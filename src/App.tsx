@@ -4,6 +4,7 @@ import Home from './pages/home/home'
 import QuemSomos from './pages/quemSomos/quemSomos';
 import Produtos from './pages/produtos/produto';
 import Login from './pages/login/login';
+import Cadastro from './pages/cadastro/cadastro';
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       {/* <Home/> */}
       {/* <QuemSomos/> */}
       {/* <Produtos/> */}
-      <Login/>
+      {/* <Login/> */}
+      <Cadastro/>
     </div>
   );
 }
