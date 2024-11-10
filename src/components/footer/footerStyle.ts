@@ -75,6 +75,7 @@ export const IconsSocialMidia = styled.div`
 export const IconsImage = styled.img`
     width: 20px;
     height: auto;
+    cursor: pointer;
 `;
 
 export const InscrevaseContainer = styled.div`
@@ -116,4 +117,5 @@ export const Page = styled.div`
     color: #fff;
     font-weight: 300;
     padding: 3px;
+    cursor: pointer;
 `;

@@ -12,7 +12,7 @@ import {
 import Header from '../../components/header/header'
 import BarrosImage from '../../assets/explore_barros.png'
 import Footer from "../../components/footer/footer";
-import { useContext, useState } from "react";
+import Clientes from "../../components/clientes/cliente";
 
 
 function Home() {
@@ -37,6 +37,7 @@ function Home() {
             </ExploreContainer>
             <LinhaUm/>
             <LinhaDois/>
+            <Clientes/>
             <Footer/>
         </div>
     )
