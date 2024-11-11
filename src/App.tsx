@@ -9,11 +9,11 @@ import Cadastro from './pages/cadastro/cadastro';
 function App() {
   return (
     <div className="App">
-      {/* <Home/> */}
+      <Home/>
       {/* <QuemSomos/> */}
       {/* <Produtos/> */}
       {/* <Login/> */}
-      <Cadastro/>
+      {/* <Cadastro/> */}
     </div>
   );
 }

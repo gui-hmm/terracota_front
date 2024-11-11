@@ -63,8 +63,240 @@ export const BarrosExplore = styled.img`
 
 
 
+export const ContainerMaisVendido = styled.div`
+    width: 100%;
+    height: 200px;
+    margin: 120px 80px 120px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+`;
+
+export const ContainerTextMaisVendido = styled.div`
+    width: 15%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin: 80px 0px 80px 80px;
+`;
+
+export const ContainerText1 = styled.div`
+    display: flex;
+    height: 25px;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+`;
+
+export const Text1 = styled.div`
+    font-size: 140px;
+    font-weight: lighter;
+    margin-bottom: 30px;
+`;
+
+export const Text2 = styled.div`
+    font-size: 24px;
+    font-weight: 600;
+`;
+
+export const Text3 = styled.div`
+    font-size: 44px;
+    font-weight: 500;
+    margin-bottom: 10px;
+`;
+
+export const Text4 = styled.div`
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 25px;
+`;
+
+export const Text5 = styled.div`
+    font-size: 24px;
+    font-weight: 500;
+    color: #fff;
+    width: 165px;
+    height: 65px;
+    background-color: #800000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const VoltarDestaques = styled.img`
+    width: 25px;
+    margin: 0px 100px;
+`;
+
+export const AvancarDestaques = styled.img`
+    width: 25px;
+    margin-left: 70px;
+    margin-right: 100px;
+`;
+
+export const ContainerProdutosDestaque = styled.div`
+    width: 185px;
+    height: 230px;
+    border: solid 1px #bdbebd;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-bottom: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    cursor: pointer;
+
+`;
+
+export const ImageProdutoDestaque = styled.img`
+    width: 190px;
+    height: 190px;
+    background-size: contain;
+`;
+
+export const ProdutoNameDestaque = styled.div`
+    font-size: 17px;
+    font-weight: 600;
+`;
+
+export const ProdutoValorDestaque = styled.div`
+    font-size: 18px;
+    font-weight: 400;
+`;
 
 
+
+export const ContainerImageAltaQualidade = styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const ImageAltaQualidade = styled.img`
+    width: 90%;
+    height: auto;
+    background-size: contain;
+`;
+
+export const ContainerText = styled.div`
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 70px 0px;
+`;
+
+export const ProdutosText1 = styled.div`
+    color: #800000;
+    font-size: 85px;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 25px 20px 25px; 
+`;
+
+export const ProdutosText = styled.div`
+    font-size: 35px;
+    color: #800000;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+`;
+
+export const ContainerCategorias = styled.div`
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+`;
+
+export const CategoriaSelecionada = styled.div`
+    width: 200px;
+    height: 50px;
+    background-color: #800000;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 50px;
+    border: solid 2px #800000;
+`;
+
+export const CategoriaNaoSelecionada = styled.div`
+    width: 200px;
+    height: 50px;
+    background-color: #fff;
+    color: #800000;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 50px;
+    border: solid 2px #800000;
+`;
+
+
+export const ContainerProdutosGeral1 = styled.div`
+    width: 100%;
+    height: auto;
+    margin: 2% 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const ContainerProdutosGeral2 = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+    column-gap: 20px;
+    row-gap: 50px;
+    position: relative;
+    width: 80%;
+    height: auto;
+    margin-bottom: 50px;
+`;
+
+export const ContainerProdutos = styled.div`
+    width: 285px;
+    height: 350px;
+    border: solid 1px #bdbebd;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 20px;
+    cursor: pointer;
+
+`;
+
+export const ImageProduto = styled.img`
+    width: 300px;
+    height: 300px;
+    background-size: contain;
+`;
+
+export const ProdutoName = styled.div`
+    font-size: 17px;
+    font-weight: 600;
+`;
+
+export const ProdutoValor = styled.div`
+    font-size: 18px;
+    font-weight: 400;
+`;
 
 
 
