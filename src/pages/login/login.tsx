@@ -20,8 +20,15 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
 import Jarro from "../../assets/login_jarro.png"
+import { To, useNavigate } from "react-router-dom";
 
 function Login(){
+
+    const navigate = useNavigate();
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return(
         <div>
             <Header/>
@@ -41,7 +48,7 @@ function Login(){
                         <InputLogin placeholder="Senha" />
                         <ContainerText3>
                             <Text3>Ainda não fez cadastro?</Text3>
-                            <Text4>Acesse aqui</Text4>
+                            <Text4 onClick={() => handleNavigate('/cadastro')} >Acesse aqui</Text4>
                         </ContainerText3>
                         <ContainerButton>
                             <ButtonEntrar>Entrar</ButtonEntrar>

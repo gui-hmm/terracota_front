@@ -10,8 +10,17 @@ import {
     LogoIcon,
     SearchCarrinhoButton} from "./headerStyle";
 import { useContext, useState } from "react";
+import { To, useNavigate } from "react-router-dom";
 
 function Header() {
+
+    const navigate = useNavigate();
+
+    // Função para navegação
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return (
         <div>
             <Container>
@@ -19,11 +28,11 @@ function Header() {
                     alt="" src={Logo}
                 />
                 <IconsContainer>
-                    <IconsPages>Home</IconsPages>
-                    <IconsPages>Quem Somos</IconsPages>
-                    <IconsPages>Produtos</IconsPages>
-                    <IconsPages>Contato</IconsPages>
-                    <IconsPages>Login</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/')}>Home</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/produtos')}>Produtos</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/')}>Contato</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/login')}>Login</IconsPages>
                 </IconsContainer>
                 <IconsRightContainer>
                     <SearchCarrinhoButton src={Search} alt="" />
