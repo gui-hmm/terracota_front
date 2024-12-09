@@ -23,14 +23,22 @@ import P12 from "../../assets/p12.png"
 import Voltar from "../../assets/menorQue.png"
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import { To, useNavigate } from "react-router-dom";
 
 function Produtos(){
+
+    const navigate = useNavigate();
+
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return(
         <div>
             <Header/>
             <Container>
                 <ConteinerProdutosText>
-                    <IconVoltar alt="" src={Voltar} />
+                    <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
                     <TextProdutos>
                         Produtos
                     </TextProdutos>

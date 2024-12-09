@@ -56,9 +56,17 @@ import Avancar from "../../assets/maior_que.png"
 import Header from '../../components/header/header'
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
+import { To, useNavigate } from "react-router-dom";
 
 
 function Home() {
+
+    const navigate = useNavigate();
+
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return (
         <div>
             <Header/>
@@ -71,7 +79,7 @@ function Home() {
                         <TextDois>
                             Descubra Agora Nossas Ofertas Exclusivas e Produtos Feitos à Mão com Todo Cuidado!
                         </TextDois>
-                        <ButtonExplore>
+                        <ButtonExplore onClick={() => handleNavigate('/produtos')} >
                             Nossos Produtos
                         </ButtonExplore>
                     </TextExploreContainer>

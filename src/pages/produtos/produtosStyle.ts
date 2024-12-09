@@ -11,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const ConteinerProdutosText = styled.div`
-    margin-left: 30px;
+    margin-left: 3%;
     margin-bottom: 50px;
     display: flex;
     flex-direction: row;

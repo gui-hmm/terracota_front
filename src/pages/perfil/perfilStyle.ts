@@ -10,7 +10,7 @@ export const Container = styled.div`
     justify-content: start;
 `;
 
-export const ConteinerCadastroText = styled.div`
+export const ConteinerPerfilText = styled.div`
     margin-left: 3%;
     margin-bottom: 50px;
     display: flex;
@@ -25,12 +25,12 @@ export const IconVoltar = styled.img`
     margin-right: 15px;
 `;
 
-export const TextCadastro = styled.div`
+export const TextPerfil = styled.div`
     font-size: 26px;
     font-weight: 200;
 `;
 
-export const ContainerCadastroGeral = styled.div`
+export const ContainerPerfilGeral = styled.div`
     width: 100%;
     height: auto;
     display: grid;
@@ -41,13 +41,13 @@ export const ContainerCadastroGeral = styled.div`
     margin: 20px 50px 10px 3%;
 `;
 
-export const ImageCadastro = styled.img`
+export const ImagePerfil = styled.img`
     width: 800px;
     height: auto;
     background-size: contain;
 `;
 
-export const ContainerCadastro = styled.div`
+export const ContainerPerfil = styled.div`
     width: 400px;
     height: auto;
     display: flex;
@@ -67,7 +67,7 @@ export const TextInput = styled.div`
     color: #949494;
 `;
 
-export const InputCadastro = styled.input`
+export const InputPerfil = styled.input`
     border: none;
     padding: 5px;
     outline: none;
@@ -75,33 +75,22 @@ export const InputCadastro = styled.input`
     background-color: #f9f9f9;
     width: 300px;
     height: 25px;
+    ${({ disabled }) => (disabled ? `background-color: #e0e0e0;` : `background-color: #f3f3f3;`)};
 `;
 
 export const SelectInput = styled.select`
     border: none;
     padding: 5px;
+    outline: none;
     margin-bottom: 20px;
     background-color: #f9f9f9;
     width: 300px;
-    height: 30px;
-`;
-
-export const ContainerText2 = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 300px;
-    align-items: start;
-    justify-content: start;
-`;
-
-export const Checkbox = styled.input`
-    margin-right: 10px;
-`;
-
-export const Text2 = styled.div`
+    height: 35px;
     font-size: 16px;
-    font-weight: 400;
-    margin-left: 5px;
+    ${({ disabled }) => (disabled ? `background-color: #e0e0e0;` : `background-color: #f3f3f3;`)};
+    option {
+        font-size: 16px;
+    }
 `;
 
 export const ContainerButton = styled.div`
@@ -114,7 +103,7 @@ export const ContainerButton = styled.div`
     margin-top: 60px;
 `;
 
-export const ButtonEntrar = styled.div`
+export const ButtonEditar = styled.div`
     width: 110px;
     height: 50px;
     background-color: #800000;
@@ -127,9 +116,16 @@ export const ButtonEntrar = styled.div`
     margin-right: 50px;
 `;
 
-export const ErrorMessage = styled.div`
-  color: red;
-  font-size: 12px;
-  margin-top: 5px; 
+export const ButtonSalvar = styled.div`
+    width: 110px;
+    height: 50px;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 50px;
 `;
 

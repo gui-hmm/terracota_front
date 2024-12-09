@@ -11,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const ConteinerLoginText = styled.div`
-    margin-left: 30px;
+    margin-left: 3%;
     margin-bottom: 50px;
     display: flex;
     flex-direction: row;
@@ -68,18 +68,26 @@ export const Text2 = styled.div`
     margin-bottom: 20px;
 `;
 
+export const Label = styled.label`
+    font-size: 16px;
+    color: #949494;
+    margin-bottom: 5px;
+    display: block;
+`;
+
 export const InputLogin = styled.input`
     border: none;
-    border-bottom: 1px solid #000;
     padding: 5px;
     outline: none;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    width: 300px;
+    height: 25px;
 
-    &::placeholder{
-        position: fixed;
-        left: 0;
+    &::placeholder {
         color: #c0c0c0;
     }
+
 `;
 
 export const ContainerText3 = styled.div`
@@ -88,7 +96,6 @@ export const ContainerText3 = styled.div`
     width: 300px;
     align-items: start;
     justify-content: start;
-
 `;
 
 export const Text3 = styled.div`
@@ -139,4 +146,15 @@ export const ButtonEsqueceuSenha = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
+`;
+
+export const TextInput = styled.div`
+    font-size: 16px;
+    color: #949494;
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px; 
 `;
