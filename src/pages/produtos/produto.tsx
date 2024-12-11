@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Voltar from "../../assets/menorQue.png";
 import ProdutoList from "../../components/produtosComponent/produtoList";
 import ProdutoDetalhesModal from "../../components/produtosComponent/ProdutoDetalhesModal";
 import { 
-    Container, 
-    ConteinerProdutosText, 
-    IconVoltar, 
-    TextProdutos, 
-    ContainerProdutosGeral } from "./produtosStyle";
+  Container, 
+  ConteinerProdutosText, 
+  IconVoltar, 
+  TextProdutos, 
+  ContainerProdutosGeral 
+} from "./produtosStyle";
 import P1 from "../../assets/p1.png";
 import P2 from "../../assets/p2.png";
 import P3 from "../../assets/p3.png";
@@ -31,6 +32,12 @@ export interface Produto {
   imagem: string;
 }
 
+// Definindo o tipo de um item no carrinho
+export interface ProdutoCarrinho {
+  produto: Produto;
+  quantidade: number;
+}
+
 // Lista de produtos
 const produtos: Produto[] = [
     { id: 1, nome: "Vasos de cerâmica", valor: 160.00, imagem: P1 },
@@ -50,6 +57,32 @@ const produtos: Produto[] = [
 const Produtos: React.FC = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [quantidade, setQuantidade] = useState(1);
+  const [carrinho, setCarrinho] = useState<ProdutoCarrinho[]>([]);
+
+  // Carregar o carrinho do localStorage ao montar o componente
+  useEffect(() => {
+    const carrinhoStorage = localStorage.getItem("carrinho");
+    console.log('Carrinho lido do localStorage: ', carrinhoStorage); // Log para verificar os dados do carrinho no localStorage
+    if (carrinhoStorage) {
+      const carrinhoParse = JSON.parse(carrinhoStorage);
+      console.log('Carrinho após parse: ', carrinhoParse); // Log após parsing
+      if (Array.isArray(carrinhoParse)) {
+        setCarrinho(carrinhoParse);
+      } else {
+        setCarrinho([]); // Inicialize como array vazio se a estrutura estiver errada
+      }
+    } else {
+      setCarrinho([]); // Inicialize como array vazio caso não haja dados no localStorage
+    }
+  }, []);
+
+
+  // Função para salvar o carrinho no localStorage
+  useEffect(() => {
+    if (carrinho.length > 0) {
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    }
+  }, [carrinho]);
 
   const handleProdutoSelect = (produto: Produto) => {
     setProdutoSelecionado(produto);
@@ -61,9 +94,36 @@ const Produtos: React.FC = () => {
     }
   };
 
-  const handleAdicionarAoCarrinho = () => {
-    console.log(`Produto ${produtoSelecionado?.nome} adicionado com quantidade: ${quantidade}`);
-  };
+  const handleAdicionarAoCarrinho = (produto: Produto, quantidade: number) => {
+    // Verificar se o produto já está no carrinho
+    const produtoExistente = carrinho.find(p => p.produto && p.produto.id === produto.id);
+    let novosCarrinho;
+
+    if (produtoExistente) {
+      // Se o produto já estiver no carrinho, aumente a quantidade
+      novosCarrinho = carrinho.map(p =>
+        p.produto && p.produto.id === produto.id
+          ? {
+              ...p,
+              quantidade: p.quantidade + quantidade // Atualiza a quantidade corretamente
+            }
+          : p
+      );
+    } else {
+      // Se não estiver, adicione o novo produto com a quantidade passada
+      novosCarrinho = [...carrinho, { produto, quantidade }];
+    }
+
+    console.log('Carrinho atualizado: ', novosCarrinho); // Para depuração
+    // Atualize o carrinho local
+    setCarrinho(novosCarrinho);
+
+    // Atualize o localStorage
+    localStorage.setItem('carrinho', JSON.stringify(novosCarrinho));
+
+    // Fechar o modal
+    setProdutoSelecionado(null);
+  };  
 
   return (
     <>
@@ -81,8 +141,6 @@ const Produtos: React.FC = () => {
         {produtoSelecionado && (
           <ProdutoDetalhesModal
             produto={produtoSelecionado}
-            quantidade={quantidade}
-            onAlterarQuantidade={handleAlterarQuantidade}
             onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
             onFecharModal={() => setProdutoSelecionado(null)}
           />
