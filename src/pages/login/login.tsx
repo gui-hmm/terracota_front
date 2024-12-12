@@ -24,7 +24,7 @@ import Jarro from "../../assets/login_jarro.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
-import { useNavigate } from "react-router-dom";
+import { To, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { login } from "../../store/reducers/auth";
 
@@ -32,6 +32,10 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
+
+  const handleNavigate = (path: To) => {
+    navigate(path);
+  };
 
   const [form, setForm] = useState({
     email: "",

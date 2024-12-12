@@ -23,6 +23,7 @@ import P9 from "../../assets/p9.png";
 import P10 from "../../assets/p10.png";
 import P11 from "../../assets/p11.png";
 import P12 from "../../assets/p12.png";
+import { To, useNavigate } from "react-router-dom";
 
 // Definindo o tipo do produto
 export interface Produto {
@@ -58,6 +59,12 @@ const Produtos: React.FC = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [quantidade, setQuantidade] = useState(1);
   const [carrinho, setCarrinho] = useState<ProdutoCarrinho[]>([]);
+
+  const navigate = useNavigate();
+
+  const handleNavigate = (path: To) => {
+    navigate(path);
+  };
 
   // Carregar o carrinho do localStorage ao montar o componente
   useEffect(() => {
@@ -130,7 +137,7 @@ const Produtos: React.FC = () => {
       <Header />
       <Container>
         <ConteinerProdutosText>
-          <IconVoltar src={Voltar} alt="Voltar" />
+          <IconVoltar src={Voltar} alt="Voltar" onClick={() => handleNavigate('/')} />
           <TextProdutos>Produtos</TextProdutos>
         </ConteinerProdutosText>
 
