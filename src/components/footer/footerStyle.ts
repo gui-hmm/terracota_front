@@ -9,6 +9,7 @@ export const ContainerFooter = styled.div`
     position: relative;
     bottom: 0;
     left: 0;
+    padding-bottom: 15px;
 
     @media (max-width: 768px){
         height: auto;
@@ -120,6 +121,12 @@ export const PagesContainer = styled.div`
     align-items: start;
     justify-content: start;
     flex-direction: column;
+
+    @media (max-width: 768px){
+        justify-content: center;
+        width: 90%;
+        margin: 10px;
+    }
 `;
 
 export const Page = styled.div`

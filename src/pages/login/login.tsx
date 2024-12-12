@@ -132,7 +132,7 @@ function Login() {
 
             <ContainerButton>
               <ButtonEntrar onClick={handleSubmit}>Entrar</ButtonEntrar>
-              <ButtonEsqueceuSenha onClick={() => handleNavigate("/esqueci-senha")}>
+              <ButtonEsqueceuSenha onClick={() => handleNavigate("/")}>
                 Esqueceu a senha?
               </ButtonEsqueceuSenha>
             </ContainerButton>
