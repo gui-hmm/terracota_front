@@ -33,10 +33,6 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
 
-  const handleNavigate = (path: To) => {
-    navigate(path);
-  };
-
   const [form, setForm] = useState({
     email: "",
     password: "",
