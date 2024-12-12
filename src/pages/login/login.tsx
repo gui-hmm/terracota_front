@@ -102,7 +102,7 @@ const Login: React.FC = () => {
 
             <ContainerButton>
               <ButtonEntrar onClick={handleSubmit}>Entrar</ButtonEntrar>
-              <ButtonEsqueceuSenha onClick={() => handleNavigate("/")}>
+              <ButtonEsqueceuSenha onClick={() => navigate("/")}>
                 Esqueceu a senha?
               </ButtonEsqueceuSenha>
             </ContainerButton>

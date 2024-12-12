@@ -53,7 +53,7 @@ export const login = createAsyncThunk<
   try {
     const response = await api.post("/auth/login", credentials);
     // Store token in localStorage only after successful login
-    localStorage.setItem('token', response.data.token);
+    sessionStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
@@ -90,7 +90,7 @@ const authSlice = createSlice({
     logout(state) {
       state.user = null;
       state.token = null;
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
     },
     clearRegistrationSuccess(state) {
       state.registrationSuccess = false;
