@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
+import { register } from "../../store/reducers/auth";
 import {
   ButtonEntrar,
   Checkbox,
@@ -25,7 +28,10 @@ import Jarros from "../../assets/cadastro_barros.png";
 import { To, useNavigate } from "react-router-dom";
 
 function Cadastro() {
-  const [role, setRole] = useState<string>("cliente");
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error: authError } = useSelector((state: RootState) => state.auth);
+
+  const [role, setRole] = useState<string>("CUSTOMER");
 
   const navigate = useNavigate();
 
@@ -72,6 +78,8 @@ function Cadastro() {
       }));
     }
   };
+
+  
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setRole(event.target.value);
@@ -156,13 +164,28 @@ function Cadastro() {
     return !Object.values(newErrors).some((error) => error !== "");
   };
 
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
-      alert("Formulário enviado com sucesso!");
-    } else {
-      alert("Existem erros no formulário.");
+      try {
+        const result = await dispatch(register({
+          email: form.email,
+          password: form.password,
+          name: form.name,
+          cpf: form.cpf.replace(/[.-]/g, ''), // Remove dots and dash from CPF
+          contact: form.contact.replace(/[()-\s]/g, ''), // Remove formatting from contact
+          role: role.toUpperCase(),
+        })).unwrap();
+
+        if (result) {
+          // Registration successful
+          handleNavigate('/login'); // or wherever you want to redirect
+        }
+      } catch (err) {
+        // Error is handled by Redux and will be available in authError
+        console.error('Registration failed:', err);
+      }
     }
   };
 
@@ -170,6 +193,7 @@ function Cadastro() {
     <div>
       <Header />
       <Container>
+      {authError && <ErrorMessage>{authError}</ErrorMessage>}
         <ConteinerCadastroText>
           <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
           <TextCadastro>Cadastro</TextCadastro>
@@ -239,9 +263,9 @@ function Cadastro() {
 
             <TextInput>Tipo de Usuário</TextInput>
             <SelectInput value={role} onChange={handleRoleChange}>
-              <option value="cliente">Cliente</option>
-              <option value="artesao">Artesão</option>
-              <option value="empresa">Empresa</option>
+              <option value="CUSTOMER">Cliente</option>
+              <option value="CRAFTSMAN">Artesão</option>
+              <option value="COMPANY">Empresa</option>
             </SelectInput>
 
                 {errors.termsAccepted && (
@@ -260,8 +284,12 @@ function Cadastro() {
             </ContainerText2>
 
             <ContainerButton>
-              <ButtonEntrar onClick={handleSubmit}>Entrar</ButtonEntrar>
-            </ContainerButton>
+          <ButtonEntrar 
+            onClick={handleSubmit}
+          >
+            Entrar
+          </ButtonEntrar>
+        </ContainerButton>
           </ContainerCadastro>
         </ContainerCadastroGeral>
       </Container>
