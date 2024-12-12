@@ -3,12 +3,13 @@ import Logo from '../../assets/logomarca.png';
 import Search from '../../assets/search_icon.webp';
 import Carrinho from '../../assets/carrinho_icon.png';
 import { 
+    CarrinhoButton,
     Container,
     IconsContainer,
     IconsPages,
     IconsRightContainer,
     LogoIcon,
-    SearchCarrinhoButton
+    SearchButton,
 } from "./headerStyle";
 import { To, useNavigate } from "react-router-dom";
 
@@ -41,8 +42,8 @@ const Header = () => {
                     </IconsPages>
                 </IconsContainer>
                 <IconsRightContainer>
-                    <SearchCarrinhoButton src={Search} alt="Buscar" />
-                    <SearchCarrinhoButton src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
+                    <SearchButton src={Search} alt="Buscar" />
+                    <CarrinhoButton src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
                 </IconsRightContainer>
             </Container>
         </div>

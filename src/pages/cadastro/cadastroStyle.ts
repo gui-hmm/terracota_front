@@ -7,7 +7,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: start;
+    justify-content: start;   
 `;
 
 export const ConteinerCadastroText = styled.div`
@@ -33,18 +33,25 @@ export const TextCadastro = styled.div`
 export const ContainerCadastroGeral = styled.div`
     width: 100%;
     height: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 80px;
-    row-gap: 50px;
+    display: flex;
+    flex-direction: row;
     position: relative;
     margin: 20px 50px 10px 3%;
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+    } 
 `;
 
 export const ImageCadastro = styled.img`
     width: 800px;
     height: auto;
     background-size: contain;
+    margin-right: 5%;
+
+    @media (max-width: 900) {
+        width: 90%;
+    }
 `;
 
 export const ContainerCadastro = styled.div`
@@ -52,8 +59,12 @@ export const ContainerCadastro = styled.div`
     height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: space-evenly;
     align-items: start;
+    
+    @media (max-width: 768px) {
+        margin: 50px;
+    } 
 `;
 
 export const Text1 = styled.div`

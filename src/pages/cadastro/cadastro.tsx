@@ -4,7 +4,6 @@ import { AppDispatch, RootState } from "../../store/store";
 import { register } from "../../store/reducers/auth";
 import {
   ButtonEntrar,
-  Checkbox,
   Container,
   ContainerButton,
   ContainerCadastro,
@@ -284,12 +283,12 @@ function Cadastro() {
             </ContainerText2>
 
             <ContainerButton>
-          <ButtonEntrar 
-            onClick={handleSubmit}
-          >
-            Entrar
-          </ButtonEntrar>
-        </ContainerButton>
+              <ButtonEntrar 
+                onClick={handleSubmit}
+              >
+                Entrar
+              </ButtonEntrar>
+            </ContainerButton>
           </ContainerCadastro>
         </ContainerCadastroGeral>
       </Container>

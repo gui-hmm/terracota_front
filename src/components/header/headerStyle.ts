@@ -49,7 +49,7 @@ export const IconsContainer = styled.div`
 export const IconsPages = styled.div`
     cursor: pointer;
     display: flex;
-    color: #B67B57;
+    color: #802600;
     font-size: larger;
 
     &:hover {
@@ -71,12 +71,21 @@ export const IconsRightContainer = styled.div`
     }
 `;
 
-export const SearchCarrinhoButton = styled.img`
+export const SearchButton = styled.img`
     cursor: pointer;
     color: #000000;
     width: 25px;
     height: 25px;
     margin-right: 6vh;
+`;
+
+export const CarrinhoButton = styled.img`
+    cursor: pointer;
+    color: #000000;
+    width: 25px;
+    height: 25px;
+    margin-right: 6vh;
+    transition: 0.2s;
 
     &:hover {
         width: 30px;

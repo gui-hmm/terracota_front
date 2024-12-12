@@ -39,12 +39,21 @@ export const ContainerLoginGeral = styled.div`
     row-gap: 50px;
     position: relative;
     margin: 20px 50px 10px 8%;
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+    } 
 `;
 
 export const ImageLogin = styled.img`
     width: 450px;
     height: auto;
     background-size: contain;
+
+    @media (max-width: 900) {
+        width: auto;
+    }
 `;
 
 export const ContainerLogin = styled.div`

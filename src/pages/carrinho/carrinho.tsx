@@ -155,7 +155,9 @@ const Carrinho: React.FC = () => {
         <ContainerProdutos>
           <ContainerCards>
             {produtos.length === 0 ? (
-              <p>Seu carrinho está vazio.</p>
+              <center style={{ height: '120px' }}>
+                <p>Seu carrinho está vazio.</p>
+              </center>
             ) : (
               produtos.map((produto) => {
                 //console.log("Produto sendo renderizado: ", produto); // Depuração
