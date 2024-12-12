@@ -15,9 +15,16 @@ import {
     SobreText } from "./footerStyle";
 import Linkedin from '../../assets/linkedin.png'
 import Instagram from '../../assets/instagram.png';
+import { To, useNavigate } from "react-router-dom";
 
 
 function Footer(){
+
+    const navigate = useNavigate();
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return (
         <div>
             <ContainerFooter>
@@ -47,10 +54,10 @@ function Footer(){
                         </EmailInput>
                     </InscrevaseContainer>
                     <PagesContainer>
-                        <Page>Home</Page>
-                        <Page>Quem Somos</Page>
-                        <Page>Produto</Page>
-                        <Page>Contato</Page>
+                        <Page onClick={() => handleNavigate('/')}>Home</Page>
+                        <Page onClick={() => handleNavigate('/quemsomos')}>Quem Somos</Page>
+                        <Page onClick={() => handleNavigate('/produtos')}>Produto</Page>
+                        <Page onClick={() => handleNavigate('/login')}>login</Page>
                     </PagesContainer>
                 </InformationContainer>
                 <EmailContainer>

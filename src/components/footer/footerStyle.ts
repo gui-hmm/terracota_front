@@ -9,6 +9,10 @@ export const ContainerFooter = styled.div`
     position: relative;
     bottom: 0;
     left: 0;
+
+    @media (max-width: 768px){
+        height: auto;
+    }
 `;
 
 export const InformationContainer =  styled.div`
@@ -17,6 +21,11 @@ export const InformationContainer =  styled.div`
     display: grid;
     grid-template-columns: 1.5fr 2fr 1fr;
     margin: 40px 100px 5px 100px;
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+    }
 `;
 
 export const EmailContainer = styled.div`
