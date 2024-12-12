@@ -17,33 +17,28 @@ import {
   Text4,
   TextInput,
   TextLogin,
-  ErrorMessage, // Importando a estilização para mensagens de erro
+  ErrorMessage,
 } from "./loginStyle";
 import Voltar from "../../assets/menorQue.png";
+import Jarro from "../../assets/login_jarro.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
-import Jarro from "../../assets/login_jarro.png";
-import { To, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { login } from "../../store/reducers/auth";
 
-function Login() {
+const Login: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => state.auth);
 
-  const handleNavigate = (path: To) => {
-    navigate(path);
-  };
-  
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -51,44 +46,16 @@ function Login() {
     }));
   };
 
-  const validateEmail = (email: string): boolean => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
-  const validatePassword = (password: string): boolean => {
-    return password.length >= 8;
-  };
-
-  const validateForm = (): boolean => {
-    let newErrors = { ...errors };
-
-    if (!validateEmail(form.email)) {
-      newErrors.email = "Email inválido.";
-    } else {
-      newErrors.email = "";
-    }
-
-    if (!validatePassword(form.password)) {
-      newErrors.password = "A senha deve ter pelo menos 8 caracteres.";
-    } else {
-      newErrors.password = "";
-    }
-
-    setErrors(newErrors);
-
-    return !Object.values(newErrors).some((error) => error !== "");
-  };
-
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      alert("Login bem-sucedido!");
-      // Aqui você pode adicionar a lógica para autenticação real.
-    } else {
-      alert("Existem erros no formulário.");
-    }
+    dispatch(login(form))
+      .unwrap()
+      .then(() => {
+        navigate("/"); // Navegue para a página principal após login bem-sucedido
+      })
+      .catch(() => {
+        // O erro será exibido automaticamente pelo estado `error`
+      });
   };
 
   return (
@@ -96,7 +63,7 @@ function Login() {
       <Header />
       <Container>
         <ConteinerLoginText>
-          <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
+          <IconVoltar alt="" src={Voltar} onClick={() => navigate('/')} />
           <TextLogin>Login</TextLogin>
         </ConteinerLoginText>
         <ContainerLoginGeral>
@@ -106,7 +73,7 @@ function Login() {
             <Text2>Digite seus detalhes abaixo</Text2>
 
             <TextInput>Email</TextInput>
-            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
             <InputLogin
               type="email"
               name="email"
@@ -116,7 +83,6 @@ function Login() {
             />
 
             <TextInput>Senha</TextInput>
-            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
             <InputLogin
               type="password"
               name="password"
@@ -127,7 +93,7 @@ function Login() {
 
             <ContainerText3>
               <Text3>Ainda não fez cadastro?</Text3>
-              <Text4 onClick={() => handleNavigate('/cadastro')}>Acesse aqui</Text4>
+              <Text4 onClick={() => navigate('/cadastro')}>Acesse aqui</Text4>
             </ContainerText3>
 
             <ContainerButton>
@@ -143,6 +109,6 @@ function Login() {
       <Footer />
     </div>
   );
-}
+};
 
 export default Login;
