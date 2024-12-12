@@ -13,7 +13,7 @@ export const Container = styled.div`
 
 // Texto que aparece na parte superior da tela de produtos
 export const ConteinerProdutosText = styled.div`
-  margin-left: 3%;
+  margin-left: 2%;
   margin-bottom: 50px;
   display: flex;
   flex-direction: row;

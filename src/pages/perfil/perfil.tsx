@@ -19,6 +19,7 @@ import Voltar from "../../assets/menorQue.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Jarros from "../../assets/cadastro_barros.png";
+import { To, useNavigate } from "react-router-dom";
 
 function Perfil() {
     const [editando, setEditando] = useState(false);
@@ -29,6 +30,12 @@ function Perfil() {
         contato: "(11) 98765-4321",
         tipoUsuario: "cliente"  // Pode ser "cliente", "artesao", "empresa"
     });
+
+    const navigate = useNavigate();
+
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
 
     const handleEditar = () => {
         setEditando(true);
@@ -52,7 +59,7 @@ function Perfil() {
             <Header />
             <Container>
                 <ConteinerPerfilText>
-                    <IconVoltar alt="" src={Voltar} />
+                    <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
                     <TextPerfil>Perfil</TextPerfil>
                 </ConteinerPerfilText>
                 <ContainerPerfilGeral>

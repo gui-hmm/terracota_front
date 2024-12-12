@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: auto;
-  margin: 150px auto 50px;
+  margin: 100px auto 50px;
   padding: 50px;
   background-color: #fff;
 `;
 
 // Texto que aparece na parte superior da tela de produtos
 export const ConteinerCarrinhoText = styled.div`
-  margin-left: 3%;
+  margin-left: 1.5%;
   margin-bottom: 50px;
   display: flex;
   flex-direction: row;

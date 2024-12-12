@@ -1,5 +1,6 @@
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
+import Voltar from "../../assets/menorQue.png";
 import Modelagem from "../../assets/modelagem.png"
 import { 
     ContainerImage, 
@@ -7,13 +8,28 @@ import {
     ImageModelagem, 
     QuemSomosContainer, 
     QuemSomosText, 
-    Text } from "./quemSomosStyle";
+    Text, 
+    ConteinerQuemSomosText,
+    IconVoltar,
+    TextQuemSomos} from "./quemSomosStyle";
+import { To, useNavigate } from "react-router-dom";
 
 function QuemSomos(){
+
+    const navigate = useNavigate();
+
+    const handleNavigate = (path: To) => {
+        navigate(path);
+    };
+
     return(
         <div>
             <Header/>
             <Container>
+                <ConteinerQuemSomosText>
+                    <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
+                    <TextQuemSomos>Quem somos</TextQuemSomos>
+                </ConteinerQuemSomosText>
                 <ContainerImage>
                     <ImageModelagem alt="" src={Modelagem} />
                 </ContainerImage>

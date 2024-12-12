@@ -150,7 +150,7 @@ const Carrinho: React.FC = () => {
       <Container>
         <ConteinerCarrinhoText>
           <IconVoltar src={Voltar} alt="Voltar" onClick={() => navigate(-1)} />
-          <TextCarrinho>Produtos</TextCarrinho>
+          <TextCarrinho>Carrinho</TextCarrinho>
         </ConteinerCarrinhoText>
         <ContainerProdutos>
           <ContainerCards>
