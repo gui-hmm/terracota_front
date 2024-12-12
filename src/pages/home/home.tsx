@@ -8,25 +8,20 @@ import {
     ContainerCategorias,
     ContainerImageAltaQualidade,
     ContainerMaisVendido,
-    ContainerProdutos,
     ContainerProdutosDestaque,
     ContainerProdutosGeral1,
-    ContainerProdutosGeral2,
     ContainerText,
     ContainerText1,
     ContainerTextMaisVendido,
     ExploreContainer, 
     ExploreContainerColuns, 
     ImageAltaQualidade, 
-    ImageProduto, 
     ImageProdutoDestaque, 
     LinhaDois, 
     LinhaUm, 
-    ProdutoName, 
     ProdutoNameDestaque, 
     ProdutosText, 
-    ProdutosText1, 
-    ProdutoValor, 
+    ProdutosText1,
     ProdutoValorDestaque, 
     Text1, 
     Text2, 
@@ -234,82 +229,20 @@ function Home() {
                 <CategoriaNaoSelecionada>Cozinha</CategoriaNaoSelecionada>
             </ContainerCategorias>
 
-            <ContainerProdutosGeral>
-                <ProdutoList produtos={produtos} onSelectProduto={handleProdutoSelect} />
-            </ContainerProdutosGeral>
+            <ContainerProdutosGeral1>
+                <ContainerProdutosGeral>
+                    <ProdutoList produtos={produtos} onSelectProduto={handleProdutoSelect} />
+                </ContainerProdutosGeral>
+            </ContainerProdutosGeral1>
 
             {produtoSelecionado && (
                 <ProdutoDetalhesModal
                     produto={produtoSelecionado}
                     onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
                     onFecharModal={() => setProdutoSelecionado(null)}
-                />
+                    />
             )}
 
-            {/* <ContainerProdutosGeral1>
-                <ContainerProdutosGeral2 onClick={() => handleNavigate('/produtos')} >
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P1} />
-                        <ProdutoName>Vasos de cerâmica</ProdutoName>
-                        <ProdutoValor>R$ 160,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P2} />
-                        <ProdutoName>Panela de barro</ProdutoName>
-                        <ProdutoValor>R$ 145,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P3} />
-                        <ProdutoName>Estatueta de terracota</ProdutoName>
-                        <ProdutoValor>R$ 350,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P4} />
-                        <ProdutoName>Caldeirão de barro</ProdutoName>
-                        <ProdutoValor>R$ 160,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P5} />
-                        <ProdutoName>Potes de barro</ProdutoName>
-                        <ProdutoValor>R$ 145,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P6} />
-                        <ProdutoName>Tigelas de cerâmica</ProdutoName>
-                        <ProdutoValor>R$ 145,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P7} />
-                        <ProdutoName>Leão de barro</ProdutoName>
-                        <ProdutoValor>R$ 300,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P8} />
-                        <ProdutoName>Cervos de cerâmica</ProdutoName>
-                        <ProdutoValor>R$ 500,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P9} />
-                        <ProdutoName>São Francisco</ProdutoName>
-                        <ProdutoValor>R$ 250,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P10} />
-                        <ProdutoName>Jarra de cerâmica</ProdutoName>
-                        <ProdutoValor>R$ 150,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P11} />
-                        <ProdutoName>Cisnes de cerâmica</ProdutoName>
-                        <ProdutoValor>R$ 200,00</ProdutoValor>
-                    </ContainerProdutos>
-                    <ContainerProdutos>
-                        <ImageProduto alt="" src={P12} />
-                        <ProdutoName>Coelho de barro</ProdutoName>
-                        <ProdutoValor>R$ 130,00</ProdutoValor>
-                    </ContainerProdutos>
-                </ContainerProdutosGeral2>
-            </ContainerProdutosGeral1> */}
             <Clientes/>
             <Footer/>
         </div>

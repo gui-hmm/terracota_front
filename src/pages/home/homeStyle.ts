@@ -249,7 +249,7 @@ export const CategoriaNaoSelecionada = styled.div`
 
 
 export const ContainerProdutosGeral1 = styled.div`
-    width: 100%;
+    width: auto;
     height: auto;
     margin: 2% 2%;
     display: flex;
@@ -257,45 +257,45 @@ export const ContainerProdutosGeral1 = styled.div`
     justify-content: center;
 `;
 
-export const ContainerProdutosGeral2 = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
-    column-gap: 20px;
-    row-gap: 50px;
-    position: relative;
-    width: 80%;
-    height: auto;
-    margin-bottom: 50px;
-`;
+// export const ContainerProdutosGeral2 = styled.div`
+//     display: grid;
+//     grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+//     column-gap: 20px;
+//     row-gap: 50px;
+//     position: relative;
+//     width: 80%;
+//     height: auto;
+//     margin-bottom: 50px;
+// `;
 
-export const ContainerProdutos = styled.div`
-    width: 285px;
-    height: 350px;
-    border: solid 1px #bdbebd;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    padding: 20px;
-    cursor: pointer;
+// export const ContainerProdutos = styled.div`
+//     width: 285px;
+//     height: 350px;
+//     border: solid 1px #bdbebd;
+//     border-radius: 15px;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: start;
+//     padding: 20px;
+//     cursor: pointer;
 
-`;
+// `;
 
-export const ImageProduto = styled.img`
-    width: 300px;
-    height: 300px;
-    background-size: contain;
-`;
+// export const ImageProduto = styled.img`
+//     width: 300px;
+//     height: 300px;
+//     background-size: contain;
+// `;
 
-export const ProdutoName = styled.div`
-    font-size: 17px;
-    font-weight: 600;
-`;
+// export const ProdutoName = styled.div`
+//     font-size: 17px;
+//     font-weight: 600;
+// `;
 
-export const ProdutoValor = styled.div`
-    font-size: 18px;
-    font-weight: 400;
-`;
+// export const ProdutoValor = styled.div`
+//     font-size: 18px;
+//     font-weight: 400;
+// `;
 
 
 
