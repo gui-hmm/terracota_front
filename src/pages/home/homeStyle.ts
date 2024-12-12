@@ -61,8 +61,6 @@ export const BarrosExplore = styled.img`
     margin-left: 100px;
 `;
 
-
-
 export const ContainerMaisVendido = styled.div`
     width: 100%;
     height: 200px;
@@ -123,6 +121,7 @@ export const Text5 = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 `;
 
 export const VoltarDestaques = styled.img`
