@@ -7,11 +7,31 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: start;
     justify-content: center;
-    margin: 140px 100px 50px 100px;
+    margin: 150px 50px 50px 50px;
+`;
+
+export const ConteinerQuemSomosText = styled.div`
+    margin-left: 1%;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+`;
+
+export const IconVoltar = styled.img`
+    width: auto;
+    height: 23px;
+    margin-top: 6px;
+    margin-right: 15px;
+`;
+
+export const TextQuemSomos = styled.div`
+    font-size: 26px;
+    font-weight: 200;
 `;
 
 export const ContainerImage = styled.div`
-    width: 1300px;
+    width: 93%;
     height: auto;
     background-size: contain;
 `;
@@ -22,7 +42,7 @@ export const ImageModelagem = styled.img`
 `;
 
 export const QuemSomosContainer = styled.div`
-    width: 1300px;
+    width: 96%;
     height: auto;
     display: flex;
     flex-direction: column;

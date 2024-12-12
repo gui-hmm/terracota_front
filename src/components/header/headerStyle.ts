@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
+    flex-direction: row;
     width: 100%;
     height: 100px;
     justify-content: space-around;
@@ -10,12 +11,23 @@ export const Container = styled.div`
     left: 0;
     z-index: 1000;
     background-color: #fff;
+
+    @media (max-width: 768px) {
+        /* Para tablets */
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+    }
 `;
 
 export const LogoIcon = styled.img`
     width: auto;
     margin-right: 5px;
     margin-top: 2px;
+
+    @media (max-width: 768px) {
+        width: 60%;
+    }
 `;
 
 export const IconsContainer = styled.div`
@@ -25,6 +37,13 @@ export const IconsContainer = styled.div`
     flex-direction: row;
     width: 800px;
     height: auto;
+
+    @media (max-width: 768px) {
+        /* Para tablets */
+        flex-direction: column;
+        justify-content: center;
+        padding-bottom: 10px;
+    }
 `;
 
 export const IconsPages = styled.div`
@@ -45,6 +64,11 @@ export const IconsRightContainer = styled.div`
     width: auto;
     height: auto;
     margin-right: 1vh;
+
+    @media (max-width: 768px) {
+        margin-left: 15%;
+        padding-bottom: 10px;
+    }
 `;
 
 export const SearchCarrinhoButton = styled.img`

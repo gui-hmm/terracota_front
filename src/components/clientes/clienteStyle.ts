@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     width: 100%;
-    height: 400px;
+    height: auto;
     margin: 80px 0px 30px 0px;
     display: flex;
     flex-direction: column;
@@ -35,10 +35,27 @@ export const ClientesText = styled.div`
     justify-content: center;
 `;
 
-export const ContainerImage = styled.img`
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    margin: 30px 80px 50px 80px;
+export const ContainerImages = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 20px;  /* Adicionando um pequeno espaço entre as imagens */
+    margin: 30px 0px 50px 0px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;  /* Em telas menores, as imagens serão empilhadas */
+        align-items: center;
+    }
 `;
 
+export const ContainerImage = styled.img`
+    width: 45%;  /* Faz com que as imagens ocupem 45% da largura disponível */
+    max-width: 600px;  /* Garantindo que a largura máxima da imagem não ultrapasse 600px */
+    height: auto;  /* Mantém a proporção da imagem */
+    object-fit: cover;  /* Faz com que a imagem cubra o espaço sem distorcer */
+    
+    @media (max-width: 768px) {
+        width: 90%;  /* Em telas menores, as imagens ocupam mais espaço (90%) */
+    }
+`;

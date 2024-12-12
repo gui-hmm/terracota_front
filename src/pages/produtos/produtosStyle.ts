@@ -1,71 +1,57 @@
 import styled from "styled-components";
 
+// Container principal da tela de produtos
 export const Container = styled.div`
-    width: 100%;
-    height: auto;
-    margin: 150px 25px 50px 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: start;
+  width: auto;
+  height: auto;
+  margin: 150px 40px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
 `;
 
+// Texto que aparece na parte superior da tela de produtos
 export const ConteinerProdutosText = styled.div`
-    margin-left: 3%;
-    margin-bottom: 50px;
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
+  margin-left: 2%;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
 `;
 
+// Ícone de voltar
 export const IconVoltar = styled.img`
-    width: auto;
-    height: 23px;
-    margin-top: 6px;
-    margin-right: 15px;
+  width: auto;
+  height: 23px;
+  margin-top: 6px;
+  margin-right: 15px;
 `;
 
+// Texto "Produtos"
 export const TextProdutos = styled.div`
-    font-size: 26px;
-    font-weight: 200;
+  font-size: 26px;
+  font-weight: 200;
 `;
 
+// Container que organiza os produtos em grid
 export const ContainerProdutosGeral = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
-    column-gap: 20px;
-    row-gap: 50px;
-    position: relative;
-    width: 100%;
-    height: auto;
-    margin-bottom: 50px;
-`;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajustado para um mínimo de 280px */
+  gap: 20px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
 
-export const ContainerProdutos = styled.div`
-    width: 285px;
-    height: 350px;
-    border: solid 1px #bdbebd;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    padding: 20px;
-    cursor: pointer;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Para tablets */
+  }
 
-`;
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Para dispositivos móveis */
+  }
 
-export const ImageProduto = styled.img`
-    width: 300px;
-    height: 300px;
-    background-size: contain;
-`;
-
-export const ProdutoName = styled.div`
-    font-size: 17px;
-    font-weight: 600;
-`;
-
-export const ProdutoValor = styled.div`
-    font-size: 18px;
-    font-weight: 400;
+  @media (max-width: 320px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Para dispositivos muito pequenos */
+  }
 `;
