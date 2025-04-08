@@ -25,6 +25,11 @@ export const ClientesText1 = styled.div`
     justify-content: center;
     align-items: center;
     margin: 0 25px 20px 25px; 
+
+    @media (max-width: 480px) {
+        margin: 0 10px 25px 10px;
+        font-size: 65px;
+    }
 `;
 
 export const ClientesText = styled.div`
@@ -33,6 +38,11 @@ export const ClientesText = styled.div`
     font-weight: 500;
     display: flex;
     justify-content: center;
+
+    @media (max-width: 480px) {
+        font-size: 30px;
+        font-weight: 400;
+    }
 `;
 
 export const ContainerImages = styled.div`
@@ -40,22 +50,22 @@ export const ContainerImages = styled.div`
     flex-direction: row;
     width: 100%;
     justify-content: center;
-    gap: 20px;  /* Adicionando um pequeno espaço entre as imagens */
+    gap: 20px; 
     margin: 30px 0px 50px 0px;
 
     @media (max-width: 768px) {
-        flex-direction: column;  /* Em telas menores, as imagens serão empilhadas */
+        flex-direction: column;
         align-items: center;
     }
 `;
 
 export const ContainerImage = styled.img`
-    width: 45%;  /* Faz com que as imagens ocupem 45% da largura disponível */
-    max-width: 600px;  /* Garantindo que a largura máxima da imagem não ultrapasse 600px */
-    height: auto;  /* Mantém a proporção da imagem */
-    object-fit: cover;  /* Faz com que a imagem cubra o espaço sem distorcer */
+    width: 45%; 
+    max-width: 600px;  
+    height: auto;
+    object-fit: cover; 
     
     @media (max-width: 768px) {
-        width: 90%;  /* Em telas menores, as imagens ocupam mais espaço (90%) */
+        width: 90%;  
     }
 `;
