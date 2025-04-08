@@ -26,6 +26,7 @@ export const InformationContainer =  styled.div`
     @media (max-width: 768px){
         display: flex;
         flex-direction: column;
+        margin: 40px 50px 5px 50px;
     }
 `;
 
@@ -63,18 +64,19 @@ export const SobreText = styled.div`
 `;
 
 export const IconsSocialMidiaContainer = styled.div`
-    width: 20%;
+    width: auto;
     height: 35px;
     margin-top: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
 `;
 
 export const IconsSocialMidia = styled.div`
     width: 30px;
     height: 30px;
+    margin-right: 10px;
     border-radius: 50%;
     background-color: #fff;
     display: flex;
@@ -102,6 +104,11 @@ export const InscrevaseText = styled.div`
     font-weight: 300;
     margin-left: 5px;
     margin-bottom: 10px;
+
+    @media (max-width: 380px){
+        font-size: 15px;
+        font-weight: 200;
+    }
 `;
 
 export const EmailInput = styled.input`
