@@ -7,7 +7,11 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: start;
     justify-content: center;
-    margin: 150px 50px 50px 50px;
+    margin: 150px 50px 50px 40px;
+
+    @media (max-width: 768px) {
+        margin-top: 270px;
+    }
 `;
 
 export const ConteinerQuemSomosText = styled.div`
@@ -38,11 +42,12 @@ export const ContainerImage = styled.div`
 
 export const ImageModelagem = styled.img`
     width: 100%;
-    height: 450px;
+    height: auto;
 `;
 
 export const QuemSomosContainer = styled.div`
-    width: 96%;
+    width: 93%;
+    
     height: auto;
     display: flex;
     flex-direction: column;
@@ -57,7 +62,7 @@ export const QuemSomosText = styled.div`
 `;
 
 export const Text = styled.div`
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 200;
     margin-bottom: 35px;
 `;

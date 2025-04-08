@@ -84,7 +84,7 @@ export const ModalNome = styled.h2`
 export const ModalPreco = styled.p`
   font-size: 20px;
   font-weight: bold;
-  color: #27ae60;
+  color: #802600;
   margin-bottom: 20px;
 `;
 
@@ -118,7 +118,7 @@ export const ControlesQuantidade = styled.div`
 
 // Botão para Adicionar ao Carrinho
 export const BotaoAdicionar = styled.button`
-  background-color: #27ae60;
+  background-color: #802600;
   color: #fff;
   padding: 10px 20px;
   border: none;

@@ -8,6 +8,10 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: start;
     justify-content: start;
+
+    @media (max-width: 768px) {
+        margin-top: 270px;
+    }
 `;
 
 export const ConteinerLoginText = styled.div`
@@ -47,13 +51,8 @@ export const ContainerLoginGeral = styled.div`
 `;
 
 export const ImageLogin = styled.img`
-    width: 450px;
-    height: auto;
+    width: 70%;
     background-size: contain;
-
-    @media (max-width: 900) {
-        width: auto;
-    }
 `;
 
 export const ContainerLogin = styled.div`

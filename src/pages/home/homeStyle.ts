@@ -6,6 +6,10 @@ export const ExploreContainer = styled.div`
     background-color: #D4D4D4;
     padding-bottom: 30px;
     margin-top: 100px;
+
+    @media (max-width: 768px) {
+        margin-top: 270px;
+    }
 `;
 
 export const ExploreContainerColuns = styled.div`
