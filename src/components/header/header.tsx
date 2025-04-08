@@ -29,24 +29,22 @@ const Header = () => {
     };
 
     return (
-        <div>
-            <Container>
-                <LogoIcon alt="Logo" src={Logo} />
-                <IconsContainer>
-                    <IconsPages onClick={() => handleNavigate('/')}>Home</IconsPages>
-                    <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
-                    <IconsPages onClick={() => handleNavigate('/produtos')}>Produtos</IconsPages>
-                    {/* Aqui altera o texto de "Login" para "Perfil" dependendo do estado de login */}
-                    <IconsPages onClick={() => handleNavigate(isLoggedIn ? '/perfil' : '/login')}>
-                        {isLoggedIn ? 'Perfil' : 'Login'}
-                    </IconsPages>
-                </IconsContainer>
-                <IconsRightContainer>
-                    <SearchButton src={Search} alt="Buscar" />
-                    <CarrinhoButton src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
-                </IconsRightContainer>
-            </Container>
-        </div>
+        <Container>
+            <LogoIcon alt="Logo" src={Logo} />
+            <IconsContainer>
+                <IconsPages onClick={() => handleNavigate('/')}>Home</IconsPages>
+                <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
+                <IconsPages onClick={() => handleNavigate('/produtos')}>Produtos</IconsPages>
+                
+                <IconsPages onClick={() => handleNavigate(isLoggedIn ? '/perfil' : '/login')}>
+                    {isLoggedIn ? 'Perfil' : 'Login'}
+                </IconsPages>
+            </IconsContainer>
+            <IconsRightContainer>
+                <SearchButton src={Search} alt="Buscar" />
+                <CarrinhoButton src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
+            </IconsRightContainer>
+        </Container>
     );
 };
 

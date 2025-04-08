@@ -1,4 +1,10 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const huHuAnimation = keyframes`
+  50% {
+    transform: translateY(-5px);
+  }
+`;
 
 export const Container = styled.div`
     display: flex;
@@ -21,9 +27,13 @@ export const Container = styled.div`
 `;
 
 export const LogoIcon = styled.img`
-    width: auto;
+    width: 35%;
     margin-right: 5px;
     margin-top: 2px;
+
+    @media (min-width: 1268px) {
+        width: 25%;
+    }
 
     @media (max-width: 768px) {
         width: 60%;
@@ -39,7 +49,6 @@ export const IconsContainer = styled.div`
     height: auto;
 
     @media (max-width: 768px) {
-        /* Para tablets */
         flex-direction: column;
         justify-content: center;
         padding-bottom: 10px;
@@ -77,19 +86,29 @@ export const SearchButton = styled.img`
     width: 25px;
     height: 25px;
     margin-right: 6vh;
+
+    @media (max-width: 876px) {
+        margin-right: 3vh;
+    }
 `;
 
 export const CarrinhoButton = styled.img`
     cursor: pointer;
-    color: #000000;
     width: 25px;
     height: 25px;
     margin-right: 6vh;
     transition: 0.2s;
 
     &:hover {
-        width: 30px;
-        height: 30px;
+        animation: ${huHuAnimation} infinite 2s ease-in-out;
+    }
+
+    @media (max-width: 876px) {
+        margin-right: 2vh;
+    }
+
+    @media (max-width: 768px) {
+        margin-right: 6vh;
     }
 `;
 
