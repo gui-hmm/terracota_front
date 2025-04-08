@@ -5,9 +5,12 @@ export const Container = styled.div`
   margin: 100px auto 50px;
   padding: 50px;
   background-color: #fff;
+
+  @media (max-width: 768px) {
+    margin-top: 270px;
+  }
 `;
 
-// Texto que aparece na parte superior da tela de produtos
 export const ConteinerCarrinhoText = styled.div`
   margin-left: 1.5%;
   margin-bottom: 50px;
@@ -16,7 +19,6 @@ export const ConteinerCarrinhoText = styled.div`
   cursor: pointer;
 `;
 
-// Ícone de voltar
 export const IconVoltar = styled.img`
   width: auto;
   height: 23px;
@@ -24,7 +26,6 @@ export const IconVoltar = styled.img`
   margin-right: 15px;
 `;
 
-// Texto "Produtos"
 export const TextCarrinho = styled.div`
   font-size: 26px;
   font-weight: 200;
@@ -36,7 +37,6 @@ export const ContainerProdutos = styled.div`
   align-items: center;
 `;
 
-// Container que organiza os produtos em grid
 export const ContainerCards = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajustado para um mínimo de 280px */
