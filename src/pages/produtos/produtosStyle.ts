@@ -10,8 +10,8 @@ export const Container = styled.div`
   justify-content: start;
 
   @media (max-width: 768px) {
-        margin-top: 270px;
-    }
+    margin-top: 270px;
+  }
 `;
 
 export const ConteinerProdutosText = styled.div`

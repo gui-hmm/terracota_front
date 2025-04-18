@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Logo from '../../assets/logomarca.png';
-import Search from '../../assets/search_icon.webp';
 import Carrinho from '../../assets/carrinho_icon.png';
+import Robot from '../../assets/robot.png';
 import { 
     CarrinhoButton,
     Container,
@@ -9,7 +9,7 @@ import {
     IconsPages,
     IconsRightContainer,
     LogoIcon,
-    SearchButton,
+    ChatbotButton,
 } from "./headerStyle";
 import { To, useNavigate } from "react-router-dom";
 
@@ -41,8 +41,8 @@ const Header = () => {
                 </IconsPages>
             </IconsContainer>
             <IconsRightContainer>
-                <SearchButton src={Search} alt="Buscar" />
                 <CarrinhoButton src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
+                <ChatbotButton src={Robot} alt="Chat bot" onClick={() => handleNavigate('/chatbot')} />
             </IconsRightContainer>
         </Container>
     );

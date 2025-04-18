@@ -80,11 +80,10 @@ export const IconsRightContainer = styled.div`
     }
 `;
 
-export const SearchButton = styled.img`
+export const ChatbotButton = styled.img`
     cursor: pointer;
     color: #000000;
-    width: 25px;
-    height: 25px;
+    width: 30px;
     margin-right: 6vh;
 
     @media (max-width: 876px) {

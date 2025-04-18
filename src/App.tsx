@@ -8,6 +8,7 @@ import Login from './pages/login/login';
 import Cadastro from './pages/cadastro/cadastro';
 import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
+import Chatbot from './pages/chatbot/chatbot';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/cadastro' element={<Cadastro/>} />
           <Route path='/perfil' element={<Perfil/>} />
           <Route path='/carrinho' element={<Carrinho/>} />
+          <Route path='/chatbot' element={<Chatbot/>} />
         </Routes>
       </BrowserRouter>
     </div>
