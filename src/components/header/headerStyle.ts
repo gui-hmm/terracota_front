@@ -75,8 +75,12 @@ export const IconsRightContainer = styled.div`
     margin-right: 1vh;
 
     @media (max-width: 768px) {
-        margin-left: 15%;
+        margin-left: 6%;
         padding-bottom: 10px;
+    }
+
+    @media (max-width: 400px) {
+        margin-left: 9%;
     }
 `;
 

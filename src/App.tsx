@@ -9,6 +9,9 @@ import Cadastro from './pages/cadastro/cadastro';
 import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
 import Chatbot from './pages/chatbot/chatbot';
+import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
+import MinhasVendas from './pages/artesaoMinhasVendas/minhasVendas';
+import ArtesaoPerfil from './pages/artesaPerfil/artesaoPerfil';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route path='/perfil' element={<Perfil/>} />
           <Route path='/carrinho' element={<Carrinho/>} />
           <Route path='/chatbot' element={<Chatbot/>} />
+          <Route path='/meusprodutos' element={<MeusProdutos/>} />
+          <Route path='/minhasvendas' element={<MinhasVendas/>} />
+          <Route path='/artesaoperfil' element={<ArtesaoPerfil/>} />
         </Routes>
       </BrowserRouter>
     </div>

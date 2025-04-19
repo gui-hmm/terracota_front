@@ -170,8 +170,6 @@ export const ProdutoValorDestaque = styled.div`
     font-weight: 400;
 `;
 
-
-
 export const ContainerImageAltaQualidade = styled.div`
     width: 100%;
     height: auto;
@@ -219,6 +217,11 @@ export const ContainerCategorias = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 50px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        padding-left: 30%;
+    }
 `;
 
 export const CategoriaSelecionada = styled.div`
