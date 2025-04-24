@@ -25,7 +25,6 @@ import ProdutoDetalhesModal from "../../components/produtosComponent/ProdutoDeta
 import { Produto } from "../produtos/produto";
 import Footer from "../../components/footer/footer";
 
-// Definindo o tipo para Produto
 interface ProdutoCarrinho {
   id: number;
   nome: string;
@@ -37,32 +36,24 @@ interface ProdutoCarrinho {
 const Carrinho: React.FC = () => {
   const navigate = useNavigate();
 
-  // Estado que mantém os produtos do carrinho
   const [produtos, setProdutos] = useState<ProdutoCarrinho[]>([]);
-  const [showModal, setShowModal] = useState(false); // Controla a visibilidade do modal
-  const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null); // Produto selecionado
+  const [showModal, setShowModal] = useState(false);
+  const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
 
-  // Carregar produtos do localStorage quando o componente for montado
   useEffect(() => {
     const produtosStorage = localStorage.getItem("carrinho");
     if (produtosStorage) {
-      //console.log("Carrinho carregado do localStorage: ", produtosStorage); // Depuração
       const produtosCarregados = JSON.parse(produtosStorage).map((produto: any) => ({
-        ...produto.produto, // Extraindo o produto corretamente
+        ...produto.produto,
         quantidade: produto.quantidade
       }));
-      //console.log("Produtos carregados após mapeamento: ", produtosCarregados); // Depuração adicional
-      setProdutos(produtosCarregados); // Carregar os produtos salvos
+      setProdutos(produtosCarregados);
     }
   }, []);
-  
-  // Salvar produtos no localStorage sempre que a lista de produtos for alterada
-  
 
-  // Função para alterar a quantidade do produto
   const alterarQuantidade = (id: number, novaQuantidade: number) => {
     if (novaQuantidade <= 0) {
-      removerProduto(id);  // Se a quantidade for 0 ou negativa, remove o produto
+      removerProduto(id);
     } else {
       setProdutos((prev) =>
         prev.map((produto) =>
@@ -72,75 +63,60 @@ const Carrinho: React.FC = () => {
     }
   };
 
-  // Função para remover um produto do carrinho
   const removerProduto = (id: number) => {
     setProdutos((prev) => {
       const novosProdutos = prev.filter((produto) => produto.id !== id);
-      localStorage.setItem("carrinho", JSON.stringify(novosProdutos)); // Atualizar no localStorage
+      localStorage.setItem("carrinho", JSON.stringify(novosProdutos));
       return novosProdutos;
     });
   };
 
-  // Função para esvaziar o carrinho
   const esvaziarCarrinho = () => {
-    setProdutos([]);  // Limpa todos os produtos do carrinho
-    localStorage.removeItem("carrinho"); // Limpa o localStorage
+    setProdutos([]);
+    localStorage.removeItem("carrinho");
   };
 
-  // Função para calcular o valor total do carrinho
   const calcularTotal = () => {
     const total = produtos.reduce((total, produto) => {
-      //console.log("Calculando valor para: ", produto); // Depuração
       const valor = produto.valor;
       const quantidade = produto.quantidade;
 
-      // Verifica se tanto o valor quanto a quantidade são números válidos
       if (!isNaN(valor) && !isNaN(quantidade)) {
         return total + valor * quantidade;
       }
-      return total; // Se algum valor for inválido, retorna o total atual sem alterações
+      return total;
     }, 0);
 
     return isNaN(total) ? '0.00' : total.toFixed(2);
   };
 
-  // Função para adicionar o produto ao carrinho
   const adicionarAoCarrinho = (produto: Produto, quantidade: number) => {
     setProdutos((prevProdutos) => {
-      // Verificar se o produto já existe no carrinho
       const produtoExistente = prevProdutos.find(p => p.id === produto.id);
       let novosProdutos;
       
       if (produtoExistente) {
-        // Se o produto já estiver no carrinho, apenas aumentar a quantidade
         novosProdutos = prevProdutos.map(p =>
           p.id === produto.id ? { ...p, quantidade: p.quantidade + quantidade } : p
         );
       } else {
-        // Se não existir, adicionar o novo produto ao carrinho
         novosProdutos = [...prevProdutos, { ...produto, quantidade }];
       }
   
-      // Persistir no localStorage
-      console.log("Novos produtos após adicionar: ", novosProdutos); // Depuração
       localStorage.setItem("carrinho", JSON.stringify(novosProdutos));
-      return novosProdutos;  // Atualiza o estado com os novos produtos
+      return novosProdutos; 
     });
   
-    setShowModal(false); // Fechar o modal depois de adicionar o produto
+    setShowModal(false);
   };
 
 
-  // Função para redirecionar à página de finalização de compra
   const handleFinalizarCompra = () => {
-    // Limpar o carrinho no estado e no localStorage
-    localStorage.removeItem("carrinho");  // Limpar o carrinho no localStorage
-    setProdutos([]);  // Limpar o carrinho no estado
+    localStorage.removeItem("carrinho");
+    setProdutos([]);
   
-    // Redirecionar para a página inicial (Home)
-    navigate("/");  // Caminho da sua página inicial
+    navigate("/");
     
-    // Exibir uma mensagem de sucesso (pode ser em um componente de alerta ou modal)
     alert("Compra finalizada com sucesso!");
   };  
 

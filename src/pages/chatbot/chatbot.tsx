@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   ChatContainer,
   ChatHeader,
@@ -10,7 +11,8 @@ import {
   IconVoltar,
   PageContainer,
   TextProdutos,
-  ConteinerProdutosText
+  ConteinerProdutosText,
+  Spinner
 } from "./chatbotStyle";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -22,59 +24,83 @@ const Chatbot: React.FC = () => {
     { sender: "bot", text: "Olá! Em que posso te ajudar hoje?" },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    setMessages([...messages, { sender: "user", text: input }]);
+    const userInput = input;
+    setMessages((prev) => [...prev, { sender: "user", text: userInput }]);
     setInput("");
+    setLoading(true);
+    
+    try {
+      const response = await axios.post("https://spring-terracota-new.onrender.com/api/chatbot", {
+        prompt: userInput,
+      });
 
-    // Simula resposta do bot
-    setTimeout(() => {
+      const botResponse = response.data?.response || "Desculpe, não consegui responder.";
+
+      setMessages((prev) => [...prev, { sender: "bot", text: botResponse }]);
+    } catch (error) {
+      console.error("Erro ao se comunicar com o chatbot:", error);
       setMessages((prev) => [
         ...prev,
-        { sender: "user", text: input },
-        { sender: "bot", text: "Estou pensando na melhor resposta para você..." },
+        { sender: "bot", text: "⚠️ Ocorreu um erro ao tentar responder. Tente novamente mais tarde." },
       ]);
-    }, 1000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-        <Header/>
-        <PageContainer>
+      <Header />
+      <PageContainer>
         <Header />
         <ConteinerProdutosText>
-            <IconVoltar src={Voltar} onClick={() => navigate("/")} />
-            <TextProdutos>Assistente terracora</TextProdutos>
+          <IconVoltar src={Voltar} onClick={() => navigate("/")} />
+          <TextProdutos>Assistente Terracota</TextProdutos>
         </ConteinerProdutosText>
+
         <ChatContainer>
-            <ChatHeader>Chat de Suporte</ChatHeader>
-            <ChatMessages>
+          <ChatHeader>Chat de Suporte</ChatHeader>
+
+          <ChatMessages>
             {messages.map((msg, index) => (
-                <MessageBubble
+              <MessageBubble
                 key={index}
                 className={msg.sender === "user" ? "user" : "bot"}
-                >
+              >
                 {msg.text}
-                </MessageBubble>
+              </MessageBubble>
             ))}
-            </ChatMessages>
-            <ChatInputContainer>
+
+            {loading && (
+              <MessageBubble className="bot">
+                <Spinner />
+              </MessageBubble>
+            )}
+          </ChatMessages>
+
+          <ChatInputContainer>
             <ChatInput
-                placeholder="Digite sua mensagem..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => {
+              placeholder="Digite sua mensagem..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => {
                 if (e.key === "Enter") sendMessage();
-                }}
+              }}
+              disabled={loading}
             />
-            <ChatButton onClick={sendMessage}>Enviar</ChatButton>
-            </ChatInputContainer>
+            <ChatButton onClick={sendMessage} disabled={loading}>
+              Enviar
+            </ChatButton>
+          </ChatInputContainer>
         </ChatContainer>
-        </PageContainer>
-        <Footer />
+      </PageContainer>
+      <Footer />
     </>
   );
 };
