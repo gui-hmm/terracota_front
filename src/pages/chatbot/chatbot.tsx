@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import axios from "axios";
 import {
   ChatContainer,
@@ -73,7 +74,7 @@ const Chatbot: React.FC = () => {
                 key={index}
                 className={msg.sender === "user" ? "user" : "bot"}
               >
-                {msg.text}
+                {msg.sender === "bot" ? <ReactMarkdown>{msg.text}</ReactMarkdown> : msg.text}
               </MessageBubble>
             ))}
 

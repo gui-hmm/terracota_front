@@ -3,8 +3,8 @@ import Header from "../../components/header/header";
 import Voltar from "../../assets/menorQue.png";
 import Modelagem from "../../assets/modelagem.png"
 import { 
-    ContainerImage, 
     Container, 
+    ContainerImage, 
     ImageModelagem, 
     QuemSomosContainer, 
     QuemSomosText, 
