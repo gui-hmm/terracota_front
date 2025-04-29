@@ -13,7 +13,7 @@ import {
 } from "./chatbotStyle";
 import Voltar from "../../assets/menor_que_branco.png";
 import { useNavigate } from "react-router-dom";
-import { enviarMensagemChatbot } from "../../services/chebotService";
+import { enviarMensagemChatbot } from "../../services/chatbotService";
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState([
