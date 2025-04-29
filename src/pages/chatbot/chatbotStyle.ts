@@ -16,20 +16,15 @@ export const Spinner = styled.div`
   margin: 5px auto;
 `;
 
-export const PageContainer = styled.div`
-  margin: 150px 25px 50px 25px;
 
-  @media (max-width: 768px) {
-    margin-top: 270px;
-  }
-`;
-
-export const ConteinerProdutosText = styled.div`
-  margin-left: 2%;
-  margin-bottom: 50px;
+export const ChatContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
   display: flex;
-  flex-direction: row;
-  cursor: pointer;
+  flex-direction: column;
+  background-color: #fff5f5;
+  box-sizing: border-box;
 `;
 
 export const IconVoltar = styled.img`
@@ -37,24 +32,7 @@ export const IconVoltar = styled.img`
   height: 23px;
   margin-top: 6px;
   margin-right: 15px;
-`;
-
-export const TextProdutos = styled.div`
-  font-size: 26px;
-  font-weight: 200;
-`;
-
-
-export const ChatContainer = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  height: 600px;
-  margin: auto;
-  border: 1px solid #dcdcdc;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff5f5;
+  cursor: pointer;
 `;
 
 export const ChatHeader = styled.div`
@@ -66,8 +44,6 @@ export const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 0 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
 `;
 
 export const ChatMessages = styled.div`

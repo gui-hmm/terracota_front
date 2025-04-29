@@ -10,14 +10,9 @@ import {
   ChatButton,
   MessageBubble,
   IconVoltar,
-  PageContainer,
-  TextProdutos,
-  ConteinerProdutosText,
   Spinner
 } from "./chatbotStyle";
-import Header from "../../components/header/header";
-import Footer from "../../components/footer/footer";
-import Voltar from "../../assets/menorQue.png";
+import Voltar from "../../assets/menor_que_branco.png";
 import { useNavigate } from "react-router-dom";
 
 const Chatbot: React.FC = () => {
@@ -56,53 +51,45 @@ const Chatbot: React.FC = () => {
   };
 
   return (
-    <>
-      <Header />
-      <PageContainer>
-        <Header />
-        <ConteinerProdutosText>
-          <IconVoltar src={Voltar} onClick={() => navigate("/")} />
-          <TextProdutos>Assistente Terracota</TextProdutos>
-        </ConteinerProdutosText>
+    <ChatContainer>
+      
+      <ChatHeader>
+        <IconVoltar src={Voltar} onClick={() => navigate("/")} />
+        Chat de Suporte
+      </ChatHeader>
 
-        <ChatContainer>
-          <ChatHeader>Chat de Suporte</ChatHeader>
+      <ChatMessages>
+        {messages.map((msg, index) => (
+          <MessageBubble
+            key={index}
+            className={msg.sender === "user" ? "user" : "bot"}
+          >
+            {msg.sender === "bot" ? <ReactMarkdown>{msg.text}</ReactMarkdown> : msg.text}
+          </MessageBubble>
+        ))}
 
-          <ChatMessages>
-            {messages.map((msg, index) => (
-              <MessageBubble
-                key={index}
-                className={msg.sender === "user" ? "user" : "bot"}
-              >
-                {msg.sender === "bot" ? <ReactMarkdown>{msg.text}</ReactMarkdown> : msg.text}
-              </MessageBubble>
-            ))}
+        {loading && (
+          <MessageBubble className="bot">
+            <Spinner />
+          </MessageBubble>
+        )}
+      </ChatMessages>
 
-            {loading && (
-              <MessageBubble className="bot">
-                <Spinner />
-              </MessageBubble>
-            )}
-          </ChatMessages>
-
-          <ChatInputContainer>
-            <ChatInput
-              placeholder="Digite sua mensagem..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") sendMessage();
-              }}
-              disabled={loading}
-            />
-            <ChatButton onClick={sendMessage} disabled={loading}>
-              Enviar
-            </ChatButton>
-          </ChatInputContainer>
-        </ChatContainer>
-      </PageContainer>
-      <Footer />
-    </>
+      <ChatInputContainer>
+        <ChatInput
+          placeholder="Digite sua mensagem..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
+          disabled={loading}
+        />
+        <ChatButton onClick={sendMessage} disabled={loading}>
+          Enviar
+        </ChatButton>
+      </ChatInputContainer>
+    </ChatContainer>
   );
 };
 
