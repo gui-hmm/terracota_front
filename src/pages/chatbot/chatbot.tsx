@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import axios from "axios";
 import {
   ChatContainer,
   ChatHeader,
@@ -14,6 +13,7 @@ import {
 } from "./chatbotStyle";
 import Voltar from "../../assets/menor_que_branco.png";
 import { useNavigate } from "react-router-dom";
+import { enviarMensagemChatbot } from "../../services/chebotService";
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState([
@@ -23,6 +23,7 @@ const Chatbot: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
@@ -30,14 +31,9 @@ const Chatbot: React.FC = () => {
     setMessages((prev) => [...prev, { sender: "user", text: userInput }]);
     setInput("");
     setLoading(true);
-    
+
     try {
-      const response = await axios.post("https://spring-terracota-new.onrender.com/api/chatbot", {
-        prompt: userInput,
-      });
-
-      const botResponse = response.data?.response || "Desculpe, não consegui responder.";
-
+      const botResponse = await enviarMensagemChatbot(userInput);
       setMessages((prev) => [...prev, { sender: "bot", text: botResponse }]);
     } catch (error) {
       console.error("Erro ao se comunicar com o chatbot:", error);
@@ -49,6 +45,7 @@ const Chatbot: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <ChatContainer>
