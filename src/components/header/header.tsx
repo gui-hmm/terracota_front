@@ -12,16 +12,15 @@ import {
     ChatbotButton,
 } from "./headerStyle";
 import { To, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks";
 
 // Suponha que você tenha um contexto de autenticação que armazena o estado de login do usuário
 // Por exemplo, useAuthContext() seria um hook que retornaria se o usuário está logado ou não.
 const Header = () => {
 
     const navigate = useNavigate();
-
-    // Supondo que você tenha um contexto de autenticação para saber se o usuário está logado.
-    // Exemplo fictício: const { isLoggedIn } = useAuthContext();
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Substitua por seu próprio estado ou contexto
+    const token = useAppSelector(state => state.auth.token);
+    const isLoggedIn = !!token;
 
     // Função para navegação
     const handleNavigate = (path: To) => {

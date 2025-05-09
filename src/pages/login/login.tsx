@@ -24,7 +24,7 @@ import Jarro from "../../assets/login_jarro.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
-import { To, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { login } from "../../store/reducers/auth";
 

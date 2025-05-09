@@ -44,15 +44,13 @@ const initialState: AuthState = {
   registrationSuccess: false,
 };
 
-// Login action
 export const login = createAsyncThunk<
   LoginResponse,
   LoginCredentials,
   { rejectValue: string }
->("auth/login", async (credentials, { rejectWithValue }) => {
+>("auth", async (credentials, { rejectWithValue }) => {
   try {
-    const response = await api.post("/auth/login", credentials);
-    // Store token in localStorage only after successful login
+    const response = await api.post("/auth", credentials);
     sessionStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error: any) {
@@ -62,7 +60,6 @@ export const login = createAsyncThunk<
   }
 });
 
-// Register action - now doesn't handle token
 export const register = createAsyncThunk<
   { message: string },
   RegisterCredentials,
@@ -74,7 +71,7 @@ export const register = createAsyncThunk<
       role: credentials.role.toUpperCase()
     };
     
-    const response = await api.post("/customer", formattedCredentials);
+    const response = await api.post("/customers", formattedCredentials);
     return { message: "Cadastro realizado com sucesso!" };
   } catch (error: any) {
     return rejectWithValue(

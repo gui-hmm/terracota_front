@@ -20,15 +20,22 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Jarros from "../../assets/cadastro_barros.png";
 import { To, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { logout } from "../../store/reducers/auth";
 
 function Perfil() {
+
+    const user = useAppSelector((state) => state.auth.user);
+    const dispatch = useAppDispatch();
+
+
     const [editando, setEditando] = useState(false);
     const [perfil, setPerfil] = useState({
-        nome: "João Silva",
-        email: "joao.silva@email.com",
-        cpf: "123.456.789-00",
-        contato: "(11) 98765-4321",
-        tipoUsuario: "cliente"  // Pode ser "cliente", "artesao", "empresa"
+        nome: user?.name || "João Silva",
+        email: user?.email || "joao.silva@email.com",
+        cpf: user?.cpf || "123.456.789-00",
+        contato: user?.contact || "(11) 98765-4321",
+        tipoUsuario: user?.role.toLowerCase() || "cliente"  // Pode ser "cliente", "artesao", "empresa"
     });
 
     const navigate = useNavigate();
@@ -45,6 +52,12 @@ function Perfil() {
         setEditando(false);
         // Aqui você pode salvar os dados atualizados, se necessário
     };
+
+    const handleSair = () => {
+        dispatch(logout());
+        navigate('/login');
+    };
+    
 
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
         const { name, value } = e.target;
@@ -117,6 +130,8 @@ function Perfil() {
                             ) : (
                                 <ButtonEditar onClick={handleEditar}>Editar</ButtonEditar>
                             )}
+                            <ButtonEditar onClick={handleSair}>Sair</ButtonEditar>
+
                         </ContainerButton>
                     </ContainerPerfil>
                 </ContainerPerfilGeral>
