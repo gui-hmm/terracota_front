@@ -18,6 +18,7 @@ import {
   TextInput,
   TextLogin,
   ErrorMessage,
+  Spinner,
 } from "./loginStyle";
 import Voltar from "../../assets/menorQue.png";
 import Jarro from "../../assets/login_jarro.png";
@@ -72,36 +73,40 @@ const Login: React.FC = () => {
             <Text1>Login</Text1>
             <Text2>Digite seus detalhes abaixo</Text2>
 
-            <TextInput>Email</TextInput>
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            <InputLogin
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleInputChange}
-              required
-            />
+            <form onSubmit={handleSubmit}>
+              <TextInput>Email</TextInput>
+              {error && <ErrorMessage>{error}</ErrorMessage>}
+              <InputLogin
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleInputChange}
+                required
+              />
 
-            <TextInput>Senha</TextInput>
-            <InputLogin
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleInputChange}
-              required
-            />
+              <TextInput>Senha</TextInput>
+              <InputLogin
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleInputChange}
+                required
+              />
 
-            <ContainerText3>
-              <Text3>Ainda não fez cadastro?</Text3>
-              <Text4 onClick={() => navigate('/cadastro')}>Acesse aqui</Text4>
-            </ContainerText3>
+              <ContainerText3>
+                <Text3>Ainda não fez cadastro?</Text3>
+                <Text4 onClick={() => navigate('/cadastro')}>Acesse aqui</Text4>
+              </ContainerText3>
 
-            <ContainerButton>
-              <ButtonEntrar onClick={handleSubmit}>Entrar</ButtonEntrar>
-              <ButtonEsqueceuSenha onClick={() => navigate("/")}>
-                Esqueceu a senha?
-              </ButtonEsqueceuSenha>
-            </ContainerButton>
+              <ContainerButton>
+                <ButtonEntrar type="submit" disabled={loading}>
+                  {loading ? <Spinner /> : "Entrar"}
+                </ButtonEntrar>
+                <ButtonEsqueceuSenha onClick={() => navigate("/")}>
+                  Esqueceu a senha?
+                </ButtonEsqueceuSenha>
+              </ContainerButton>
+            </form>
           </ContainerLogin>
         </ContainerLoginGeral>
       </Container>
