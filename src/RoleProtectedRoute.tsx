@@ -18,7 +18,6 @@ export default function RoleProtectedRoute({
   const token = sessionStorage.getItem("token");
 
   if (!token) {
-    alert("Acesso negado: você não tem permissão para acessar esta página.");
     return <Navigate to={redirectTo} />;
   }
 
@@ -30,7 +29,7 @@ export default function RoleProtectedRoute({
       return <Outlet />;
     } else {
       alert("Acesso negado: você não tem permissão para acessar esta página.");
-      return <Navigate to="/" />; 
+      return <Navigate to={redirectTo} />; 
     }
 
   } catch (error) {

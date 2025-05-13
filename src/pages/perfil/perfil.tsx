@@ -28,7 +28,8 @@ import { api } from "../../api/api";
 import { jwtDecode } from "jwt-decode";
 
 interface JwtPayload {
-  sub: string; 
+  sub: string;
+  role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
 }
 
 function Perfil() {
@@ -45,6 +46,7 @@ function Perfil() {
     tipoUsuario: "cliente",
   });
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const token = sessionStorage.getItem("token");
 
@@ -53,42 +55,53 @@ function Perfil() {
       try {
         const decoded = jwtDecode<JwtPayload>(token);
         setUserEmail(decoded.sub);
+        setUserRole(decoded.role);
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
       }
     }
   }, [token]);
+  
 
   useEffect(() => {
-    if (userEmail) {
+    if (userEmail && userRole) {
       const fetchPerfil = async () => {
         try {
-          setLoading(true); 
-          const response = await api.get(`/customers/email/${userEmail}`, {
+          setLoading(true);
+          
+          const roleToEndpoint: Record<string, string> = {
+            CUSTOMER: "customers",
+            CRAFTSMAN: "craftsmen",
+            COMPANY: "companies",
+          };
+          
+          const endpointRole = roleToEndpoint[userRole.toUpperCase()] || "customers";          
+
+          const response = await api.get(`/${endpointRole}/email/${userEmail}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
           const data = response.data;
-      
+  
           setPerfil({
             id: data.id || "",
             nome: data.name || "",
             email: data.email || "",
             cpf: data.cpf || "",
             contato: data.phone || "",
-            tipoUsuario: data.role.toLowerCase() || "cliente",
+            tipoUsuario: data.role || "cliente",
           });
         } catch (error) {
           console.error("Erro ao carregar perfil:", error);
         } finally {
           setLoading(false);
         }
-      };      
-
+      };
+  
       fetchPerfil();
     }
-  }, [userEmail, token]);
+  }, [userEmail, userRole, token]);  
 
   const handleNavigate = (path: To) => {
     navigate(path);
@@ -174,9 +187,9 @@ function Perfil() {
                   value={perfil.tipoUsuario}
                   title="Este campo não pode ser editado"
                 >
-                  <option value="cliente">Cliente</option>
-                  <option value="artesao">Artesão</option>
-                  <option value="empresa">Empresa</option>
+                  <option value="CUSTOMER">Cliente</option>
+                  <option value="CRAFTSMAN">Artesão</option>
+                  <option value="COMPANY">Empresa</option>
                 </SelectInput>
 
                 <ContainerButton>

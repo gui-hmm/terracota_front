@@ -10,12 +10,12 @@ import Login from './pages/login/login';
 import Cadastro from './pages/cadastro/cadastro';
 import Chatbot from './pages/chatbot/chatbot';
 
-// Páginas protegidas (por role)
+// Páginas protegidas
 import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
 import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
 import MinhasVendas from './pages/artesaoMinhasVendas/minhasVendas';
-import ArtesaoPerfil from './pages/artesaPerfil/artesaoPerfil';
+import DashboardArtesao from './pages/artesaoDashboard/daschboard';
 
 import RoleProtectedRoute from './RoleProtectedRoute';
 
@@ -35,7 +35,6 @@ function App() {
 
           {/* Protegidas para CUSTOMER */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER"]} />}>
-            <Route path="/perfil" element={<Perfil />} />
             <Route path="/carrinho" element={<Carrinho />} />
           </Route>
 
@@ -43,7 +42,21 @@ function App() {
           <Route element={<RoleProtectedRoute allowedRoles={["CRAFTSMAN"]} />}>
             <Route path="/meusprodutos" element={<MeusProdutos />} />
             <Route path="/minhasvendas" element={<MinhasVendas />} />
-            <Route path="/artesaoperfil" element={<ArtesaoPerfil />} />
+          </Route>
+
+          {/* Protegidas para COMPANY */}
+          <Route element={<RoleProtectedRoute allowedRoles={["COMPANY"]} />}>
+
+          </Route>
+
+          {/* Protegidas para CUSTOMER e CRAFTSMAN */}
+          <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER", "CRAFTSMAN"]} />}>
+            <Route path="/perfil" element={<Perfil />} />
+          </Route>
+
+          {/* Protegidas para CRAFTSMAN e COMPANY */}
+          <Route element={<RoleProtectedRoute allowedRoles={["CRAFTSMAN", "COMPANY"]} />}>
+            <Route path="/dashboard" element={<DashboardArtesao />} />
           </Route>
 
         </Routes>

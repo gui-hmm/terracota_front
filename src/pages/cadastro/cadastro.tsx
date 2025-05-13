@@ -18,13 +18,15 @@ import {
   TextCadastro,
   TextInput,
   SelectInput,
-  ErrorMessage, // Importando a nova estilização para mensagens de erro
+  ErrorMessage,
+  Spinner,
 } from "./cadastroStyle";
 import Voltar from "../../assets/menorQue.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Jarros from "../../assets/cadastro_barros.png";
 import { To, useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 function Cadastro() {
   const dispatch = useDispatch<AppDispatch>();
@@ -44,18 +46,18 @@ function Cadastro() {
     password: "",
     confirmPassword: "",
     cpf: "",
-    contact: "",
-    termsAccepted: false,  // Estado para controlar o checkbox de termos
+    phone: "",
+    termsAccepted: false, 
   });
 
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     cpf: "",
-    contact: "",
+    phone: "",
     password: "",
     confirmPassword: "",
-    termsAccepted: "",  // Erro para o checkbox de termos
+    termsAccepted: "", 
   });
 
   const handleInputChange = (
@@ -63,23 +65,20 @@ function Cadastro() {
   ): void => {
     const { name, value, type } = e.target;
 
-    // Se o tipo do campo for checkbox, usamos `checked`, caso contrário usamos `value`.
     if (type === "checkbox") {
-      const target = e.target as HTMLInputElement; // Afirmação de tipo para garantir que seja um HTMLInputElement
+      const target = e.target as HTMLInputElement;
       setForm((prev) => ({
         ...prev,
-        [name]: target.checked,  // Aqui usamos `target.checked` para o checkbox
+        [name]: target.checked,  
       }));
     } else {
       setForm((prev) => ({
         ...prev,
-        [name]: value,  // Para outros tipos de input, usamos `value`
+        [name]: value, 
       }));
     }
   };
-
   
-
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setRole(event.target.value);
   };
@@ -94,9 +93,9 @@ function Cadastro() {
     return regex.test(cpf);
   };
 
-  const validateContact = (contact: string): boolean => {
+  const validatePhone = (phone: string): boolean => {
     const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
-    return regex.test(contact);
+    return regex.test(phone);
   };
 
   const validatePassword = (password: string): boolean => {
@@ -113,7 +112,6 @@ function Cadastro() {
   const validateForm = (): boolean => {
     let newErrors: any = { ...errors };
 
-    // Validação para o campo "Nome"
     if (!form.name.trim()) {
       newErrors.name = "O campo 'Nome' é obrigatório.";
     } else {
@@ -132,10 +130,10 @@ function Cadastro() {
       newErrors.cpf = "";
     }
 
-    if (!validateContact(form.contact)) {
-      newErrors.contact = "Contato inválido. Formato esperado: (XX) XXXXX-XXXX";
+    if (!validatePhone(form.phone)) {
+      newErrors.phone = "Contato inválido. Formato esperado: (XX) XXXXX-XXXX";
     } else {
-      newErrors.contact = "";
+      newErrors.phone = "";
     }
 
     if (!validatePassword(form.password)) {
@@ -150,7 +148,6 @@ function Cadastro() {
       newErrors.confirmPassword = "";
     }
 
-    // Validação para o checkbox de "Aceitar os termos"
     if (!form.termsAccepted) {
       newErrors.termsAccepted = "Você precisa aceitar os termos e condições.";
     } else {
@@ -159,7 +156,6 @@ function Cadastro() {
 
     setErrors(newErrors);
 
-    // Se existir algum erro, o formulário não será enviado
     return !Object.values(newErrors).some((error) => error !== "");
   };
 
@@ -172,18 +168,22 @@ function Cadastro() {
           email: form.email,
           password: form.password,
           name: form.name,
-          cpf: form.cpf.replace(/[.-]/g, ''), // Remove dots and dash from CPF
-          contact: form.contact.replace(/[()-\s]/g, ''), // Remove formatting from contact
+          cpf: form.cpf.replace(/[.-]/g, ''), 
+          phone: form.phone.replace(/[()-\s]/g, ''),
           role: role.toUpperCase(),
         })).unwrap();
 
         if (result) {
-          // Registration successful
-          handleNavigate('/login'); // or wherever you want to redirect
+          handleNavigate('/login'); 
         }
-      } catch (err) {
-        // Error is handled by Redux and will be available in authError
-        console.error('Registration failed:', err);
+      } catch (error) {
+        const err = error as AxiosError;
+      
+        console.error('Registration failed:', {
+          message: err.response?.data,
+          status: err.response?.status,
+          fullError: err,
+        });
       }
     }
   };
@@ -252,10 +252,10 @@ function Cadastro() {
             />
 
             <TextInput>Contato</TextInput>
-            {errors.contact && <ErrorMessage>{errors.contact}</ErrorMessage>}
+            {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
             <InputCadastro
-              name="contact"
-              value={form.contact}
+              name="phone"
+              value={form.phone}
               onChange={handleInputChange}
               required
             />
@@ -283,10 +283,12 @@ function Cadastro() {
             </ContainerText2>
 
             <ContainerButton>
-              <ButtonEntrar 
+              <ButtonEntrar
                 onClick={handleSubmit}
+                disabled={loading}
+                type="button"
               >
-                Entrar
+                {loading ? <Spinner /> : "Entrar"}
               </ButtonEntrar>
             </ContainerButton>
           </ContainerCadastro>

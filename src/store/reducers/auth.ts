@@ -32,7 +32,7 @@ interface RegisterCredentials {
   email: string;
   name: string;
   cpf: string;
-  contact: string;
+  phone: string;
   role: string;
   password: string;
 }
@@ -66,13 +66,28 @@ export const register = createAsyncThunk<
   RegisterCredentials,
   { rejectValue: string }
 >("auth/register", async (credentials, { rejectWithValue }) => {
+  const { role, ...rest } = credentials;
+
+  const endpointMap: Record<string, string> = {
+    CUSTOMER: "/customers",
+    CRAFTSMAN: "/craftsmen",
+    COMPANY: "/companies",
+  };
+
+  const roleUpper = role.toUpperCase();
+  const endpoint = endpointMap[roleUpper];
+
+  if (!endpoint) {
+    return rejectWithValue("Tipo de usuário inválido.");
+  }
+
   try {
-    const formattedCredentials = {
-      ...credentials,
-      role: credentials.role.toUpperCase()
+    const payload = {
+      ...rest,
+      user_role: roleUpper,
+      is_active: true,
     };
-    
-    const response = await api.post("/customers", formattedCredentials);
+    await api.post(endpoint, payload);
     return { message: "Cadastro realizado com sucesso!" };
   } catch (error: any) {
     return rejectWithValue(

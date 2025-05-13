@@ -1,4 +1,20 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Spinner = styled.div`
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #555;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${spin} 1s linear infinite;
+  margin: 5px auto;
+`;
 
 export const Container = styled.div`
     width: 100%;
@@ -93,8 +109,8 @@ export const SelectInput = styled.select`
     padding: 5px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
-    width: 300px;
-    height: 30px;
+    width: 310px;
+    height: 45px;
 `;
 
 export const ContainerText2 = styled.div`
@@ -125,17 +141,24 @@ export const ContainerButton = styled.div`
     margin-top: 60px;
 `;
 
-export const ButtonEntrar = styled.div`
-    width: 110px;
-    height: 50px;
-    background-color: #800000;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 50px;
+// cadastroStyle.ts
+export const ButtonEntrar = styled.button`
+  width: 110px;
+  height: 50px;
+  background-color: #800000;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 50px;
+  border: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 `;
 
 export const ErrorMessage = styled.div`

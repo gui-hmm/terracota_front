@@ -115,23 +115,3 @@ export const CarrinhoButton = styled.img`
     }
 `;
 
-export const ConfiguracaoButton = styled.img`
-    cursor: pointer;
-    width: 28px;
-    height: 28px;
-    margin-right: 6vh;
-    transition: 0.2s;
-
-    &:hover {
-        animation: ${huHuAnimation} infinite 2s ease-in-out;
-    }
-
-    @media (max-width: 876px) {
-        margin-right: 2vh;
-    }
-
-    @media (max-width: 768px) {
-        margin-right: 6vh;
-    }
-`;
-

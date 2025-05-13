@@ -115,10 +115,10 @@ export const SelectInput = styled.select`
     outline: none;
     margin-bottom: 20px;
     background-color: #f9f9f9;
-    width: 300px;
-    height: 35px;
+    width: 310px;
+    height: 38px;
     font-size: 16px;
-    ${({ disabled }) => (disabled ? `background-color: #e0e0e0;` : `background-color: #f3f3f3;`)};
+    ${({ disabled }) => (disabled ? `background-color:rgb(202, 202, 202);` : `background-color: #f3f3f3;`)};
     option {
         font-size: 16px;
     }
