@@ -170,9 +170,9 @@ function Perfil() {
                 <TextInput>Tipo de Usuário</TextInput>
                 <SelectInput
                   name="tipoUsuario"
-                  disabled={!editando}
+                  disabled
                   value={perfil.tipoUsuario}
-                  onChange={handleChange}
+                  title="Este campo não pode ser editado"
                 >
                   <option value="cliente">Cliente</option>
                   <option value="artesao">Artesão</option>
