@@ -22,9 +22,37 @@ export const TextExploreContainer = styled.div`
     display: flex;
     align-items: start;
     justify-content: start;
-    margin: 2vh;
-    margin-left: 8vh;
+    margin: 2vh 0 2vh 8vh;
     flex-direction: column;
+`;
+
+export const BarrosExplore = styled.img`
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 2%;
+    
+    @media (max-width: 1350px) {
+        width: 95%;
+    } 
+    
+    @media (max-width: 1095px) {
+        width: 125%;
+    } 
+
+    @media (max-width: 980px) {
+        width: 145%;
+    } 
+
+    @media (max-width: 836px) {
+        width: 165%;
+    } 
+
+    @media (max-width: 768px) {
+        visibility: hidden;
+    } 
 `;
 
 export const TextUm = styled.div`
@@ -55,16 +83,6 @@ export const ButtonExplore = styled.button`
     height: 6.5vh;
 `;
 
-
-export const BarrosExplore = styled.img`
-    width: 95vh;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 100px;
-`;
-
 export const ContainerMaisVendido = styled.div`
     width: 100%;
     height: 200px;
@@ -73,6 +91,10 @@ export const ContainerMaisVendido = styled.div`
     flex-direction: row;
     justify-content: start;
     align-items: center;
+
+    @media (max-width: 1260px) {
+        flex-direction: column;
+    } 
 `;
 
 export const ContainerTextMaisVendido = styled.div`
@@ -126,6 +148,11 @@ export const Text5 = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+`;
+
+export const ContainerDestaques = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
 
 export const VoltarDestaques = styled.img`

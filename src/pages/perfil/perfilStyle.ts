@@ -1,4 +1,27 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+export const Spinner = styled.div`
+  width: 100px;
+  height: 100px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #555;
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
+`;
+
 
 export const Container = styled.div`
     width: 100%;
@@ -8,6 +31,10 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: start;
     justify-content: start;
+
+    @media (max-width: 768px) {
+        margin-top: 270px;
+    }
 `;
 
 export const ConteinerPerfilText = styled.div`
@@ -39,11 +66,15 @@ export const ContainerPerfilGeral = styled.div`
     row-gap: 50px;
     position: relative;
     margin: 20px 50px 10px 3%;
+
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column;
+    } 
 `;
 
 export const ImagePerfil = styled.img`
-    width: 800px;
-    height: auto;
+    width: 85%;
     background-size: contain;
 `;
 

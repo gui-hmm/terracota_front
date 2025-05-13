@@ -6,6 +6,7 @@ import {
     CategoriaNaoSelecionada,
     CategoriaSelecionada,
     ContainerCategorias,
+    ContainerDestaques,
     ContainerImageAltaQualidade,
     ContainerMaisVendido,
     ContainerProdutosDestaque,
@@ -181,23 +182,25 @@ function Home() {
                     <Text4>A produção diária na nossa fábrica. novas práticas de gestão de qualidade.</Text4>
                     <Text5 onClick={() => handleNavigate('/produtos')} >Explore</Text5>
                 </ContainerTextMaisVendido>
-                <VoltarDestaques alt="" src={Voltar} />
-                <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
-                    <ImageProdutoDestaque alt="" src={P1} />
-                    <ProdutoNameDestaque>Vasos de cerâmica</ProdutoNameDestaque>
-                    <ProdutoValorDestaque>R$ 160,00</ProdutoValorDestaque>
-                </ContainerProdutosDestaque>
-                <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
-                    <ImageProdutoDestaque alt="" src={P10} />
-                    <ProdutoNameDestaque>Jarra de cerâmica</ProdutoNameDestaque>
-                    <ProdutoValorDestaque>R$ 150,00</ProdutoValorDestaque>
-                </ContainerProdutosDestaque>
-                <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
-                    <ImageProdutoDestaque alt="" src={P7} />
-                    <ProdutoNameDestaque>Leão de barro</ProdutoNameDestaque>
-                    <ProdutoValorDestaque>R$ 300,00</ProdutoValorDestaque>
-                </ContainerProdutosDestaque>
-                <AvancarDestaques alt="" src={Avancar} />
+                <ContainerDestaques>
+                    <VoltarDestaques alt="" src={Voltar} />
+                    <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
+                        <ImageProdutoDestaque alt="" src={P1} />
+                        <ProdutoNameDestaque>Vasos de cerâmica</ProdutoNameDestaque>
+                        <ProdutoValorDestaque>R$ 160,00</ProdutoValorDestaque>
+                    </ContainerProdutosDestaque>
+                    <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
+                        <ImageProdutoDestaque alt="" src={P10} />
+                        <ProdutoNameDestaque>Jarra de cerâmica</ProdutoNameDestaque>
+                        <ProdutoValorDestaque>R$ 150,00</ProdutoValorDestaque>
+                    </ContainerProdutosDestaque>
+                    <ContainerProdutosDestaque onClick={() => handleNavigate('/produtos')} >
+                        <ImageProdutoDestaque alt="" src={P7} />
+                        <ProdutoNameDestaque>Leão de barro</ProdutoNameDestaque>
+                        <ProdutoValorDestaque>R$ 300,00</ProdutoValorDestaque>
+                    </ContainerProdutosDestaque>
+                    <AvancarDestaques alt="" src={Avancar} />
+                </ContainerDestaques>
             </ContainerMaisVendido>
 
             <ContainerImageAltaQualidade onClick={() => handleNavigate('/produtos')} >

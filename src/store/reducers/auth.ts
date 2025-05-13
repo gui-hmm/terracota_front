@@ -37,12 +37,9 @@ interface RegisterCredentials {
   password: string;
 }
 
-const storedUser = sessionStorage.getItem("user");
-const storedToken = sessionStorage.getItem("token");
-
 const initialState: AuthState = {
-  user: storedUser ? JSON.parse(storedUser) : null,
-  token: storedToken || null,
+  user: null,
+  token: null,
   loading: false,
   error: null,
   registrationSuccess: false,
@@ -56,7 +53,6 @@ export const login = createAsyncThunk<
   try {
     const response = await api.post("/auth", credentials);
     sessionStorage.setItem('token', response.data.token);
-    sessionStorage.setItem('customer', JSON.stringify(response.data.user));
     return response.data;
   } catch (error: any) {
     return rejectWithValue(

@@ -69,10 +69,8 @@ const Produtos: React.FC = () => {
   // Carregar o carrinho do localStorage ao montar o componente
   useEffect(() => {
     const carrinhoStorage = localStorage.getItem("carrinho");
-    console.log('Carrinho lido do localStorage: ', carrinhoStorage); // Log para verificar os dados do carrinho no localStorage
     if (carrinhoStorage) {
       const carrinhoParse = JSON.parse(carrinhoStorage);
-      console.log('Carrinho após parse: ', carrinhoParse); // Log após parsing
       if (Array.isArray(carrinhoParse)) {
         setCarrinho(carrinhoParse);
       } else {
@@ -121,7 +119,6 @@ const Produtos: React.FC = () => {
       novosCarrinho = [...carrinho, { produto, quantidade }];
     }
 
-    console.log('Carrinho atualizado: ', novosCarrinho); // Para depuração
     // Atualize o carrinho local
     setCarrinho(novosCarrinho);
 
