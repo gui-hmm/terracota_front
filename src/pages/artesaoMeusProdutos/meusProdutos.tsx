@@ -48,11 +48,12 @@ const MeusProdutos = () => {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const [creating, setCreating] = useState(false);
-  const [craftsmanId, setCraftsmanId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
+  const [isFetchingProducts, setIsFetchingProducts] = useState(true);
+  const [craftsmanId, setCraftsmanId] = useState<string | null>(null);
   const [editProductId, setEditProductId] = useState<string | null>(null);
   const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
-  const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [buttonLoadingMap, setButtonLoadingMap] = useState<Record<string, string | null>>({});
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -106,13 +107,18 @@ const MeusProdutos = () => {
   }, [craftsmanId]);
 
   const fetchProducts = async () => {
+    setIsFetchingProducts(true);
     try {
       const response = await api.get(`/products/craftsmen/${craftsmanId}`);
       setProducts(response.data.items);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
+      toast.error("Erro ao carregar produtos.");
+    } finally {
+      setIsFetchingProducts(false);
     }
   };
+  
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -321,67 +327,73 @@ const MeusProdutos = () => {
         </Form>
 
         <Titles>Produtos cadastrados</Titles>
-        <ProductList>
-          {products.map((product) => {
-            const isItemLoading = isLoading(product.id);
+        {isFetchingProducts ? (
+          <Spinner>
+            <div className="loader" />
+          </Spinner>
+        ) : (
+          <ProductList>
+            {products.map((product) => {
+              const isItemLoading = isLoading(product.id);
 
-            return (
-              <ProductItem key={product.id}>
-                {editProductId === product.id ? (
-                  <>
-                    <InputProdutos
-                      name="name"
-                      value={editedProduct.name || ""}
-                      onChange={handleEditChange}
-                      disabled={isItemLoading}
-                    />
-                    <InputProdutos
-                      name="description"
-                      value={editedProduct.description || ""}
-                      onChange={handleEditChange}
-                      disabled={isItemLoading}
-                    />
-                    <InputProdutos
-                      name="price"
-                      type="number"
-                      value={editedProduct.price?.toString() || ""}
-                      onChange={handleEditChange}
-                      disabled={isItemLoading}
-                    />
-                    <Actions>
-                      <Button onClick={handleEditProduct} disabled={isItemLoading}>
-                        {isButtonLoading(product.id, "save") ? <SpinnerButton /> : "Salvar"}
-                      </Button>
-                      <Button onClick={cancelEditing} disabled={isItemLoading}>Cancelar</Button>
-                    </Actions>
-                  </>
-                ) : (
-                  <>
-                    <p><strong>{product.name}</strong><br />{product.description}</p>
-                    <p>Preço: R$ {product.price.toFixed(2)} | Quantidade: {product.quantity}</p>
-                    <Actions>
-                      <Button onClick={() => startEditing(product)} disabled={isItemLoading}>
-                        Editar
-                      </Button>
+              return (
+                <ProductItem key={product.id}>
+                  {editProductId === product.id ? (
+                <>
+                  <InputProdutos
+                    name="name"
+                    value={editedProduct.name || ""}
+                    onChange={handleEditChange}
+                    disabled={isItemLoading}
+                  />
+                  <InputProdutos
+                    name="description"
+                    value={editedProduct.description || ""}
+                    onChange={handleEditChange}
+                    disabled={isItemLoading}
+                  />
+                  <InputProdutos
+                    name="price"
+                    type="number"
+                    value={editedProduct.price?.toString() || ""}
+                    onChange={handleEditChange}
+                    disabled={isItemLoading}
+                  />
+                  <Actions>
+                    <Button onClick={handleEditProduct} disabled={isItemLoading}>
+                      {isButtonLoading(product.id, "save") ? <SpinnerButton /> : "Salvar"}
+                    </Button>
+                    <Button onClick={cancelEditing} disabled={isItemLoading}>Cancelar</Button>
+                  </Actions>
+                </>
+              ) : (
+                <>
+                  <p><strong>{product.name}</strong><br />{product.description}</p>
+                  <p>Preço: R$ {product.price.toFixed(2)} | Quantidade: {product.quantity}</p>
+                  <Actions>
+                    <Button onClick={() => startEditing(product)} disabled={isItemLoading}>
+                      Editar
+                    </Button>
 
-                      <Button onClick={() => handleDeleteProduct(product.id)} disabled={isItemLoading}>
-                        {isButtonLoading(product.id, "delete") ? <SpinnerButton /> : "Excluir"}
-                      </Button>
+                    <Button onClick={() => handleDeleteProduct(product.id)} disabled={isItemLoading}>
+                      {isButtonLoading(product.id, "delete") ? <SpinnerButton /> : "Excluir"}
+                    </Button>
 
-                      <Button onClick={() => updateQuantity(product.id, 1)} disabled={isItemLoading}>
-                        {isButtonLoading(product.id, "increase") ? <SpinnerButton /> : "+1 Unidade"}
-                      </Button>
+                    <Button onClick={() => updateQuantity(product.id, 1)} disabled={isItemLoading}>
+                      {isButtonLoading(product.id, "increase") ? <SpinnerButton /> : "+1 Unidade"}
+                    </Button>
 
-                      <Button onClick={() => updateQuantity(product.id, -1)} disabled={isItemLoading}>
-                        {isButtonLoading(product.id, "decrease") ? <SpinnerButton /> : "-1 Unidade"}
-                      </Button>
-                    </Actions>
-                  </>
-                )}
-              </ProductItem>
-            );
-          })}
-        </ProductList>
+                    <Button onClick={() => updateQuantity(product.id, -1)} disabled={isItemLoading}>
+                      {isButtonLoading(product.id, "decrease") ? <SpinnerButton /> : "-1 Unidade"}
+                    </Button>
+                  </Actions>
+                </>
+              )}
+                </ProductItem>
+              );
+            })}
+          </ProductList>
+        )}
       </Container>
       <Footer />
     </>
