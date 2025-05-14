@@ -61,7 +61,10 @@ const Header = () => {
                 )}
 
                 {userRole === "CRAFTSMAN" && (
-                    <ConfiguracaoButton title="Painel do artesão" src={Settings} alt="Painel" onClick={() => handleNavigate('/dashboard')} />
+                    <>
+                        <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
+                        <ConfiguracaoButton title="Painel do artesão" src={Settings} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
+                    </>
                 )}
 
                 <ChatbotButton title="chatbot" src={Robot} alt="Chat bot" onClick={() => handleNavigate('/chatbot')} />

@@ -56,7 +56,7 @@ export const QuemSomosContainer = styled.div`
 
 export const QuemSomosText = styled.div`
     width: 100%;
-    color: #800000;
+    color: #802600;
     font-size: 45px;
     font-weight: 400;
     margin: 25px 0px 15px 0px;

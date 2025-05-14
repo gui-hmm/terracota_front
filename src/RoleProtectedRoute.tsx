@@ -18,12 +18,12 @@ export default function RoleProtectedRoute({
   const token = sessionStorage.getItem("token");
 
   if (!token) {
+    alert("Acesso negado: você não tem permissão para acessar esta página.");
     return <Navigate to={redirectTo} />;
   }
 
   try {
     const decoded = jwtDecode<JwtPayload>(token);
-    console.log(decoded.role)
 
     if (allowedRoles.includes(decoded.role)) {
       return <Outlet />;
