@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from '../../assets/logomarca.png';
 import Carrinho from '../../assets/carrinho_icon.png';
 import Robot from '../../assets/robot.png';
-import Settings from '../../assets/settings-cog-svgrepo-com.svg';
+import Painel from '../../assets/painel.svg';
 import { 
     CarrinhoButton,
     Container,
@@ -63,7 +63,7 @@ const Header = () => {
                 {userRole === "CRAFTSMAN" && (
                     <>
                         <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
-                        <ConfiguracaoButton title="Painel do artesão" src={Settings} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
+                        <ConfiguracaoButton title="Painel do artesão" src={Painel} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
                     </>
                 )}
 

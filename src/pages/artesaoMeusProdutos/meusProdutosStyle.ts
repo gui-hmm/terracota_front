@@ -24,13 +24,13 @@ export const Spinner = styled.div`
 `;
 
 export const SpinnerButton = styled.div`
-  border: 3px solid rgba(0, 0, 0, 0.1);
+  border: 3px solid #FFFFFF;
   border-left-color: #555;
   border-radius: 50%;
   width: 20px;
   height: 20px;
   animation: ${spin} 1s linear infinite;
-  margin: 5px auto;
+  margin: auto;
 `;
 
 export const Container = styled.div`
@@ -132,10 +132,6 @@ export const ButtonCriarProduto = styled.button`
   border-radius: 4px;
   cursor: pointer;
 
-  &:hover {
-    background-color: #000000;
-  }
-
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -214,7 +210,7 @@ export const Quantity = styled.p`
   color: #444;
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   width: 100%;
   margin-bottom: 2rem;
 `;

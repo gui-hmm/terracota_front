@@ -5,7 +5,6 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { useAppSelector } from "../../store/hooks";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Container,
@@ -48,10 +47,13 @@ interface JwtPayload {
 const MeusProdutos = () => {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
-  const { loading } = useAppSelector((state) => state.auth);
-
+  const [creating, setCreating] = useState(false);
   const [craftsmanId, setCraftsmanId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [editProductId, setEditProductId] = useState<string | null>(null);
+  const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
+  const [buttonLoadingMap, setButtonLoadingMap] = useState<Record<string, string | null>>({});
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
@@ -60,9 +62,6 @@ const MeusProdutos = () => {
     type: "",
   });
 
-  const [editProductId, setEditProductId] = useState<string | null>(null);
-  const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
-  const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
   const setLoadingFor = (id: string, isLoading: boolean) => {
     setLoadingIds((prev) =>
@@ -71,6 +70,16 @@ const MeusProdutos = () => {
   };
 
   const isLoading = (id: string) => loadingIds.includes(id);
+
+  const setButtonLoading = (productId: string, buttonType: string | null) => {
+    setButtonLoadingMap((prev) => ({
+      ...prev,
+      [productId]: buttonType,
+    }));
+  };
+  
+  const isButtonLoading = (productId: string, buttonType: string) =>
+  buttonLoadingMap[productId] === buttonType;  
 
   useEffect(() => {
     if (token) {
@@ -114,19 +123,19 @@ const MeusProdutos = () => {
 
   const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const { name, description, price, quantity, type } = newProduct;
-
+  
     if (!name || !description || !price || !quantity || !type) {
       toast.error("Preencha todos os campos obrigatórios.");
       return;
     }
-
+  
     if (!craftsmanId) {
       toast.error("ID do artesão não encontrado.");
       return;
     }
-
+  
     const payload = {
       name,
       description,
@@ -135,7 +144,8 @@ const MeusProdutos = () => {
       type,
       craftsman_id: craftsmanId,
     };
-
+  
+    setCreating(true);
     try {
       await api.post("/products", payload);
       fetchProducts();
@@ -144,11 +154,14 @@ const MeusProdutos = () => {
     } catch (error) {
       console.error("Erro ao criar produto:", error);
       toast.error("Erro ao criar produto.");
+    } finally {
+      setCreating(false);
     }
-  };
+  }; 
 
   const handleDeleteProduct = async (productId: string) => {
     setLoadingFor(productId, true);
+    setButtonLoading(productId, "delete");
     try {
       await api.delete(`/products/${productId}`);
       await fetchProducts();
@@ -158,8 +171,9 @@ const MeusProdutos = () => {
       toast.error("Erro ao excluir produto.");
     } finally {
       setLoadingFor(productId, false);
+      setButtonLoading(productId, null);
     }
-  };
+  };  
 
   const startEditing = (product: Product) => {
     setEditProductId(product.id);
@@ -173,8 +187,10 @@ const MeusProdutos = () => {
 
   const handleEditProduct = async () => {
     if (!craftsmanId || !editProductId) return;
-
+  
     setLoadingFor(editProductId, true);
+    setButtonLoading(editProductId, "save");
+  
     try {
       await api.put(`/products/${editProductId}/craftsmen/${craftsmanId}`, {
         name: editedProduct.name || "",
@@ -189,13 +205,16 @@ const MeusProdutos = () => {
       toast.error("Erro ao editar produto.");
     } finally {
       setLoadingFor(editProductId, false);
+      setButtonLoading(editProductId, null);
     }
-  };
+  };  
 
   const updateQuantity = async (id: string, delta: number) => {
     if (!craftsmanId) return;
-
+  
     setLoadingFor(id, true);
+    setButtonLoading(id, delta > 0 ? "increase" : "decrease");
+  
     try {
       const action = delta > 0 ? "add" : "remove";
       await api.patch(`/products/${id}/craftsmen/${craftsmanId}/${action}`);
@@ -206,8 +225,9 @@ const MeusProdutos = () => {
       toast.error("Erro ao atualizar quantidade.");
     } finally {
       setLoadingFor(id, false);
+      setButtonLoading(id, null);
     }
-  };
+  };  
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -295,8 +315,8 @@ const MeusProdutos = () => {
             </ContainerInputs>
           </ContainerCriarProdutos>
 
-          <ButtonCriarProduto type="submit" disabled={loading} onClick={handleCreateProduct}>
-            {loading ? <SpinnerButton /> : "Criar produto"}
+          <ButtonCriarProduto type="submit" disabled={creating} >
+            {creating ? <SpinnerButton /> : "Criar produto"}
           </ButtonCriarProduto>
         </Form>
 
@@ -330,7 +350,7 @@ const MeusProdutos = () => {
                     />
                     <Actions>
                       <Button onClick={handleEditProduct} disabled={isItemLoading}>
-                        {isItemLoading ? <Spinner><div className="loader" /></Spinner> : "Salvar"}
+                        {isButtonLoading(product.id, "save") ? <SpinnerButton /> : "Salvar"}
                       </Button>
                       <Button onClick={cancelEditing} disabled={isItemLoading}>Cancelar</Button>
                     </Actions>
@@ -340,12 +360,21 @@ const MeusProdutos = () => {
                     <p><strong>{product.name}</strong><br />{product.description}</p>
                     <p>Preço: R$ {product.price.toFixed(2)} | Quantidade: {product.quantity}</p>
                     <Actions>
-                      <Button onClick={() => startEditing(product)}>Editar</Button>
-                      <Button onClick={() => handleDeleteProduct(product.id)} disabled={isItemLoading}>
-                        {isItemLoading ? <Spinner /> : "Excluir"}
+                      <Button onClick={() => startEditing(product)} disabled={isItemLoading}>
+                        Editar
                       </Button>
-                      <Button onClick={() => updateQuantity(product.id, 1)} disabled={isItemLoading}>+1 Unidade</Button>
-                      <Button onClick={() => updateQuantity(product.id, -1)} disabled={isItemLoading}>-1 Unidade</Button>
+
+                      <Button onClick={() => handleDeleteProduct(product.id)} disabled={isItemLoading}>
+                        {isButtonLoading(product.id, "delete") ? <SpinnerButton /> : "Excluir"}
+                      </Button>
+
+                      <Button onClick={() => updateQuantity(product.id, 1)} disabled={isItemLoading}>
+                        {isButtonLoading(product.id, "increase") ? <SpinnerButton /> : "+1 Unidade"}
+                      </Button>
+
+                      <Button onClick={() => updateQuantity(product.id, -1)} disabled={isItemLoading}>
+                        {isButtonLoading(product.id, "decrease") ? <SpinnerButton /> : "-1 Unidade"}
+                      </Button>
                     </Actions>
                   </>
                 )}
