@@ -236,6 +236,10 @@ export const ProdutosText = styled.div`
     font-weight: 500;
     display: flex;
     justify-content: center;
+    
+    @media (max-width: 510px) {
+        font-size: 25px;
+    }
 `;
 
 export const ContainerCategorias = styled.div`
