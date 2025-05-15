@@ -203,6 +203,10 @@ export const ContainerImageAltaQualidade = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: 768px) {
+        margin-top: 20px;
+    } 
 `;
 
 export const ImageAltaQualidade = styled.img`
