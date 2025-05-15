@@ -3,7 +3,8 @@ import Logo from '../../assets/logomarca.png';
 import Carrinho from '../../assets/carrinho_icon.png';
 import Robot from '../../assets/robot.png';
 import Painel from '../../assets/painel.svg';
-import { 
+import Menu from '../../assets/menu.svg';
+import {
     CarrinhoButton,
     Container,
     IconsContainer,
@@ -12,6 +13,9 @@ import {
     LogoIcon,
     ChatbotButton,
     ConfiguracaoButton,
+    MenuButton,
+    ContainerLogoMenu,
+    MenuContent // novo componente
 } from "./headerStyle";
 import { To, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
@@ -27,48 +31,61 @@ const Header = () => {
     const token = useAppSelector(state => state.auth.token);
     const isLoggedIn = !!token;
     const [userRole, setUserRole] = useState<string | null>(null);
+    const [menuOpen, setMenuOpen] = useState(false); // estado para controlar visibilidade do menu
 
     useEffect(() => {
         if (token) {
-          try {
-            const decoded = jwtDecode<JwtPayload>(token);
-            setUserRole(decoded.role);
-          } catch (error) {
-            console.error("Erro ao decodificar o token:", error);
-          }
+            try {
+                const decoded = jwtDecode<JwtPayload>(token);
+                setUserRole(decoded.role);
+            } catch (error) {
+                console.error("Erro ao decodificar o token:", error);
+            }
         }
-      }, [token]);
+    }, [token]);
 
     const handleNavigate = (path: To) => {
         navigate(path);
+        setMenuOpen(false); // Fecha o menu ao navegar
     };
 
     return (
         <Container>
-            <LogoIcon alt="Logo" src={Logo} />
-            <IconsContainer>
-                <IconsPages onClick={() => handleNavigate('/')}>Início</IconsPages>
-                <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
-                <IconsPages onClick={() => handleNavigate('/produtos')}>Produtos</IconsPages>
-                
-                <IconsPages onClick={() => handleNavigate(isLoggedIn ? '/perfil' : '/login')}>
-                    {isLoggedIn ? 'Perfil' : 'Login'}
-                </IconsPages>
-            </IconsContainer>
-            <IconsRightContainer>
-                {userRole !== "CRAFTSMAN" && (
-                    <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
-                )}
+            <ContainerLogoMenu>
+                <LogoIcon alt="Logo" src={Logo} />
+                <MenuButton 
+                    title="Abrir Menu"
+                    src={Menu}
+                    alt="Menu"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                />
+            </ContainerLogoMenu>
 
-                {userRole === "CRAFTSMAN" && (
-                    <>
+            <MenuContent $menuOpen={menuOpen}>
+                <IconsContainer>
+                    <IconsPages onClick={() => handleNavigate('/')}>Início</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
+                    <IconsPages onClick={() => handleNavigate('/produtos')}>Produtos</IconsPages>
+                    <IconsPages onClick={() => handleNavigate(isLoggedIn ? '/perfil' : '/login')}>
+                        {isLoggedIn ? 'Perfil' : 'Login'}
+                    </IconsPages>
+                </IconsContainer>
+
+                <IconsRightContainer>
+                    {userRole !== "CRAFTSMAN" && (
                         <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
-                        <ConfiguracaoButton title="Painel do artesão" src={Painel} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
-                    </>
-                )}
+                    )}
 
-                <ChatbotButton title="chatbot" src={Robot} alt="Chat bot" onClick={() => handleNavigate('/chatbot')} />
-            </IconsRightContainer>
+                    {userRole === "CRAFTSMAN" && (
+                        <>
+                            <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
+                            <ConfiguracaoButton title="Painel do artesão" src={Painel} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
+                        </>
+                    )}
+
+                    <ChatbotButton title="chatbot" src={Robot} alt="Chat bot" onClick={() => handleNavigate('/chatbot')} />
+                </IconsRightContainer>
+            </MenuContent>
         </Container>
     );
 };

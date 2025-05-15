@@ -7,10 +7,10 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: start;
     justify-content: center;
-    margin: 150px 50px 50px 40px;
+    margin: 120px 50px 50px 40px;
 
     @media (max-width: 768px) {
-        margin-top: 270px;
+
         margin-left: 25px;
     }
 `;

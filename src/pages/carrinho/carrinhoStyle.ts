@@ -2,13 +2,10 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: auto;
-  margin: 100px auto 50px;
+  margin: 80px auto 50px;
   padding: 50px;
   background-color: #fff;
 
-  @media (max-width: 768px) {
-    margin-top: 270px;
-  }
 `;
 
 export const ConteinerCarrinhoText = styled.div`

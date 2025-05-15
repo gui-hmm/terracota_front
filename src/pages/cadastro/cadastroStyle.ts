@@ -19,7 +19,7 @@ export const Spinner = styled.div`
 export const Container = styled.div`
     width: 100%;
     height: auto;
-    margin: 150px 25px 50px 25px;
+    margin: 125px 25px 50px 25px;
     display: flex;
     flex-direction: column;
     align-items: start;

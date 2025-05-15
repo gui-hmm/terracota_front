@@ -26,15 +26,11 @@ export const Spinner = styled.div`
 export const Container = styled.div`
     width: 100%;
     height: auto;
-    margin: 150px 25px 50px 25px;
+    margin: 120px 25px 50px 25px;
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: start;
-
-    @media (max-width: 768px) {
-        margin-top: 270px;
-    }
 `;
 
 export const ConteinerPerfilText = styled.div`

@@ -1,5 +1,9 @@
 import styled, { keyframes } from "styled-components";
 
+interface MenuContentProps {
+  $menuOpen: boolean;
+}
+
 const huHuAnimation = keyframes`
   50% {
     transform: translateY(-5px);
@@ -19,24 +23,54 @@ export const Container = styled.div`
     background-color: #fff;
 
     @media (max-width: 768px) {
-        /* Para tablets */
         flex-direction: column;
         align-items: center;
         height: auto;
     }
 `;
 
+export const ContainerLogoMenu = styled.div`
+    display: flex;
+    justify-content: start;
+    
+    @media (max-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+`;
+
 export const LogoIcon = styled.img`
-    width: 35%;
+    width: 100%;
     margin-right: 5px;
     margin-top: 2px;
 
-    @media (min-width: 1268px) {
-        width: 25%;
-    }
-
     @media (max-width: 768px) {
         width: 60%;
+    }
+`;
+
+export const MenuButton = styled.img`
+    display: none;
+    
+    @media (max-width: 768px) {
+        display: flex;
+        width: 25px;
+
+        margin-right: 3vh;
+    }
+`;
+
+export const MenuContent = styled.div<MenuContentProps>`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        display: ${({ $menuOpen }) => ($menuOpen ? 'flex' : 'none')};
+        width: 100%;
     }
 `;
 
@@ -134,4 +168,3 @@ export const ConfiguracaoButton = styled.img`
         margin-right: 6vh;
     }
 `;
-

@@ -41,10 +41,6 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: start;
   justify-content: start;
-
-  @media (max-width: 768px) {
-    margin-top: 270px;
-  }
 `;
 
 export const ConteinerMeusProdutosText = styled.div`
