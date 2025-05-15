@@ -55,7 +55,7 @@ export const BarrosExplore = styled.img`
     } 
 
     @media (max-width: 768px) {
-        visibility: hidden;
+        display: none;
     } 
 `;
 
@@ -97,7 +97,7 @@ export const ContainerMaisVendido = styled.div`
     align-items: center;
 
     @media (max-width: 1200px) {
-        visibility: hidden;
+        display: none;
     }
 `;
 
