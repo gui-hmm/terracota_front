@@ -24,6 +24,10 @@ export const TextExploreContainer = styled.div`
     justify-content: start;
     margin: 2vh 0 2vh 8vh;
     flex-direction: column;
+
+    @media (max-width: 480px) {
+        margin-left: 30px;
+    }
 `;
 
 export const BarrosExplore = styled.img`
@@ -92,9 +96,9 @@ export const ContainerMaisVendido = styled.div`
     justify-content: start;
     align-items: center;
 
-    @media (max-width: 1260px) {
-        flex-direction: column;
-    } 
+    @media (max-width: 1200px) {
+        visibility: hidden;
+    }
 `;
 
 export const ContainerTextMaisVendido = styled.div`
@@ -150,10 +154,6 @@ export const Text5 = styled.div`
     cursor: pointer;
 `;
 
-export const ContainerDestaques = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
 
 export const VoltarDestaques = styled.img`
     width: 25px;
@@ -247,7 +247,17 @@ export const ContainerCategorias = styled.div`
 
     @media (max-width: 768px) {
         flex-direction: column;
+        padding-left: 35%;
+    }
+
+    @media (max-width: 560px) {
+        flex-direction: column;
         padding-left: 30%;
+    }
+
+    @media (max-width: 420px) {
+        flex-direction: column;
+        padding-left: 23%;
     }
 `;
 

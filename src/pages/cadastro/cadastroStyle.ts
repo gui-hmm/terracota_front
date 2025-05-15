@@ -23,7 +23,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: start;   
+    justify-content: start;
 `;
 
 export const ConteinerCadastroText = styled.div`
@@ -53,34 +53,34 @@ export const ContainerCadastroGeral = styled.div`
     flex-direction: row;
     position: relative;
     margin: 20px 50px 10px 3%;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
-    } 
+    }
 `;
 
 export const ImageCadastro = styled.img`
-    width: 800px;
-    height: auto;
+    width: 55%;
+    height: 20%;
     background-size: contain;
     margin-right: 5%;
 
-    @media (max-width: 900) {
-        width: 90%;
+    @media (max-width: 768px) {
+        width: 80%;
     }
 `;
 
 export const ContainerCadastro = styled.div`
-    width: 400px;
+    width: 350px;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: start;
-    
+
     @media (max-width: 768px) {
-        margin: 50px;
-    } 
+        margin-top: 30px;
+    }
 `;
 
 export const Text1 = styled.div`
@@ -164,6 +164,6 @@ export const ButtonEntrar = styled.button`
 export const ErrorMessage = styled.div`
   color: red;
   font-size: 12px;
-  margin-top: 5px; 
+  margin-top: 5px;
 `;
 

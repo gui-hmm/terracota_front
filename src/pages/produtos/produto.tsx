@@ -24,7 +24,7 @@ import P10 from "../../assets/p10.png";
 import P11 from "../../assets/p11.png";
 import P12 from "../../assets/p12.png";
 import { To, useNavigate } from "react-router-dom";
-import { api } from "../../api/api"; // usando a instância configurada de axios
+import { api } from "../../api/api";
 
 // Tipagens
 export interface Produto {

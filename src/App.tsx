@@ -35,7 +35,6 @@ function App() {
 
           {/* Protegidas para CUSTOMER */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER"]} />}>
-            <Route path="/carrinho" element={<Carrinho />} />
           </Route>
 
           {/* Protegidas para CRAFTSMAN */}
@@ -51,6 +50,7 @@ function App() {
 
           {/* Protegidas para CUSTOMER e CRAFTSMAN */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER", "CRAFTSMAN"]} />}>
+            <Route path="/carrinho" element={<Carrinho />} />
             <Route path="/perfil" element={<Perfil />} />
           </Route>
 
