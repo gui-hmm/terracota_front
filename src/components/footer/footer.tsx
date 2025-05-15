@@ -16,10 +16,12 @@ import {
 import Linkedin from '../../assets/linkedin.png'
 import Instagram from '../../assets/instagram.png';
 import { To, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks";
 
 
 function Footer(){
-
+    const token = useAppSelector(state => state.auth.token);
+    const isLoggedIn = !!token;
     const navigate = useNavigate();
     const handleNavigate = (path: To) => {
         navigate(path);
@@ -57,7 +59,9 @@ function Footer(){
                         <Page onClick={() => handleNavigate('/')}>Home</Page>
                         <Page onClick={() => handleNavigate('/quemsomos')}>Quem Somos</Page>
                         <Page onClick={() => handleNavigate('/produtos')}>Produto</Page>
-                        <Page onClick={() => handleNavigate('/login')}>login</Page>
+                        <Page onClick={() => handleNavigate(isLoggedIn ? '/perfil' : '/login')}>
+                            {isLoggedIn ? 'Perfil' : 'Login'}
+                        </Page>
                     </PagesContainer>
                 </InformationContainer>
                 <EmailContainer>

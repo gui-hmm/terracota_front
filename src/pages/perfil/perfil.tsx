@@ -35,18 +35,18 @@ interface JwtPayload {
 function Perfil() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(true); 
+  const [editando, setEditando] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [perfil, setPerfil] = useState({
     id: "",
     nome: "",
     email: "",
     cpf: "",
     contato: "",
-    tipoUsuario: "cliente",
+    tipoUsuario: "",
   });
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
 
   const token = sessionStorage.getItem("token");
 
@@ -90,7 +90,7 @@ function Perfil() {
             email: data.email || "",
             cpf: data.cpf || "",
             contato: data.phone || "",
-            tipoUsuario: data.role || "cliente",
+            tipoUsuario: data.role || "",
           });
         } catch (error) {
           console.error("Erro ao carregar perfil:", error);
