@@ -143,7 +143,7 @@ export const ButtonEditar = styled.div`
     margin-right: 50px;
 `;
 
-export const ButtonSalvar = styled.div`
+export const ButtonSalvar = styled.button` // Mudei para button para semântica e estado disabled
     width: 110px;
     height: 50px;
     background-color: #4CAF50;
@@ -154,5 +154,64 @@ export const ButtonSalvar = styled.div`
     justify-content: center;
     align-items: center;
     margin-right: 50px;
+    border: none; // Adicionado para remover borda padrão de button
+    border-radius: 4px; // Opcional: bordas arredondadas
+
+    &:disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: not-allowed;
+    }
 `;
 
+export const PreviewImage = styled.img`
+    max-width: 100px; 
+    max-height: 100px; 
+    margin-top: 10px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 1px solid #ddd;
+`;
+
+// Container para a foto de perfil do usuário e o input de alterar foto
+export const ContainerImageContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px; // Espaço antes dos campos de input
+  width: 300px; // Para centralizar dentro de ContainerPerfil
+`;
+
+// Imagem de perfil do usuário (ou preview da nova)
+export const UserProfilePhoto = styled.img` // Renomeado de PreviewImage para clareza neste contexto
+  width: 150px;    // Tamanho desejado para a foto de perfil
+  height: 150px;   // Tamanho desejado para a foto de perfil
+  border-radius: 50%; // Para foto circular
+  object-fit: cover;  // Garante que a imagem cubra o espaço sem distorcer
+  border: 3px solid #ddd; // Borda sutil
+  margin-bottom: 10px; // Espaço antes do botão "Alterar Foto"
+  background-color: #f0f0f0; // Cor de fundo caso a imagem não carregue
+`;
+
+// Input de arquivo escondido (já existente)
+export const StyledFileInput = styled.input`
+  display: none;
+`;
+
+// Label estilizado para o input de arquivo (já existente)
+export const FileInputLabel = styled.label`
+  display: inline-block;
+  padding: 8px 12px; // Um pouco menor para este contexto
+  background-color: #800000; // Cor do seu botão Editar
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  text-align: center;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #600000; // Cor mais escura no hover
+  }
+`;
