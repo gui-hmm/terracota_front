@@ -288,9 +288,13 @@ function Home() {
         const total = cartItems.reduce((acc, item) => acc + (item.produto.valor * item.quantidade), 0);
         console.log("Dados calculados do carrinho:", { products_ids, total });
 
+        // --- ADICIONANDO O CRAFTSMAN_ID FIXO PARA TESTE ---
+        const testCraftsmanId = "21338bba177949b4b52048158a533ec5";
+
         const saleData = {
           preference_id: preferenceIdParam,
           payment_id: parseInt(paymentIdParam, 10),
+          craftsman_id: testCraftsmanId, // <--- ADICIONADO AQUI
           customer_id: customerId,
           products_ids: products_ids,
           total: parseFloat(total.toFixed(2)),
