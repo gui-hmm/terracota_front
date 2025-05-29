@@ -77,12 +77,12 @@ const Produtos: React.FC = () => {
     const buscarProdutosApi = async () => {
       setLoadingProdutosApi(true);
       try {
-        const response = await api.get("/products");
+        const response = await api.get("/products?perPage=30");
         const produtosFormatados: Produto[] = response.data.items.map((item: any) => ({
           id: item.id,
           nome: item.name,
           valor: item.price,
-          imagem: item.image || "https://via.placeholder.com/300x200?text=Produto", // imagem fallback
+          imagem: item.image || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg", // imagem fallback
         }));
         setProdutosApi(produtosFormatados);
       } catch (error) {

@@ -210,3 +210,46 @@ export const Form = styled.form`
   width: 100%;
   margin-bottom: 2rem;
 `;
+
+export const ProductImage = styled.img`
+  width: 100px; /* Ajuste conforme necessário */
+  height: 100px; /* Ajuste conforme necessário */
+  object-fit: cover; /* Para manter a proporção da imagem */
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+`;
+
+export const StyledFileInput = styled.input`
+  display: none; /* Esconde o input padrão */
+`;
+
+export const ContainerImageContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+export const FileInputLabel = styled.label`
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.9em;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
+export const PreviewImage = styled.img`
+  max-width: 200px;
+  max-height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  object-fit: contain;
+`;
