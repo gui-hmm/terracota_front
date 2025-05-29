@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+  // ... seus outros imports de homeStyle
+  StatusNotification, // Importar o novo styled component
+  ProcessingText,     // Importar o novo styled component
   AvancarDestaques,
   BarrosExplore,
   ButtonExplore,
@@ -34,6 +37,7 @@ import {
   VoltarDestaques,
 } from "./homeStyle";
 import P1 from "../../assets/p1.png";
+// ... outros imports de imagem P2 a P12
 import P2 from "../../assets/p2.png";
 import P3 from "../../assets/p3.png";
 import P4 from "../../assets/p4.png";
@@ -57,11 +61,10 @@ import { ContainerProdutosGeral } from "../produtos/produtosStyle";
 import ProdutoList from "../../components/produtosComponent/produtoList";
 import ProdutoDetalhesModal from "../../components/produtosComponent/ProdutoDetalhesModal";
 import { api } from "../../api/api";
-import { jwtDecode } from "jwt-decode"; // Importar jwt-decode
+import { jwtDecode } from "jwt-decode";
 
-// Interface para o payload do JWT (igual à da tela de Perfil)
 interface JwtPayload {
-  sub: string; // e-mail
+  sub: string;
   role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
 }
 
@@ -92,9 +95,8 @@ const produtosMockadosHome: Produto[] = [
   { id: 12, nome: "Coelho de barro", valor: 130.00, imagem: P12 }
 ];
 
-// Função para obter e-mail e role do token (baseada na lógica do Perfil)
 const getUserInfoFromToken = (): { email: string; role: JwtPayload['role'] } | null => {
-  const token = sessionStorage.getItem('token'); // Usando sessionStorage como no Perfil
+  const token = sessionStorage.getItem('token');
   if (token) {
     try {
       const decoded = jwtDecode<JwtPayload>(token);
@@ -114,12 +116,20 @@ function Home() {
 
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [carrinhoHomeState, setCarrinhoHomeState] = useState<ProdutoCarrinho[]>([]);
-
+  
   const [isProcessingSale, setIsProcessingSale] = useState(false);
   const [saleStatusMessage, setSaleStatusMessage] = useState<string | null>(null);
+  const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | 'warning'>('info');
+
 
   const handleNavigate = (path: To) => {
     navigate(path);
+  };
+
+  // Função para definir o status e tipo da notificação
+  const setNotification = (message: string | null, type: 'success' | 'error' | 'info' | 'warning') => {
+    setSaleStatusMessage(message);
+    setNotificationType(type);
   };
 
   useEffect(() => {
@@ -132,7 +142,7 @@ function Home() {
         } else {
           setCarrinhoHomeState([]);
         }
-      } catch {
+      } catch(e) {
         setCarrinhoHomeState([]);
       }
     } else {
@@ -154,79 +164,98 @@ function Home() {
 
   useEffect(() => {
     const processPaymentConfirmation = async () => {
+      console.log("Verificando parâmetros de URL para confirmação de pagamento...");
       const params = new URLSearchParams(location.search);
       const paymentIdParam = params.get('payment_id');
       const statusParam = params.get('status');
       const preferenceIdParam = params.get('preference_id');
       const paymentTypeParam = params.get('payment_type');
 
+      console.log("Parâmetros recebidos:", { paymentIdParam, statusParam, preferenceIdParam, paymentTypeParam });
+
       const processedPaymentKey = `processed_sale_${paymentIdParam}`;
       if (paymentIdParam && localStorage.getItem(processedPaymentKey)) {
+        console.log(`Venda com payment_id ${paymentIdParam} já processada anteriormente.`);
+        const successMessage = localStorage.getItem(`success_message_${paymentIdParam}`);
+        if (successMessage) {
+            setNotification(successMessage, 'success');
+        } else {
+            setNotification(null, 'info');
+        }
         if(location.search) navigate('/', { replace: true });
         return;
       }
 
+      setNotification(null, 'info'); // Limpa notificação anterior
+
       if (paymentIdParam && statusParam === 'approved' && preferenceIdParam) {
         setIsProcessingSale(true);
-        setSaleStatusMessage('Processando confirmação da sua compra...');
+        setNotification('Processando confirmação da sua compra...', 'info');
+        console.log(`Iniciando processamento para payment_id: ${paymentIdParam}`);
 
         const userInfo = getUserInfoFromToken();
+        console.log("Informações do usuário obtidas do token:", userInfo);
         if (!userInfo || !userInfo.email || !userInfo.role) {
-          setSaleStatusMessage('Erro: Não foi possível identificar o usuário. Faça login e tente novamente ou contate o suporte.');
+          const errorMsg = 'Erro: Não foi possível identificar o usuário. Faça login e tente novamente ou contate o suporte.';
+          console.error(errorMsg, "(userInfo:", userInfo, ")");
+          setNotification(errorMsg, 'error');
           setIsProcessingSale(false);
           return;
         }
 
         const { email: userEmail, role: userRole } = userInfo;
 
-        // Determinar o endpoint com base no role (igual à tela de Perfil)
-        // Para uma venda, esperamos que o role seja CUSTOMER.
         const roleToEndpoint: Record<string, string> = {
           CUSTOMER: "customers",
-          CRAFTSMAN: "craftsmen", // Mantido para consistência com a lógica do Perfil
-          COMPANY: "companies",   // Mantido para consistência
+          CRAFTSMAN: "craftsmen",
+          COMPANY: "companies",
         };
-        // Se o role do token não for um dos esperados, ou se for um artesão/empresa tentando comprar (o que pode ser um caso de borda)
-        // você pode querer um tratamento específico. Para buscar o ID de um comprador, "customers" é o mais provável.
-        const endpointRole = roleToEndpoint[userRole.toUpperCase()] || "customers"; // Default para customers
+        const endpointRole = roleToEndpoint[userRole.toUpperCase()] || "customers";
         
-        // Se a compra só pode ser feita por CUSTOMER, você pode adicionar uma verificação:
         if (userRole.toUpperCase() !== "CUSTOMER") {
-            setSaleStatusMessage(`Erro: Tipo de usuário '${userRole}' não autorizado para realizar compras. Contate o suporte.`);
+            const errorMsg = `Erro: Tipo de usuário '${userRole}' não autorizado para realizar compras. Contate o suporte.`;
+            console.error(errorMsg);
+            setNotification(errorMsg, 'error');
             setIsProcessingSale(false);
             return;
         }
 
-
         let customerId: string | null = null;
-        const token = sessionStorage.getItem("token"); // Pega o token para o header
+        const token = sessionStorage.getItem("token");
+        console.log(`Buscando dados do cliente para email: ${userEmail} no endpoint: /${endpointRole}/email/${userEmail}`);
 
         try {
           const customerResponse = await api.get(`/${endpointRole}/email/${userEmail}`, {
-            headers: { // Adicionando header de autorização
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
           customerId = customerResponse.data.id;
+          console.log("Dados do cliente recebidos:", customerResponse.data);
         } catch (error: any) {
-          console.error("Erro ao buscar dados do cliente:", error);
-          setSaleStatusMessage(`Erro ao buscar dados do cliente (${userEmail}): ${error.response?.data?.message || error.message}. Contate o suporte.`);
+          const errorMsg = `Erro ao buscar dados do cliente (${userEmail}): ${error.response?.data?.message || error.message}. Contate o suporte.`;
+          console.error("Detalhes do erro ao buscar cliente:", error);
+          setNotification(errorMsg, 'error');
           setIsProcessingSale(false);
           return;
         }
         
         if (!customerId) {
-            setSaleStatusMessage('Erro: ID do cliente não encontrado após busca por e-mail.');
+            const errorMsg = 'Erro: ID do cliente não encontrado após busca por e-mail.';
+            console.error(errorMsg);
+            setNotification(errorMsg, 'error');
             setIsProcessingSale(false);
             return;
         }
+        console.log("Customer ID obtido:", customerId);
 
         const carrinhoStorage = localStorage.getItem('carrinho');
         if (!carrinhoStorage) {
-          setSaleStatusMessage('Erro: Carrinho não encontrado para finalizar a venda. Contate o suporte.');
+          const errorMsg = 'Erro: Carrinho não encontrado para finalizar a venda. Contate o suporte.';
+          console.error(errorMsg);
+          setNotification(errorMsg, 'error');
           setIsProcessingSale(false);
           return;
         }
+        console.log("Carrinho encontrado no localStorage:", carrinhoStorage);
 
         let cartItems: ProdutoCarrinho[] = [];
         try {
@@ -239,19 +268,25 @@ function Home() {
               typeof item.quantidade === 'number' && item.quantidade > 0
             )) {
             cartItems = parsedCart as ProdutoCarrinho[];
+            console.log("Itens do carrinho parseados com sucesso:", cartItems);
           } else {
-            setSaleStatusMessage('Erro: Carrinho vazio ou com formato inválido. Contate o suporte.');
+            const errorMsg = 'Erro: Carrinho vazio ou com formato inválido. Contate o suporte.';
+            console.error(errorMsg, "Conteúdo do carrinho parseado:", parsedCart);
+            setNotification(errorMsg, 'error');
             setIsProcessingSale(false);
             return;
           }
         } catch (error) {
-          setSaleStatusMessage('Erro ao processar dados do carrinho. Contate o suporte.');
+          const errorMsg = 'Erro ao processar dados do carrinho. Contate o suporte.';
+          console.error("Detalhes do erro ao processar carrinho:", error);
+          setNotification(errorMsg, 'error');
           setIsProcessingSale(false);
           return;
         }
 
         const products_ids = cartItems.map(item => item.produto.id.toString());
         const total = cartItems.reduce((acc, item) => acc + (item.produto.valor * item.quantidade), 0);
+        console.log("Dados calculados do carrinho:", { products_ids, total });
 
         const saleData = {
           preference_id: preferenceIdParam,
@@ -263,37 +298,56 @@ function Home() {
           status: statusParam,
         };
 
+        console.log("Preparando para enviar dados para /sales:", saleData);
+
         try {
-          console.log("Enviando dados para /sales:", saleData);
-          // A chamada POST /sales também precisa do token se o endpoint for protegido?
-          // Se sim, adicione o header:
-          // const saleResponse = await api.post('/sales', saleData, {
-          //   headers: { Authorization: `Bearer ${token}` }
-          // });
-          const saleResponse = await api.post('/sales', saleData); // Ajuste se precisar de token
-          console.log('Venda registrada com sucesso:', saleResponse.data);
-          setSaleStatusMessage(`Compra ${saleResponse.data.orderId || paymentIdParam} registrada com sucesso! Obrigado!`);
+          const saleResponse = await api.post('/sales', saleData);
+          const successMsg = `Compra ${saleResponse.data.orderId || paymentIdParam} registrada com sucesso! Obrigado!`;
+          console.log('Venda registrada com sucesso! Resposta do backend:', saleResponse.data);
+          setNotification(successMsg, 'success');
+          localStorage.setItem(`success_message_${paymentIdParam}`, successMsg);
+
 
           localStorage.setItem(processedPaymentKey, 'true');
           localStorage.removeItem('carrinho');
           setCarrinhoHomeState([]);
+          console.log("Carrinho limpo do localStorage e do estado da Home.");
 
-          navigate('/', { replace: true });
+          setTimeout(() => {
+            if(location.search.includes(paymentIdParam!)) {
+                navigate('/', { replace: true });
+                console.log("URL limpa após sucesso e timeout.");
+            }
+          }, 5000);
+
         } catch (error: any) {
-          console.error('Erro ao registrar venda no backend:', error);
-          setSaleStatusMessage(`Erro ao registrar sua compra no sistema: ${error.response?.data?.message || error.message}. Por favor, contate o suporte com o ID de pagamento ${paymentIdParam}.`);
+          const errorMessage = error.response?.data?.message || error.message;
+          const errorMsgAlert = `Erro ao registrar sua compra no sistema: ${errorMessage}. Por favor, contate o suporte com o ID de pagamento ${paymentIdParam}.`;
+          console.error('Erro ao registrar venda no backend. Detalhes:', error, "Payload enviado:", saleData);
+          setNotification(errorMsgAlert, 'error');
         } finally {
           setIsProcessingSale(false);
+          console.log("Processamento de confirmação finalizado.");
         }
       } else if (paymentIdParam && statusParam && statusParam !== 'approved') {
-        setSaleStatusMessage(`Status do pagamento: ${statusParam}. Se precisar de ajuda, contate o suporte com o ID ${paymentIdParam}.`);
+        const msg = `Status do pagamento: ${statusParam}. Para o ID de pagamento ${paymentIdParam}. Se precisar de ajuda, contate o suporte.`;
+        console.warn(msg);
+        setNotification(msg, 'warning'); // Usando 'warning' para status não aprovados
+        // setTimeout(() => { if(location.search) navigate('/', { replace: true }); }, 5000);
+      } else if (location.search && (!paymentIdParam || !statusParam || !preferenceIdParam)) {
+        console.log("Parâmetros de URL presentes, mas não correspondem a uma confirmação de pagamento aprovada válida.");
+        // setTimeout(() => { if(location.search) navigate('/', { replace: true }); }, 1000);
+      } else {
+        if (!location.search) setNotification(null, 'info'); // Limpa se não há params
       }
     };
 
-    if (location.search) {
+    if (location.search || saleStatusMessage) { // Processa se há params ou se uma msg precisa ser limpa (após timeout p.ex.)
         processPaymentConfirmation();
+    } else {
+        console.log("Home carregada sem parâmetros de query na URL e sem mensagem de status pendente.");
     }
-  }, [location.search, navigate]);
+  }, [location.search, navigate]); // Removido saleStatusMessage da dependência para evitar loop com o setNotification(null, 'info') no else
 
 
   const handleProdutoSelect = (produto: Produto) => {
@@ -323,23 +377,16 @@ function Home() {
     <div>
       <Header />
       {saleStatusMessage && (
-        <div style={{
-          padding: '15px',
-          margin: '20px auto',
-          width: '80%',
-          maxWidth: '600px',
-          textAlign: 'center',
-          backgroundColor: saleStatusMessage.includes('Erro') || saleStatusMessage.toLowerCase().includes('rejeitado') || saleStatusMessage.toLowerCase().includes('pendente') ? '#f8d7da' : '#d4edda',
-          color: saleStatusMessage.includes('Erro') || saleStatusMessage.toLowerCase().includes('rejeitado') || saleStatusMessage.toLowerCase().includes('pendente') ? '#721c24' : '#155724',
-          border: `1px solid ${saleStatusMessage.includes('Erro') || saleStatusMessage.toLowerCase().includes('rejeitado') || saleStatusMessage.toLowerCase().includes('pendente') ? '#f5c6cb' : '#c3e6cb'}`,
-          borderRadius: '5px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        }}>
-          {isProcessingSale && <div style={{ marginBottom: '10px' }}>Carregando...</div>}
-          {saleStatusMessage}
-        </div>
+        <StatusNotification type={notificationType}>
+          {isProcessingSale && notificationType === 'info' && saleStatusMessage === 'Processando confirmação da sua compra...' && 
+            <ProcessingText>Processando...</ProcessingText>
+          }
+          {/* Evita mostrar "Processando..." e a msg final ao mesmo tempo se a msg final for a de processamento */}
+          {!(isProcessingSale && notificationType === 'info' && saleStatusMessage === 'Processando confirmação da sua compra...') && saleStatusMessage}
+        </StatusNotification>
       )}
 
+      {/* Conteúdo existente da Home */}
       <ExploreContainer>
           <ExploreContainerColuns>
               <TextExploreContainer>

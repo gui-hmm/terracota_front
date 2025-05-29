@@ -1,4 +1,64 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components"; 
+
+interface StatusNotificationProps {
+  type: 'success' | 'error' | 'info' | 'warning'; 
+}
+
+export const StatusNotification = styled.div<StatusNotificationProps>`
+  position: fixed;
+  top: 115px; /* 100px do header + 15px de margem */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto; /* Ajusta à largura do conteúdo */
+  min-width: 300px; /* Largura mínima */
+  max-width: 90%;  /* Largura máxima responsiva */
+  padding: 15px 20px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1050; /* Valor alto para sobrepor outros elementos */
+  font-size: 1rem;
+  line-height: 1.5;
+  /* Transições podem ser adicionadas aqui se você controlar a montagem/desmontagem com animações */
+  /* transition: opacity 0.3s ease, transform 0.3s ease; */
+
+  /* Estilização condicional baseada na prop 'type' */
+  ${({ type }) => {
+    if (type === 'success') {
+      return css`
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      `;
+    }
+    if (type === 'error') {
+      return css`
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      `;
+    }
+    if (type === 'warning') { // Para status como 'pendente' ou outros avisos
+      return css`
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+      `;
+    }
+    // Default para 'info' (ex: "Processando...")
+    return css`
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    `;
+  }}
+`;
+
+// Você pode querer um styled component para o texto "Processando..." também, se precisar de estilos específicos
+export const ProcessingText = styled.div`
+  margin-bottom: 10px;
+  font-weight: bold;
+`;
 
 export const ExploreContainer = styled.div`
     width: 100%;
