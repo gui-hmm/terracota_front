@@ -133,7 +133,7 @@ export const ContainerButton = styled.div`
 export const ButtonEditar = styled.div`
     width: 110px;
     height: 50px;
-    background-color: #800000;
+    background-color: #802600;
     color: #fff;
     font-size: 18px;
     cursor: pointer;
@@ -156,11 +156,11 @@ export const ButtonSalvar = styled.button`
     align-items: center;
     margin-right: 50px;
     border: none; 
-    border-radius: 5px; // Opcional: bordas arredondadas
+    border-radius: 5px;
 
     &:disabled {
-        background-color: #cccccc;
-        color: #666666;
+        background-color:rgba(76, 175, 79, 0.75);
+        color: #802600;
         cursor: not-allowed;
     }
 `;
@@ -203,7 +203,7 @@ export const StyledFileInput = styled.input`
 export const FileInputLabel = styled.label`
   display: inline-block;
   padding: 8px 12px; // Um pouco menor para este contexto
-  background-color: #800000; // Cor do seu botão Editar
+  background-color: #802600; // Cor do seu botão Editar
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -213,6 +213,6 @@ export const FileInputLabel = styled.label`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #600000; // Cor mais escura no hover
+    background-color: #602600; // Cor mais escura no hover
   }
 `;
