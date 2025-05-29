@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react"; // Adicionado useCallback
 import {
     ButtonEditar,
     ButtonSalvar,
@@ -8,7 +8,7 @@ import {
     ContainerPerfilGeral,
     ConteinerPerfilText,
     IconVoltar,
-    ImagePerfil, // Esta é a imagem decorativa grande
+    ImagePerfil,
     InputPerfil,
     Text1,
     TextPerfil,
@@ -16,17 +16,16 @@ import {
     SelectInput,
     Spinner,
     SpinnerWrapper,
-    // Novos/Reutilizados para a foto do usuário
-    ContainerImageContent, // Para agrupar a foto do usuário e o botão de upload
-    UserProfilePhoto,      // O styled component para a foto do usuário (antes PreviewImage)
+    ContainerImageContent,
+    UserProfilePhoto,
     StyledFileInput,
     FileInputLabel,
 } from "./perfilStyle";
 import Voltar from "../../assets/menorQue.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Jarros from "../../assets/cadastro_barros.png"; // Imagem decorativa
-import DefaultUserProfileImage from "../../assets/user.jpg"; // CRIE UMA IMAGEM PADRÃO
+import Jarros from "../../assets/cadastro_barros.png";
+import DefaultUserProfileImage from "../../assets/user.jpg";
 import { To, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { logout } from "../../store/reducers/auth";
@@ -34,7 +33,6 @@ import { api } from "../../api/api";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 interface JwtPayload {
     sub: string;
@@ -51,6 +49,9 @@ interface ProfileData {
     photo?: string;
 }
 
+// Campos que o usuário pode editar (exceto foto)
+type EditableProfileFields = Pick<ProfileData, 'nome' | 'contato'>;
+
 function Perfil() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -58,18 +59,14 @@ function Perfil() {
     const [editando, setEditando] = useState(false);
     const [userRole, setUserRole] = useState<JwtPayload['role'] | null>(null);
     const [userEmail, setUserEmail] = useState<string | null>(null);
+    
     const [perfil, setPerfil] = useState<ProfileData>({
-        id: "",
-        nome: "",
-        email: "",
-        cpf: "",
-        contato: "",
-        tipoUsuario: "",
-        photo: "",
+        id: "", nome: "", email: "", cpf: "", contato: "", tipoUsuario: "", photo: "",
     });
+    // Estado para guardar os dados originais do perfil para comparação
+    const [initialPerfilData, setInitialPerfilData] = useState<EditableProfileFields | null>(null);
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    // O previewUrl agora será usado para a foto de perfil do usuário
     const [userPhotoPreview, setUserPhotoPreview] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -84,7 +81,7 @@ function Perfil() {
             } catch (error) {
                 console.error("Erro ao decodificar o token:", error);
                 toast.error("Erro ao processar sessão. Tente fazer login novamente.");
-                // navigate("/login"); // Considere redirecionar se o token for inválido
+                navigate("/login");
             }
         } else {
             toast.info("Sessão não encontrada. Por favor, faça login.");
@@ -92,23 +89,23 @@ function Perfil() {
         }
     }, [token, navigate]);
 
-    const fetchUserProfile = async (email: string, role: JwtPayload['role']) => {
+    const fetchUserProfile = useCallback(async (email: string, role: JwtPayload['role']) => {
         if (!token) return;
         setLoading(true);
         try {
-            const roleToEndpoint: Record<string, string> = {
+            const roleToEndpointMap: Record<string, string> = {
                 CUSTOMER: "customers",
                 CRAFTSMAN: "craftsmen",
-                COMPANY: "companies",
+                COMPANY: "companies", // Embora não haja PUT /companies/{id} no swagger fornecido
             };
-            const endpointRole = roleToEndpoint[role] || "customers";
+            const endpointRole = roleToEndpointMap[role] || "customers";
 
             const response = await api.get(`/${endpointRole}/email/${email}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = response.data;
 
-            setPerfil({
+            const fetchedProfile: ProfileData = {
                 id: data.id || "",
                 nome: data.name || "",
                 email: data.email || "",
@@ -116,23 +113,23 @@ function Perfil() {
                 contato: data.phone || "",
                 tipoUsuario: data.role || "",
                 photo: data.photo || "",
-            });
-            // Define o preview inicial com a foto existente do perfil ou null
+            };
+            setPerfil(fetchedProfile);
+            setInitialPerfilData({ nome: fetchedProfile.nome, contato: fetchedProfile.contato }); // Guarda os dados editáveis iniciais
             setUserPhotoPreview(data.photo || null);
-
         } catch (error) {
             console.error("Erro ao carregar perfil:", error);
             toast.error("Erro ao carregar informações do perfil.");
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]); // Adicionado token como dependência
 
     useEffect(() => {
         if (userEmail && userRole) {
             fetchUserProfile(userEmail, userRole);
         }
-    }, [userEmail, userRole, token]); // Adicionado token como dependência
+    }, [userEmail, userRole, fetchUserProfile]);
 
     const handleNavigate = (path: To) => {
         navigate(path);
@@ -140,9 +137,11 @@ function Perfil() {
 
     const handleEditar = () => {
         setEditando(true);
-        // Ao entrar no modo de edição, se nenhum novo arquivo foi selecionado,
-        // o userPhotoPreview já deve estar com a foto atual (do fetchUserProfile) ou null.
-        // Não precisamos resetar o selectedFile aqui, pois ele só é definido se o usuário escolher um novo.
+        // Guarda o estado atual dos campos editáveis para comparação ao salvar
+        setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato });
+        if (perfil.photo && !selectedFile) {
+            setUserPhotoPreview(perfil.photo);
+        }
     };
 
     const handleFileChangeForProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,40 +156,73 @@ function Perfil() {
                 return;
             }
             setSelectedFile(file);
-            setUserPhotoPreview(URL.createObjectURL(file)); // Atualiza o preview com a nova imagem
+            setUserPhotoPreview(URL.createObjectURL(file));
         } else {
             setSelectedFile(null);
-            // Se o usuário cancelar, volta a mostrar a foto original do perfil (se houver)
             setUserPhotoPreview(perfil.photo || null);
         }
     };
+    
+    const profileDataChanged = (): boolean => {
+        if (!initialPerfilData) return false;
+        return perfil.nome !== initialPerfilData.nome || perfil.contato !== initialPerfilData.contato;
+    };
 
     const handleSalvar = async () => {
-        if (!perfil.id) {
-            toast.error("ID do usuário não encontrado.");
+        if (!perfil.id || !userRole) {
+            toast.error("ID do usuário ou tipo de usuário não encontrado.");
             return;
         }
+
+        const hasDataChanged = profileDataChanged();
+        const hasNewImage = !!selectedFile;
+
+        if (!hasDataChanged && !hasNewImage) {
+            toast.info("Nenhuma alteração para salvar.");
+            setEditando(false);
+            return;
+        }
+
         setIsSaving(true);
+        let anyUpdateSucceeded = false;
 
-        let profileDataUpdated = false;
+        // Passo 1: Salvar dados textuais do perfil (nome, contato), se alterados
+        if (hasDataChanged) {
+            try {
+                const profileUpdatePayload = {
+                    name: perfil.nome,
+                    phone: perfil.contato,
+                    // is_active: true, // O backend espera 'is_active', mas geralmente não é controlado pelo usuário aqui.
+                                      // Se for mandatório, precisa ser incluído. Assumindo que é opcional ou gerenciado de outra forma.
+                };
 
-        // Passo 1: Salvar outros dados do perfil (se houver lógica para isso)
-        // Exemplo:
-        // if (dadosDoFormularioForamAlterados) {
-        // try {
-        //   const profileUpdatePayload = { nome: perfil.nome, contato: perfil.contato };
-        //   const endpointRole = roleToEndpoint[perfil.tipoUsuario.toUpperCase()] || "customers";
-        //   await api.put(`/${endpointRole}/${perfil.id}`, profileUpdatePayload, { headers: { Authorization: `Bearer ${token}` } });
-        //   toast.success("Dados do perfil atualizados!");
-        //   profileDataUpdated = true;
-        // } catch (error) {
-        //   toast.error("Erro ao atualizar dados do perfil.");
-        //   console.error("Erro dados perfil:", error);
-        // }
-        // }
+                const roleToUpdateEndpoint: Record<string, string> = {
+                    CUSTOMER: "customers",
+                    CRAFTSMAN: "craftsmen",
+                    // COMPANY: "companies", // Adicionar se houver endpoint de PUT para company
+                };
+                const updateEndpointRole = roleToUpdateEndpoint[userRole];
+
+                if (!updateEndpointRole) {
+                    toast.error(`Tipo de usuário '${userRole}' não suporta atualização de dados.`);
+                    throw new Error("Endpoint de atualização não encontrado para o role.");
+                }
+                
+                console.log("Atualizando dados do perfil:", profileUpdatePayload);
+                await api.put(`/${updateEndpointRole}/${perfil.id}`, profileUpdatePayload, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                toast.success("Dados do perfil atualizados!");
+                setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato }); // Atualiza os dados iniciais
+                anyUpdateSucceeded = true;
+            } catch (error: any) {
+                console.error("Erro ao atualizar dados do perfil:", error);
+                toast.error(error.response?.data?.message || "Erro ao atualizar os dados do perfil.");
+            }
+        }
 
         // Passo 2: Salvar a nova imagem de perfil, se selecionada
-        if (selectedFile) {
+        if (hasNewImage && selectedFile) { // selectedFile já foi verificado em hasNewImage, mas dupla checagem para TS
             try {
                 const imageFormData = new FormData();
                 imageFormData.append("file", selectedFile);
@@ -203,34 +235,21 @@ function Perfil() {
                     },
                 });
                 toast.success("Foto de perfil atualizada!");
-                // Após o upload, o fetchUserProfile buscará a nova URL da foto
-                if(userEmail && userRole) await fetchUserProfile(userEmail, userRole); // Re-fetch para pegar a nova URL da foto
-                profileDataUpdated = true; // Marca que algo foi atualizado
-            } catch (error) {
+                anyUpdateSucceeded = true; 
+                // Re-fetch para obter a nova URL da foto e atualizar 'initialPerfilData' se os dados textuais também foram salvos antes
+                if(userEmail && userRole) await fetchUserProfile(userEmail, userRole);
+            } catch (error: any) {
                 console.error("Erro ao enviar imagem de perfil:", error);
-                toast.error("Erro ao atualizar a foto de perfil.");
+                toast.error(error.response?.data?.message || "Erro ao atualizar a foto de perfil.");
             }
         }
         
-        // Se nenhuma alteração foi feita (nem dados, nem foto)
-        if (!profileDataUpdated && !selectedFile && !outrosDadosForamAlterados()) { // precisa da função outrosDadosForamAlterados()
-             toast.info("Nenhuma alteração para salvar.");
-        }
-
-
         setIsSaving(false);
-        setEditando(false);
-        setSelectedFile(null); // Limpa o arquivo selecionado independentemente do resultado
-        // setUserPhotoPreview não precisa ser limpo aqui, pois o fetchUserProfile o atualizará
+        if(anyUpdateSucceeded || !hasDataChanged){ // Sai do modo edição se algo foi salvo ou se não havia nada para salvar (além da foto)
+            setEditando(false);
+        }
+        setSelectedFile(null);
     };
-    
-    // Função auxiliar para verificar se outros dados foram alterados (exemplo)
-    const outrosDadosForamAlterados = (): boolean => {
-        // Compare `perfil` com o estado inicial do perfil (você precisaria armazenar o estado inicial ao carregar)
-        // Por simplicidade, vamos assumir que se estiver editando, sempre há potencial para salvar
-        return editando; // Simplificação, melhore isso se tiver edição de outros campos
-    };
-
 
     const handleSair = () => {
         dispatch(logout());
@@ -251,9 +270,7 @@ function Perfil() {
             <Header />
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             {loading ? (
-                <SpinnerWrapper>
-                    <Spinner />
-                </SpinnerWrapper>
+                <SpinnerWrapper><Spinner /></SpinnerWrapper>
             ) : (
                 <>
                     <Container>
@@ -262,25 +279,20 @@ function Perfil() {
                             <TextPerfil>Perfil</TextPerfil>
                         </ConteinerPerfilText>
                         <ContainerPerfilGeral>
-                            {/* Imagem decorativa à esquerda (como estava) */}
                             <ImagePerfil alt="Decoração" src={Jarros} />
-
-                            {/* Container do formulário à direita */}
                             <ContainerPerfil>
                                 <Text1>Informações do Perfil</Text1>
-
-                                {/* Bloco para a foto de perfil do usuário */}
                                 <ContainerImageContent>
                                     <UserProfilePhoto
                                         alt="Foto de Perfil"
-                                        src={userPhotoPreview || DefaultUserProfileImage} // Usa o preview, depois foto do perfil, depois um default
-                                        onError={(e) => { e.currentTarget.src = DefaultUserProfileImage; }} // Fallback para imagem padrão
+                                        src={userPhotoPreview || DefaultUserProfileImage}
+                                        onError={(e) => { e.currentTarget.src = DefaultUserProfileImage; }}
                                     />
                                     {editando && (
                                         <>
                                             <StyledFileInput
                                                 type="file"
-                                                id="fileInputUserProfile" // ID único
+                                                id="fileInputUserProfile"
                                                 onChange={handleFileChangeForProfile}
                                                 accept="image/png, image/jpeg, image/webp"
                                             />
@@ -292,51 +304,19 @@ function Perfil() {
                                 </ContainerImageContent>
 
                                 <TextInput>Nome</TextInput>
-                                <InputPerfil
-                                    name="nome"
-                                    disabled={!editando}
-                                    value={perfil.nome}
-                                    onChange={handleChange}
-                                />
-
+                                <InputPerfil name="nome" disabled={!editando} value={perfil.nome} onChange={handleChange} />
                                 <TextInput>Email</TextInput>
-                                <InputPerfil
-                                    name="email"
-                                    disabled // Email geralmente não é editável
-                                    value={perfil.email}
-                                    readOnly // Adicionado para clareza
-                                    title="O e-mail não pode ser alterado."
-                                />
-
+                                <InputPerfil name="email" disabled value={perfil.email} readOnly title="O e-mail não pode ser alterado." />
                                 <TextInput>CPF</TextInput>
-                                <InputPerfil
-                                    name="cpf"
-                                    disabled // CPF geralmente não é editável
-                                    value={perfil.cpf}
-                                    readOnly // Adicionado para clareza
-                                    title="O CPF não pode ser alterado."
-                                />
-
+                                <InputPerfil name="cpf" disabled value={perfil.cpf} readOnly title="O CPF não pode ser alterado." />
                                 <TextInput>Contato</TextInput>
-                                <InputPerfil
-                                    name="contato"
-                                    disabled={!editando}
-                                    value={perfil.contato}
-                                    onChange={handleChange}
-                                />
-
+                                <InputPerfil name="contato" disabled={!editando} value={perfil.contato} onChange={handleChange} />
                                 <TextInput>Tipo de Usuário</TextInput>
-                                <SelectInput
-                                    name="tipoUsuario"
-                                    disabled
-                                    value={perfil.tipoUsuario}
-                                    title="Este campo não pode ser editado"
-                                >
+                                <SelectInput name="tipoUsuario" disabled value={perfil.tipoUsuario} title="Este campo não pode ser editado">
                                     <option value="CUSTOMER">Cliente</option>
                                     <option value="CRAFTSMAN">Artesão</option>
                                     <option value="COMPANY">Empresa</option>
                                 </SelectInput>
-
                                 <ContainerButton>
                                     {editando ? (
                                         <ButtonSalvar onClick={handleSalvar} disabled={isSaving}>

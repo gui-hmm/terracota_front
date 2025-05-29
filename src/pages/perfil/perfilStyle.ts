@@ -127,7 +127,7 @@ export const ContainerButton = styled.div`
     height: 50px;
     align-items: center;
     justify-content: center;
-    margin-top: 60px;
+    margin-top: 20px;
 `;
 
 export const ButtonEditar = styled.div`
@@ -141,9 +141,10 @@ export const ButtonEditar = styled.div`
     justify-content: center;
     align-items: center;
     margin-right: 50px;
+    border-radius: 5px;
 `;
 
-export const ButtonSalvar = styled.button` // Mudei para button para semântica e estado disabled
+export const ButtonSalvar = styled.button`
     width: 110px;
     height: 50px;
     background-color: #4CAF50;
@@ -154,8 +155,8 @@ export const ButtonSalvar = styled.button` // Mudei para button para semântica 
     justify-content: center;
     align-items: center;
     margin-right: 50px;
-    border: none; // Adicionado para remover borda padrão de button
-    border-radius: 4px; // Opcional: bordas arredondadas
+    border: none; 
+    border-radius: 5px; // Opcional: bordas arredondadas
 
     &:disabled {
         background-color: #cccccc;
