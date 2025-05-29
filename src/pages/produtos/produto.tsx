@@ -82,7 +82,7 @@ const Produtos: React.FC = () => {
           id: item.id,
           nome: item.name,
           valor: item.price,
-          imagem: item.image || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg", // imagem fallback
+          imagem: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg", // imagem fallback
         }));
         setProdutosApi(produtosFormatados);
       } catch (error) {
