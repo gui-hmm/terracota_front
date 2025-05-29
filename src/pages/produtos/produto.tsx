@@ -34,7 +34,8 @@ export interface Produto {
   imagem: string;
 }
 
-export interface ProdutoCarrinho {
+// Interface para o item do carrinho como será salvo no localStorage
+export interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
   quantidade: number;
 }
@@ -57,8 +58,8 @@ const produtosMockados: Produto[] = [
 
 const Produtos: React.FC = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
-  const [quantidade, setQuantidade] = useState(1);
-  const [carrinho, setCarrinho] = useState<ProdutoCarrinho[]>([]);
+  // Removido: const [quantidade, setQuantidade] = useState(1); - Quantidade será gerenciada no modal
+  // Removido: const [carrinho, setCarrinho] = useState<ProdutoCarrinhoLocalStorage[]>([]);
   const [produtosApi, setProdutosApi] = useState<Produto[]>([]);
   const [loadingProdutosApi, setLoadingProdutosApi] = useState(true);
 
@@ -68,23 +69,8 @@ const Produtos: React.FC = () => {
     navigate(path);
   };
 
-  // Carregar carrinho do localStorage
-  useEffect(() => {
-    const carrinhoStorage = localStorage.getItem("carrinho");
-    if (carrinhoStorage) {
-      try {
-        const carrinhoParse = JSON.parse(carrinhoStorage);
-        setCarrinho(Array.isArray(carrinhoParse) ? carrinhoParse : []);
-      } catch {
-        setCarrinho([]);
-      }
-    }
-  }, []);
-
-  // Atualiza o localStorage sempre que carrinho mudar
-  useEffect(() => {
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-  }, [carrinho]);
+  // Removido o useEffect para carregar carrinho aqui, pois não é necessário manter o estado do carrinho neste componente.
+  // Removido o useEffect que atualizava o localStorage quando 'carrinho' mudava.
 
   // Busca produtos da API
   useEffect(() => {
@@ -113,29 +99,46 @@ const Produtos: React.FC = () => {
     setProdutoSelecionado(produto);
   };
 
-  const handleAlterarQuantidade = (novaQuantidade: number) => {
-    if (novaQuantidade > 0) {
-      setQuantidade(novaQuantidade);
-    }
-  };
+  // Removido: handleAlterarQuantidade - Será tratado dentro do modal ou na função de adicionar
 
   const handleAdicionarAoCarrinho = (produto: Produto, quantidade: number) => {
-    const produtoExistente = carrinho.find(p => p.produto.id === produto.id);
-    let novoCarrinho;
+    const carrinhoStorage = localStorage.getItem("carrinho");
+    let carrinhoAtual: ProdutoCarrinhoLocalStorage[] = [];
 
-    if (produtoExistente) {
-      novoCarrinho = carrinho.map(p =>
-        p.produto.id === produto.id
+    if (carrinhoStorage) {
+      try {
+        const carrinhoParse = JSON.parse(carrinhoStorage);
+        if (Array.isArray(carrinhoParse)) {
+          // Validar se os itens estão no formato esperado
+          carrinhoAtual = carrinhoParse.filter(
+            item => item.produto && typeof item.produto.id !== 'undefined' && typeof item.quantidade === 'number'
+          );
+        }
+      } catch (error) {
+        console.error("Erro ao parsear carrinho do localStorage:", error);
+        carrinhoAtual = []; // Reseta se houver erro de parse
+      }
+    }
+
+    const produtoExistenteIndex = carrinhoAtual.findIndex(
+      (p) => p.produto.id === produto.id
+    );
+
+    let novoCarrinho: ProdutoCarrinhoLocalStorage[];
+
+    if (produtoExistenteIndex > -1) {
+      novoCarrinho = carrinhoAtual.map((p, index) =>
+        index === produtoExistenteIndex
           ? { ...p, quantidade: p.quantidade + quantidade }
           : p
       );
     } else {
-      novoCarrinho = [...carrinho, { produto, quantidade }];
+      novoCarrinho = [...carrinhoAtual, { produto, quantidade }];
     }
 
-    setCarrinho(novoCarrinho);
     localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-    setProdutoSelecionado(null);
+    setProdutoSelecionado(null); // Fecha o modal
+    // Opcional: Adicionar um feedback para o usuário (ex: "Produto adicionado!")
   };
 
   return (
@@ -162,7 +165,7 @@ const Produtos: React.FC = () => {
         {produtoSelecionado && (
           <ProdutoDetalhesModal
             produto={produtoSelecionado}
-            onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
+            onAdicionarAoCarrinho={handleAdicionarAoCarrinho} // Passa a quantidade diretamente
             onFecharModal={() => setProdutoSelecionado(null)}
           />
         )}

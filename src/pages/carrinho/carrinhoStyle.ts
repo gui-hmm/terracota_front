@@ -1,4 +1,20 @@
-import styled from "styled-components";
+// Em carrinhoStyle.ts (se for copiar)
+import styled, { keyframes } from "styled-components";
+
+export const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Spinner = styled.div`
+  border: 3px solid rgba(255, 255, 255, 0.3); 
+  border-left-color: #fff; 
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: ${spin} 1s linear infinite;
+`;
 
 export const Container = styled.div`
   width: auto;
@@ -168,9 +184,19 @@ export const BotaoFinalizar = styled.button`
   cursor: pointer;
   width: 100%;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 120px;
+  min-height: 72px;
 
   &:hover {
     background-color: #2ecc71;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 `;
 

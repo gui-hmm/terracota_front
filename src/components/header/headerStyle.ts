@@ -76,10 +76,10 @@ export const MenuContent = styled.div<MenuContentProps>`
 
 export const IconsContainer = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
-    width: 800px;
+    width: 65%;
     height: auto;
 
     @media (max-width: 768px) {

@@ -62,6 +62,7 @@ const Header = () => {
             </ContainerLogoMenu>
 
             <MenuContent $menuOpen={menuOpen}>
+                <div ></div>
                 <IconsContainer>
                     <IconsPages onClick={() => handleNavigate('/')}>Início</IconsPages>
                     <IconsPages onClick={() => handleNavigate('/quemsomos')}>Quem Somos</IconsPages>
