@@ -41,7 +41,7 @@ interface Product {
   price: number;
   quantity: number;
   type: string;
-  photo: string; // Continuará sendo a URL/identificador da imagem
+  photo: string;
   craftsman_id: string;
 }
 
@@ -171,11 +171,7 @@ const MeusProdutos = () => {
       toast.error("Preencha todos os campos de texto obrigatórios.");
       return;
     }
-    // A imagem é opcional na criação inicial, mas se selecionada, será enviada.
-    // if (!selectedFile) {
-    //   toast.error("Selecione uma imagem para o produto.");
-    //   return;
-    // }
+
     if (!craftsmanId) {
       toast.error("ID do artesão não encontrado. Não é possível criar o produto.");
       return;
@@ -193,7 +189,6 @@ const MeusProdutos = () => {
         quantity: parseInt(quantity),
         type,
         craftsman_id: craftsmanId,
-        // photo: null, // O backend deve lidar com photo ser inicialmente nulo/vazio
       };
 
       console.log("Enviando dados do produto:", productDataPayload);
@@ -277,7 +272,7 @@ const MeusProdutos = () => {
     setEditedProduct({ 
         ...product, 
         price: Number(product.price), 
-        quantity: Number(product.quantity) // Adicionado quantity
+        quantity: Number(product.quantity) 
     });
     setEditingPreviewUrl(product.photo || null); // Mostra a foto atual ou nada
     setEditingFile(null);
@@ -291,7 +286,14 @@ const MeusProdutos = () => {
   };
 
   const handleEditProduct = async () => {
-    if (!craftsmanId || !editProductId || !editedProduct.name || !editedProduct.description || typeof editedProduct.price === 'undefined' || typeof editedProduct.quantity === 'undefined' || !editedProduct.type ) {
+    if (!craftsmanId || 
+        !editProductId || 
+        !editedProduct.name || 
+        !editedProduct.description || 
+        typeof editedProduct.price === 'undefined' || 
+        typeof editedProduct.quantity === 'undefined' || 
+        !editedProduct.type 
+      ) {
         toast.error("Dados incompletos para edição. Verifique nome, descrição, preço, quantidade e tipo.");
         return;
     }
@@ -307,9 +309,8 @@ const MeusProdutos = () => {
         name: editedProduct.name,
         description: editedProduct.description,
         price: Number(editedProduct.price),
-        quantity: Number(editedProduct.quantity), // Adicionado quantity
-        type: editedProduct.type,                 // Adicionado type
-        // Não envie photo aqui se for atualizado via /images
+        quantity: Number(editedProduct.quantity), 
+        type: editedProduct.type,            
       };
       console.log("Atualizando dados do produto ID:", editProductId, productDataToUpdate);
       // O endpoint atual é PUT /products/{id}/craftsmen/{craftsmanId} e espera JSON

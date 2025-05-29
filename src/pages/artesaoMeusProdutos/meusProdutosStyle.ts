@@ -148,7 +148,7 @@ export const InputProdutos = styled.input`
 `;
 
 export const Select = styled.select`
-  width: 105%;
+  width: 99%;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border: solid 1px #802600;
@@ -221,7 +221,7 @@ export const ProductImage = styled.img`
 `;
 
 export const StyledFileInput = styled.input`
-  display: none; /* Esconde o input padrão */
+  display: none; 
 `;
 
 export const ContainerImageContent = styled.div`
@@ -233,10 +233,10 @@ export const ContainerImageContent = styled.div`
 export const FileInputLabel = styled.label`
   display: inline-block;
   padding: 8px 15px;
-  background-color: #f7f7f7;
+  background-color: #fff;
   color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #802600;
+  border-radius: 2px;
   cursor: pointer;
   text-align: center;
   font-size: 0.9em;

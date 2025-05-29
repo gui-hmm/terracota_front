@@ -11,18 +11,6 @@ import {
   TextProdutos,
   ContainerProdutosGeral,
 } from "./produtosStyle";
-import P1 from "../../assets/p1.png";
-import P2 from "../../assets/p2.png";
-import P3 from "../../assets/p3.png";
-import P4 from "../../assets/p4.png";
-import P5 from "../../assets/p5.png";
-import P6 from "../../assets/p6.png";
-import P7 from "../../assets/p7.png";
-import P8 from "../../assets/p8.png";
-import P9 from "../../assets/p9.png";
-import P10 from "../../assets/p10.png";
-import P11 from "../../assets/p11.png";
-import P12 from "../../assets/p12.png";
 import { To, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 
