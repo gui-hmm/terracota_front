@@ -40,22 +40,6 @@ export interface ProdutoCarrinhoLocalStorage {
   quantidade: number;
 }
 
-// Mock de produtos locais
-const produtosMockados: Produto[] = [
-  { id: 1, nome: "Vasos de cerâmica", valor: 160.0, imagem: P1 },
-  { id: 2, nome: "Panela de barro", valor: 145.0, imagem: P2 },
-  { id: 3, nome: "Estatueta de terracota", valor: 350.0, imagem: P3 },
-  { id: 4, nome: "Caldeirão de barro", valor: 160.0, imagem: P4 },
-  { id: 5, nome: "Potes de barro", valor: 145.0, imagem: P5 },
-  { id: 6, nome: "Tigelas de cerâmica", valor: 145.0, imagem: P6 },
-  { id: 7, nome: "Leão de barro", valor: 300.0, imagem: P7 },
-  { id: 8, nome: "Cervos de cerâmica", valor: 500.0, imagem: P8 },
-  { id: 9, nome: "São Francisco", valor: 250.0, imagem: P9 },
-  { id: 10, nome: "Jarra de cerâmica", valor: 150.0, imagem: P10 },
-  { id: 11, nome: "Cisnes de cerâmica", valor: 200.0, imagem: P11 },
-  { id: 12, nome: "Coelho de barro", valor: 130.0, imagem: P12 },
-];
-
 const Produtos: React.FC = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   // Removido: const [quantidade, setQuantidade] = useState(1); - Quantidade será gerenciada no modal
@@ -151,8 +135,6 @@ const Produtos: React.FC = () => {
         </ConteinerProdutosText>
 
         <ContainerProdutosGeral>
-          <ProdutoList produtos={produtosMockados} onSelectProduto={handleProdutoSelect} />
-
           {loadingProdutosApi ? (
             <div style={{ textAlign: "center", width: "100%", padding: "30px" }}>
               <span>Carregando produtos...</span>
