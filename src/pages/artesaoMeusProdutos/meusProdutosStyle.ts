@@ -183,7 +183,12 @@ export const ProductItem = styled.div`
   border-radius: 8px;
   width: 100%;
   max-width: 300px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 
   @media (max-width: 380px) {
     width: 80%;
@@ -199,6 +204,7 @@ export const Actions = styled.div`
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  justify-content: center;
 `;
 
 export const Quantity = styled.p`
