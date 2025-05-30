@@ -87,30 +87,25 @@ export const TextExploreContainer = styled.div`
 `;
 
 export const BarrosExplore = styled.img`
-    width: 75%;
+    width: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: auto;
-    margin-right: 2%;
+    margin: 3% 2% auto auto;
     
     @media (max-width: 1350px) {
         width: 95%;
     } 
     
     @media (max-width: 1095px) {
-        width: 125%;
+        margin-top: 12%;
     } 
-
+    
     @media (max-width: 980px) {
-        width: 145%;
+        margin-top: 22%;
     } 
 
     @media (max-width: 836px) {
-        width: 165%;
-    } 
-
-    @media (max-width: 768px) {
         display: none;
     } 
 `;
@@ -312,15 +307,14 @@ export const ContainerCategorias = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
         padding-left: 35%;
+        gap: 5px;
     }
 
     @media (max-width: 560px) {
-        flex-direction: column;
         padding-left: 30%;
     }
 
     @media (max-width: 420px) {
-        flex-direction: column;
         padding-left: 23%;
     }
 `;
@@ -363,6 +357,27 @@ export const ContainerProdutosGeral1 = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+export const ContainerProdutosGeral = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+  }
+
+  @media (max-width: 320px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+  }
 `;
 
 export const LinhaUm = styled.div`

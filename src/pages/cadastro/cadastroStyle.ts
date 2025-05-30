@@ -31,14 +31,14 @@ export const ConteinerCadastroText = styled.div`
     margin-bottom: 50px;
     display: flex;
     flex-direction: row;
-    cursor: pointer;
-`;
+    `;
 
 export const IconVoltar = styled.img`
     width: auto;
     height: 23px;
     margin-top: 6px;
     margin-right: 15px;
+    cursor: pointer;
 `;
 
 export const TextCadastro = styled.div`

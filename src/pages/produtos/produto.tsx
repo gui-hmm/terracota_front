@@ -124,7 +124,7 @@ const Produtos: React.FC = () => {
 
         <ContainerProdutosGeral>
           {loadingProdutosApi ? (
-            <div style={{ textAlign: "center", width: "100%", padding: "30px" }}>
+            <div style={{ textAlign: "center", width: "100%", height: "200px", padding: "30px" }}>
               <span>Carregando produtos...</span>
             </div>
           ) : (

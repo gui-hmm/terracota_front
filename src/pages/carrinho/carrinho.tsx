@@ -182,7 +182,7 @@ const Carrinho: React.FC = () => {
           <ContainerCards>
             {/* ... (mapa de produtos permanece o mesmo) ... */}
             {produtos.length === 0 ? (
-              <center style={{ height: "120px", width: "100%", paddingTop: "20px" }}>
+              <center style={{ height: "200px", width: "100%", paddingTop: "20px" }}>
                 <p>Seu carrinho está vazio.</p>
               </center>
             ) : (
