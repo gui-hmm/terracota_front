@@ -11,7 +11,8 @@ import {
   ModalImage, 
   ModalNome, 
   ModalPreco,
-  ControlesQuantidade, 
+  ControlesQuantidade,
+  ModalDescricao, 
 } from "./produtoDetalhesModalStyle";
 
 interface ProdutoDetalhesModalProps {
@@ -27,6 +28,8 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
 }) => {
   // Controle local para a quantidade
   const [quantidade, setQuantidade] = useState(1);
+
+  console.log(produto)
 
   const handleQuantidadeAlterada = (novaQuantidade: number) => {
     // Atualiza a quantidade (não permite valores negativos ou zero)
@@ -51,13 +54,14 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
         </ModalHeader>
         <ModalBody>
           <ModalImage src={produto.imagem} alt={produto.nome} />
-          <ModalPreco>{`Valor do produto R$ ${produto.valor.toFixed(2)}`}</ModalPreco>
+          <ModalDescricao>{`Descrição: ${produto.descricao}`}</ModalDescricao>
+          <ModalPreco>{`Valor do produto: R$${produto.valor.toFixed(2)}`}</ModalPreco>
           <ControlesQuantidade>
             <button onClick={() => handleQuantidadeAlterada(quantidade - 1)} disabled={quantidade <= 1}>-</button>
             <span>{quantidade}</span>
             <button onClick={() => handleQuantidadeAlterada(quantidade + 1)}>+</button>
           </ControlesQuantidade>
-          <ModalPreco>{`Valor total R$ ${(produto.valor * quantidade).toFixed(2)}`}</ModalPreco>
+          <ModalPreco>{`Valor total: R$${(produto.valor * quantidade).toFixed(2)}`}</ModalPreco>
         </ModalBody>
         <ModalFooter>
           <BotaoAdicionar onClick={handleAdicionarAoCarrinho} >

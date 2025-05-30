@@ -56,7 +56,7 @@ const Carrinho: React.FC = () => {
         id: item.id,
         nome: item.nome,
         valor: item.valor,
-        imagem: item.imagem,
+        imagem: item.imagem
       },
       quantidade: item.quantidade,
     }));

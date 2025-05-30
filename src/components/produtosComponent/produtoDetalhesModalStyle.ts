@@ -69,13 +69,21 @@ export const ModalImage = styled.img`
   height: auto;
   object-fit: contain;
   border-radius: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 `;
 
 // Nome do produto no modal
 export const ModalNome = styled.h2`
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+`;
+
+// Nome do produto no modal
+export const ModalDescricao = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
   margin-bottom: 10px;
   text-align: center;
 `;

@@ -20,6 +20,7 @@ export interface Produto {
   nome: string;
   valor: number;
   imagem: string;
+  descricao?: string;
 }
 
 // Interface para o item do carrinho como será salvo no localStorage
@@ -54,6 +55,7 @@ const Produtos: React.FC = () => {
           id: item.id,
           nome: item.name,
           valor: item.price,
+          descricao: item.description,
           imagem: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg", // imagem fallback
         }));
         setProdutosApi(produtosFormatados);
