@@ -42,7 +42,7 @@ function QuemSomos(){
                         <br/>Equipe de Desenvolvimento do Sistema:
                     </Text>
                     <Text>
-                        Nosso sistema de gestão foi cuidadosamente desenvolvido por uma equipe talentosa da Escola UNICAP - ICAM Tech, composta por:
+                        Nosso sistema de gestão foi cuidadosamente desenvolvido por uma equipe talentosa da Faculdade UNICAP no campus Recife, composta por:
                     </Text>
                     <ul>
                         <Text>
