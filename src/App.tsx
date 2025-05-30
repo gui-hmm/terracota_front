@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
 
@@ -15,15 +14,28 @@ import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
 import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
 import MinhasVendas from './pages/artesaoMinhasVendas/minhasVendas';
-import DashboardArtesao from './pages/artesaoDashboard/daschboard';
 
 import RoleProtectedRoute from './RoleProtectedRoute';
+import { ToastContainer } from "react-toastify";
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ToastContainer
+          position="top-right" // Posição preferida na tela
+          autoClose={4000}     // Fecha automaticamente após 4 segundos
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"        // Pode ser 'light', 'dark', ou 'colored'
+          style={{ zIndex: 1000 }}
+        />
         <Routes>
           {/* Rotas públicas */}
           <Route path="/" element={<Home />} />
@@ -35,6 +47,7 @@ function App() {
 
           {/* Protegidas para CUSTOMER */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER"]} />}>
+
           </Route>
 
           {/* Protegidas para CRAFTSMAN */}
@@ -56,7 +69,7 @@ function App() {
 
           {/* Protegidas para CRAFTSMAN e COMPANY */}
           <Route element={<RoleProtectedRoute allowedRoles={["CRAFTSMAN", "COMPANY"]} />}>
-            <Route path="/dashboard" element={<DashboardArtesao />} />
+
           </Route>
 
         </Routes>

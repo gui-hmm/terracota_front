@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Container,
@@ -395,7 +395,6 @@ const MeusProdutos = () => {
   return (
     <>
       <Header />
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Container>
         <ConteinerMeusProdutosText onClick={() => navigate("/")}>
           <IconVoltar alt="Voltar" src={Voltar} />

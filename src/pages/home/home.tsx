@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { To, useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Imports de Componentes
@@ -115,6 +115,23 @@ function Home() {
   const handleNavigate = (path: To) => {
     navigate(path);
   };
+
+  useEffect(() => {
+    // Exibe toasts que chegam via state do Navigate (ex: de RoleProtectedRoute)
+    if (location.state?.toastMessage) {
+        const message = location.state.toastMessage;
+        const type = location.state.type || 'info'; // 'info' como padrão
+
+        if (type === 'error') {
+            toast.error(message);
+        } else {
+            toast.info(message);
+        }
+        
+        // Limpa o state para não mostrar o toast novamente se o usuário navegar internamente
+        window.history.replaceState({}, document.title)
+    }
+  }, [location.state]);
 
   // --- LÓGICA DE PRODUTOS E CARRINHO ---
 
@@ -317,7 +334,6 @@ function Home() {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Header />
       {saleStatusMessage && (
         <StatusNotification type={notificationType}>

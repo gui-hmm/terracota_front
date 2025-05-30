@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonEntrar,
   ButtonEsqueceuSenha,
@@ -25,11 +25,13 @@ import Jarro from "../../assets/login_jarro.png";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { login } from "../../store/reducers/auth";
+import { toast, ToastContainer } from "react-toastify";
 
 const Login: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
@@ -38,6 +40,26 @@ const Login: React.FC = () => {
     email: "",
     password: "",
   });
+
+
+  // Efeito para exibir toasts vindos de redirecionamentos
+  useEffect(() => {
+    if (location.state?.toastMessage) {
+      const { toastMessage, type = 'info' } = location.state;
+
+      switch (type) {
+        case 'error':
+          toast.error(toastMessage);
+          break;
+          case 'warning':
+          toast.warn(toastMessage);
+          break;
+          default:
+          toast.warn(toastMessage);
+      }
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,6 +83,19 @@ const Login: React.FC = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-right" // Posição preferida na tela
+        autoClose={4000}     // Fecha automaticamente após 4 segundos
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"        // Pode ser 'light', 'dark', ou 'colored'
+        style={{ zIndex: 1000 }}
+      />
       <Header />
       <Container>
         <ConteinerLoginText>
