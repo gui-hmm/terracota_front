@@ -11,58 +11,74 @@ import {
     Text, 
     ConteinerQuemSomosText,
     IconVoltar,
-    TextQuemSomos} from "./quemSomosStyle";
+    TextQuemSomos
+} from "./quemSomosStyle";
 import { To, useNavigate } from "react-router-dom";
 
-function QuemSomos(){
-
+function QuemSomos() {
     const navigate = useNavigate();
 
     const handleNavigate = (path: To) => {
         navigate(path);
     };
 
-    return(
+    return (
         <div>
-            <Header/>
+            <Header />
             <Container>
                 <ConteinerQuemSomosText>
                     <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
                     <TextQuemSomos>Quem somos</TextQuemSomos>
                 </ConteinerQuemSomosText>
+
                 <ContainerImage>
-                    <ImageModelagem alt="" src={Modelagem} />
+                    <ImageModelagem alt="Imagem de modelagem" src={Modelagem} />
                 </ContainerImage>
+
                 <QuemSomosContainer>
-                    <QuemSomosText>
-                        Quem Somos
-                    </QuemSomosText>
+                    <QuemSomosText>Quem Somos</QuemSomosText>
+                    
                     <Text>
-                        Bem-vindo à Terracota, uma organização dedicada ao apoio dos artesãos do interior de Tracunhaém. Nosso compromisso é promover o desenvolvimento sustentável dessas comunidades, fornecendo suporte e recursos essenciais para o seu crescimento.
-                        <br/>Equipe de Desenvolvimento do Sistema:
+                        Bem-vindo à <strong>Terracota</strong>, uma organização dedicada ao fortalecimento e valorização dos artesãos do interior de Tracunhaém. Nosso compromisso é promover o desenvolvimento sustentável dessas comunidades, oferecendo suporte, visibilidade e recursos essenciais para seu crescimento e autonomia.
                     </Text>
+
+                    <QuemSomosText>Equipe de Desenvolvimento do Sistema</QuemSomosText>
+                    
                     <Text>
-                        Nosso sistema de gestão foi cuidadosamente desenvolvido por uma equipe talentosa da Faculdade UNICAP no campus Recife, composta por:
+                        Nosso sistema de gestão foi desenvolvido com dedicação e excelência por uma equipe talentosa da <strong>Faculdade UNICAP – Campus Recife</strong>, formada por:
                     </Text>
-                    <ul>
-                        <Text>
+                    
+                    <Text>
+                        <ul>
                             <li>Andressa Rayane</li>
                             <li>Guilherme Henrique</li>
                             <li>Hylan Silva</li>
                             <li>Ketyllen Oliveira</li>
                             <li>Lucas Bernadino</li>
                             <li>Welliana Maria</li>
-                        </Text>
-                    </ul>
+                        </ul>
+                    </Text>
+
+                    <QuemSomosText>Nossa Missão</QuemSomosText>
+
                     <Text>
-                        Nosso Compromisso com o Desenvolvimento Comunitário<br/>
-                        Além de nossas operações comerciais, estamos empenhados em promover o desenvolvimento educacional e pessoal de nossos colaboradores e suas famílias. Através de iniciativas, projetos e desafios, buscamos criar um ambiente propício para o aprendizado e o progresso contínuo de nossa comunidade. Explore nosso site para saber mais sobre a Terracota e como estamos fazendo a diferença nas vidas das pessoas e no meio ambiente. Junte-se a nós nesta jornada de crescimento e sustentabilidade!
+                        Mais do que uma plataforma digital, a Terracota é um projeto de transformação social. Atuamos como uma <strong>vitrine digital</strong> para o artesanato do interior de Pernambuco, conectando diretamente artesãos locais a clientes em âmbito regional e nacional. Essa ponte fortalece a economia criativa e ajuda a preservar o patrimônio cultural das comunidades interioranas.
+                    </Text>
+
+                    <QuemSomosText>Compromisso com o Desenvolvimento Comunitário</QuemSomosText>
+
+                    <Text>
+                        Além de nossas atividades comerciais, estamos profundamente comprometidos com o <strong>desenvolvimento educacional, social e pessoal</strong> dos artesãos, suas famílias e toda a comunidade envolvida. Por meio de projetos, iniciativas e desafios, promovemos um ambiente de aprendizado contínuo, inclusão e valorização cultural.
+                    </Text>
+
+                    <Text>
+                        Explore nosso site para conhecer mais sobre a Terracota, nossos produtos e o impacto positivo que estamos construindo juntos. <strong>Junte-se a nós nesta jornada de crescimento, cultura e sustentabilidade.</strong>
                     </Text>
                 </QuemSomosContainer>
             </Container>
-            <Footer/>
+            <Footer />
         </div>
-    )
+    );
 }
 
 export default QuemSomos;
