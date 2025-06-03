@@ -144,11 +144,13 @@ function Perfil() {
     const handleFileChangeForProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            const MAX_SIZE_MB = 15;
+
             if (!file.type.startsWith("image/")) {
                 toast.error("Por favor, selecione um arquivo de imagem.");
                 return;
             }
-            if (file.size > 5 * 1024 * 1024) { 
+            if (file.size > MAX_SIZE_MB * 1024 * 1024) { 
                 toast.error("A imagem é muito grande (máx 5MB).");
                 return;
             }

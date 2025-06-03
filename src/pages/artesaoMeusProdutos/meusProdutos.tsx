@@ -69,9 +69,9 @@ const MeusProdutos = () => {
     quantity: "",
     type: "",
   });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [editingFile, setEditingFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editingPreviewUrl, setEditingPreviewUrl] = useState<string | null>(null);
 
   const setLoadingFor = (id: string, isLoading: boolean) => {
@@ -140,16 +140,28 @@ const MeusProdutos = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    } else {
-      setSelectedFile(null);
-      setPreviewUrl(null);
-    }
+      if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const MAX_SIZE_MB = 15;
+          
+          if (!file.type.startsWith("image/")) {
+              toast.error("Por favor, selecione um arquivo de imagem.");
+              return;
+          }
+
+          if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+              toast.error(`A imagem é muito grande (máx ${MAX_SIZE_MB}MB).`);
+              return;
+          }
+
+          setSelectedFile(file);
+          setPreviewUrl(URL.createObjectURL(file));
+      } else {
+          setSelectedFile(null);
+          setPreviewUrl(null);
+      }
   };
-  
+    
   const handleEditingFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -188,13 +200,11 @@ const MeusProdutos = () => {
         craftsman_id: craftsmanId,
       };
 
-      console.log("Enviando dados do produto:", productDataPayload);
       const productResponse = await api.post("/products", productDataPayload, {
          headers: { Authorization: `Bearer ${token}` },
       });
 
       newProductId = productResponse.data.productId;
-      console.log("Produto criado com ID:", newProductId, productResponse.data);
 
       if (!newProductId) {
         toast.error("Produto criado, mas ID não retornado. Não é possível enviar a imagem.");
@@ -203,13 +213,10 @@ const MeusProdutos = () => {
       toast.info("Dados do produto salvos. Enviando imagem, se selecionada...");
 
       if (selectedFile) {
-        console.log(selectedFile.type)
         const imageFormData = new FormData();
         imageFormData.append("file", selectedFile);
         imageFormData.append("id", newProductId); 
 
-        console.log("Enviando imagem para o produto ID:", newProductId);
-        console.log("Dados carregados para enviar", imageFormData);
         await api.patch("/images", imageFormData, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -298,7 +305,6 @@ const MeusProdutos = () => {
         quantity: Number(editedProduct.quantity), 
         type: editedProduct.type,            
       };
-      console.log("Atualizando dados do produto ID:", editProductId, productDataToUpdate);
       await api.put(`/products/${editProductId}/craftsmen/${craftsmanId}`, productDataToUpdate, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -309,7 +315,6 @@ const MeusProdutos = () => {
         imageFormData.append("file", editingFile);
         imageFormData.append("id", editProductId);
 
-        console.log("Enviando nova imagem para o produto ID:", editProductId);
         await api.patch("/images", imageFormData, {
           headers: {
             Authorization: `Bearer ${token}`,
