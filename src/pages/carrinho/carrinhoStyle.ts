@@ -52,22 +52,22 @@ export const ContainerProdutos = styled.div`
 
 export const ContainerCards = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajustado para um mínimo de 280px */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   width: 100%;
   height: auto;
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Para tablets */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Para dispositivos móveis */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
   }
 
   @media (max-width: 320px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Para dispositivos muito pequenos */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
   }
 `;
 

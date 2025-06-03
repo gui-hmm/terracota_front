@@ -26,22 +26,19 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
   onAdicionarAoCarrinho,
   onFecharModal,
 }) => {
-  // Controle local para a quantidade
   const [quantidade, setQuantidade] = useState(1);
 
   console.log(produto)
 
   const handleQuantidadeAlterada = (novaQuantidade: number) => {
-    // Atualiza a quantidade (não permite valores negativos ou zero)
     if (novaQuantidade >= 1) {
       setQuantidade(novaQuantidade);
     }
   };
 
   const handleAdicionarAoCarrinho = () => {
-    // Adiciona ao carrinho com a quantidade selecionada
     onAdicionarAoCarrinho(produto, quantidade);
-    onFecharModal(); // Fecha o modal depois de adicionar
+    onFecharModal(); 
   };
 
   return (

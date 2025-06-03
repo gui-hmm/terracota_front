@@ -14,7 +14,6 @@ import {
 import { To, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 
-// Tipagens
 export interface Produto {
   id: number;
   nome: string;
@@ -23,7 +22,6 @@ export interface Produto {
   descricao?: string;
 }
 
-// Interface para o item do carrinho como será salvo no localStorage
 export interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
   quantidade: number;
@@ -31,8 +29,6 @@ export interface ProdutoCarrinhoLocalStorage {
 
 const Produtos: React.FC = () => {
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
-  // Removido: const [quantidade, setQuantidade] = useState(1); - Quantidade será gerenciada no modal
-  // Removido: const [carrinho, setCarrinho] = useState<ProdutoCarrinhoLocalStorage[]>([]);
   const [produtosApi, setProdutosApi] = useState<Produto[]>([]);
   const [loadingProdutosApi, setLoadingProdutosApi] = useState(true);
 
@@ -42,10 +38,6 @@ const Produtos: React.FC = () => {
     navigate(path);
   };
 
-  // Removido o useEffect para carregar carrinho aqui, pois não é necessário manter o estado do carrinho neste componente.
-  // Removido o useEffect que atualizava o localStorage quando 'carrinho' mudava.
-
-  // Busca produtos da API
   useEffect(() => {
     const buscarProdutosApi = async () => {
       setLoadingProdutosApi(true);
@@ -73,8 +65,6 @@ const Produtos: React.FC = () => {
     setProdutoSelecionado(produto);
   };
 
-  // Removido: handleAlterarQuantidade - Será tratado dentro do modal ou na função de adicionar
-
   const handleAdicionarAoCarrinho = (produto: Produto, quantidade: number) => {
     const carrinhoStorage = localStorage.getItem("carrinho");
     let carrinhoAtual: ProdutoCarrinhoLocalStorage[] = [];
@@ -83,14 +73,13 @@ const Produtos: React.FC = () => {
       try {
         const carrinhoParse = JSON.parse(carrinhoStorage);
         if (Array.isArray(carrinhoParse)) {
-          // Validar se os itens estão no formato esperado
           carrinhoAtual = carrinhoParse.filter(
             item => item.produto && typeof item.produto.id !== 'undefined' && typeof item.quantidade === 'number'
           );
         }
       } catch (error) {
         console.error("Erro ao parsear carrinho do localStorage:", error);
-        carrinhoAtual = []; // Reseta se houver erro de parse
+        carrinhoAtual = []; 
       }
     }
 
@@ -111,8 +100,7 @@ const Produtos: React.FC = () => {
     }
 
     localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-    setProdutoSelecionado(null); // Fecha o modal
-    // Opcional: Adicionar um feedback para o usuário (ex: "Produto adicionado!")
+    setProdutoSelecionado(null);
   };
 
   return (
@@ -137,7 +125,7 @@ const Produtos: React.FC = () => {
         {produtoSelecionado && (
           <ProdutoDetalhesModal
             produto={produtoSelecionado}
-            onAdicionarAoCarrinho={handleAdicionarAoCarrinho} // Passa a quantidade diretamente
+            onAdicionarAoCarrinho={handleAdicionarAoCarrinho} 
             onFecharModal={() => setProdutoSelecionado(null)}
           />
         )}

@@ -10,7 +10,7 @@ import {
   ProdutoValor,
   QuantidadeControle,
   TotalValor,
-  BotaoFinalizar, // Certifique-se que este é o seu styled-component para o botão
+  BotaoFinalizar,
   BotaoEsvaziar,
   ConteinerCarrinhoText,
   IconVoltar,
@@ -25,12 +25,8 @@ import { Produto } from "../produtos/produto";
 import Footer from "../../components/footer/footer";
 import { api } from "../../api/api";
 
-// Importe o Spinner. Se você copiou para carrinhoStyle.ts, importe de lá.
-// Se for do loginStyle.ts, ajuste o caminho:
-// import { Spinner } from "../login/loginStyle"; // Exemplo de caminho
-import { Spinner } from "./carrinhoStyle"; // Assumindo que copiou para carrinhoStyle.ts ou já está lá
+import { Spinner } from "./carrinhoStyle"; 
 
-// ... (interfaces ProdutoCarrinhoLocalStorage, ProdutoCarrinhoInterno permanecem as mesmas) ...
 interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
   quantidade: number;
@@ -64,7 +60,6 @@ const Carrinho: React.FC = () => {
   };
 
   useEffect(() => {
-    // ... (lógica de carregamento do carrinho permanece a mesma)
     try {
       const produtosStorage = localStorage.getItem("carrinho");
       if (produtosStorage) {
@@ -99,7 +94,6 @@ const Carrinho: React.FC = () => {
   }, []);
 
   const alterarQuantidade = (id: number, novaQuantidade: number) => {
-    // ... (lógica permanece a mesma)
     let produtosAtualizados: ProdutoCarrinhoInterno[];
     if (novaQuantidade <= 0) {
       produtosAtualizados = produtos.filter((produto) => produto.id !== id);
@@ -113,20 +107,17 @@ const Carrinho: React.FC = () => {
   };
 
   const removerProduto = (id: number) => {
-    // ... (lógica permanece a mesma)
     const produtosAtualizados = produtos.filter((produto) => produto.id !== id);
     setProdutos(produtosAtualizados);
     salvarCarrinhoNoLocalStorage(produtosAtualizados);
   };
 
   const esvaziarCarrinho = () => {
-    // ... (lógica permanece a mesma)
     setProdutos([]);
     salvarCarrinhoNoLocalStorage([]); 
   };
 
   const calcularTotal = () => {
-    // ... (lógica permanece a mesma)
     const total = produtos.reduce((acc, produto) => {
       const valor = Number(produto.valor); 
       const quantidade = Number(produto.quantidade); 
@@ -143,7 +134,7 @@ const Carrinho: React.FC = () => {
         alert("Seu carrinho está vazio.");
         return;
     }
-    setIsLoadingFinalizar(true); // Ativa o loading
+    setIsLoadingFinalizar(true); 
     try {
       const response = await api.post("/sales/link", {
         items: produtos.map((produto) => ({
@@ -155,7 +146,6 @@ const Carrinho: React.FC = () => {
       const { paymentLink } = response.data;
 
       if (paymentLink) {
-        // esvaziarCarrinho(); // Opcional: limpar o carrinho
         window.location.href = paymentLink;
       } else {
         alert("Erro ao gerar link de pagamento. Resposta da API não continha o link.");
@@ -165,7 +155,7 @@ const Carrinho: React.FC = () => {
       const errorMessage = error.response?.data?.message || "Erro ao finalizar compra. Tente novamente.";
       alert(errorMessage);
     } finally {
-      setIsLoadingFinalizar(false); // Desativa o loading em qualquer caso (sucesso ou erro)
+      setIsLoadingFinalizar(false); 
     }
   };
 
@@ -180,7 +170,6 @@ const Carrinho: React.FC = () => {
 
         <ContainerProdutos>
           <ContainerCards>
-            {/* ... (mapa de produtos permanece o mesmo) ... */}
             {produtos.length === 0 ? (
               <center style={{ height: "200px", width: "100%", paddingTop: "20px" }}>
                 <p>Seu carrinho está vazio.</p>
@@ -221,7 +210,6 @@ const Carrinho: React.FC = () => {
               <TotalValor>Total: R$ {calcularTotal()}</TotalValor>
               <ContainerButons>
                 <BotaoEsvaziar onClick={esvaziarCarrinho} disabled={isLoadingFinalizar}> 
-                  {/* Desabilita esvaziar enquanto finaliza */}
                   Esvaziar Carrinho
                 </BotaoEsvaziar>
                 <BotaoFinalizar onClick={handleFinalizarCompra} disabled={isLoadingFinalizar}>

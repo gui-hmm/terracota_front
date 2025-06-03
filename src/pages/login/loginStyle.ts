@@ -108,7 +108,6 @@ export const InputLogin = styled.input`
     &::placeholder {
         color: #c0c0c0;
     }
-
 `;
 
 export const ContainerText3 = styled.div`

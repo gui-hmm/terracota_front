@@ -174,36 +174,32 @@ export const PreviewImage = styled.img`
     border: 1px solid #ddd;
 `;
 
-// Container para a foto de perfil do usuário e o input de alterar foto
 export const ContainerImageContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 25px; // Espaço antes dos campos de input
-  width: 300px; // Para centralizar dentro de ContainerPerfil
+  margin-bottom: 25px;
+  width: 300px; 
 `;
 
-// Imagem de perfil do usuário (ou preview da nova)
-export const UserProfilePhoto = styled.img` // Renomeado de PreviewImage para clareza neste contexto
-  width: 150px;    // Tamanho desejado para a foto de perfil
-  height: 150px;   // Tamanho desejado para a foto de perfil
-  border-radius: 50%; // Para foto circular
-  object-fit: cover;  // Garante que a imagem cubra o espaço sem distorcer
-  border: 3px solid #ddd; // Borda sutil
-  margin-bottom: 10px; // Espaço antes do botão "Alterar Foto"
-  background-color: #f0f0f0; // Cor de fundo caso a imagem não carregue
+export const UserProfilePhoto = styled.img`
+  width: 150px; 
+  height: 150px;
+  border-radius: 50%; 
+  object-fit: cover;  
+  border: 3px solid #ddd; 
+  margin-bottom: 10px; 
+  background-color: #f0f0f0; 
 `;
 
-// Input de arquivo escondido (já existente)
 export const StyledFileInput = styled.input`
   display: none;
 `;
 
-// Label estilizado para o input de arquivo (já existente)
 export const FileInputLabel = styled.label`
   display: inline-block;
-  padding: 8px 12px; // Um pouco menor para este contexto
-  background-color: #802600; // Cor do seu botão Editar
+  padding: 8px 12px; 
+  background-color: #802600; 
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -213,6 +209,6 @@ export const FileInputLabel = styled.label`
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #602600; // Cor mais escura no hover
+    background-color: #602600; 
   }
 `;

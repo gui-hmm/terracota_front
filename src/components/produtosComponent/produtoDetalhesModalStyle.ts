@@ -1,20 +1,18 @@
 import styled from "styled-components";
 
-// Estilos do Modal (Fundo, Centralização)
 export const Modal = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Sobreposição escura */
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 `;
 
-// Conteúdo do Modal (caixa de diálogo)
 export const ModalContent = styled.div`
   background-color: #fff;
   width: 90%;
@@ -25,10 +23,9 @@ export const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative; /* Importante para permitir o clique fora do conteúdo */
+  position: relative; 
 `;
 
-// Cabeçalho do Modal
 export const ModalHeader = styled.div`
   width: 100%;
   display: flex;
@@ -39,7 +36,6 @@ export const ModalHeader = styled.div`
   margin-bottom: 15px;
 `;
 
-// Botão de Fechar (X)
 export const BotaoFechar = styled.button`
   background: none;
   border: none;
@@ -49,11 +45,10 @@ export const BotaoFechar = styled.button`
   transition: color 0.2s ease;
 
   &:hover {
-    color: #f00; /* Cor vermelha para indicar que é um botão de fechar */
+    color: #f00; 
   }
 `;
 
-// Corpo do Modal (onde as informações do produto são exibidas)
 export const ModalBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,7 +57,6 @@ export const ModalBody = styled.div`
   margin-bottom: 20px;
 `;
 
-// Imagem do produto
 export const ModalImage = styled.img`
   width: 100%;
   max-width: 250px;
@@ -72,7 +66,6 @@ export const ModalImage = styled.img`
   margin-bottom: 5px;
 `;
 
-// Nome do produto no modal
 export const ModalNome = styled.h2`
   font-size: 24px;
   font-weight: bold;
@@ -80,7 +73,6 @@ export const ModalNome = styled.h2`
   text-align: center;
 `;
 
-// Nome do produto no modal
 export const ModalDescricao = styled.h2`
   font-size: 16px;
   font-weight: 500;
@@ -88,7 +80,6 @@ export const ModalDescricao = styled.h2`
   text-align: center;
 `;
 
-// Preço do produto no modal
 export const ModalPreco = styled.p`
   font-size: 20px;
   font-weight: bold;
@@ -96,7 +87,6 @@ export const ModalPreco = styled.p`
   margin-bottom: 20px;
 `;
 
-// Controles de Quantidade (botões de aumento e diminuição)
 export const ControlesQuantidade = styled.div`
   display: flex;
   align-items: center;
@@ -124,7 +114,6 @@ export const ControlesQuantidade = styled.div`
   }
 `;
 
-// Botão para Adicionar ao Carrinho
 export const BotaoAdicionar = styled.button`
   background-color: #802600;
   color: #fff;
@@ -141,7 +130,6 @@ export const BotaoAdicionar = styled.button`
   }
 `;
 
-// Rodapé do Modal (onde ficam as ações: adicionar ao carrinho ou fechar)
 export const ModalFooter = styled.div`
   width: 100%;
   display: flex;

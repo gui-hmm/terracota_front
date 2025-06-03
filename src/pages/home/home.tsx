@@ -4,14 +4,12 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Imports de Componentes
 import Header from '../../components/header/header';
 import Footer from "../../components/footer/footer";
 import Clientes from "../../components/clientes/cliente";
 import ProdutoList from "../../components/produtosComponent/produtoList";
 import ProdutoDetalhesModal from "../../components/produtosComponent/ProdutoDetalhesModal";
 
-// Imports de Estilos
 import {
   StatusNotification,
   ProcessingText,
@@ -50,7 +48,6 @@ import {
   VoltarDestaques,
 } from "./homeStyle";
 
-// Imports de Assets
 import P1 from "../../assets/p1.png";
 import P7 from "../../assets/p7.png";
 import P10 from "../../assets/p10.png";
@@ -59,11 +56,9 @@ import BarrosImage from '../../assets/explore_barros.png';
 import VoltarAsset from "../../assets/menorQue.png";
 import AvancarAsset from "../../assets/maior_que.png";
 
-// API
 import { api } from "../../api/api";
 
 
-// --- TIPAGENS PADRONIZADAS ---
 interface JwtPayload {
   sub: string;
   role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
@@ -80,9 +75,7 @@ export interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
   quantidade: number;
 }
-// --- FIM DAS TIPAGENS ---
 
-// Função auxiliar para obter informações do token
 const getUserInfoFromToken = (): { email: string; role: JwtPayload['role'] } | null => {
   const token = sessionStorage.getItem('token');
   if (token) {
@@ -102,12 +95,10 @@ function Home() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Estados para a funcionalidade de produtos
   const [produtosApi, setProdutosApi] = useState<Produto[]>([]);
   const [loadingProdutos, setLoadingProdutos] = useState(true);
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
 
-  // Estados para a funcionalidade de confirmação de pagamento
   const [isProcessingSale, setIsProcessingSale] = useState(false);
   const [saleStatusMessage, setSaleStatusMessage] = useState<string | null>(null);
   const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | 'warning'>('info');
@@ -117,10 +108,9 @@ function Home() {
   };
 
   useEffect(() => {
-    // Exibe toasts que chegam via state do Navigate (ex: de RoleProtectedRoute)
     if (location.state?.toastMessage) {
         const message = location.state.toastMessage;
-        const type = location.state.type || 'info'; // 'info' como padrão
+        const type = location.state.type || 'info'; 
 
         if (type === 'error') {
             toast.error(message);
@@ -128,12 +118,9 @@ function Home() {
             toast.info(message);
         }
         
-        // Limpa o state para não mostrar o toast novamente se o usuário navegar internamente
         window.history.replaceState({}, document.title)
     }
   }, [location.state]);
-
-  // --- LÓGICA DE PRODUTOS E CARRINHO ---
 
   useEffect(() => {
     const buscarProdutosParaHome = async () => {
@@ -198,20 +185,18 @@ function Home() {
     setProdutoSelecionado(null);
   };
 
-  // --- LÓGICA DE CONFIRMAÇÃO DE PAGAMENTO ---
 
   const setNotification = (message: string | null, type: 'success' | 'error' | 'info' | 'warning') => {
     setSaleStatusMessage(message);
     setNotificationType(type);
   };
 
-  // REMOVIDO: useEffects que gerenciavam carrinhoHomeState. Eles não são mais necessários.
 
   useEffect(() => {
     const processPaymentConfirmation = async () => {
       const params = new URLSearchParams(location.search);
       const paymentIdParam = params.get('payment_id');
-      if (!paymentIdParam) return; // Sai mais cedo se não há payment_id
+      if (!paymentIdParam) return;
 
       console.log("Verificando parâmetros de URL para confirmação de pagamento...");
       const statusParam = params.get('status');
