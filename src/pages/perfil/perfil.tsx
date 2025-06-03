@@ -151,7 +151,7 @@ function Perfil() {
                 return;
             }
             if (file.size > MAX_SIZE_MB * 1024 * 1024) { 
-                toast.error("A imagem é muito grande (máx 5MB).");
+                toast.error(`A imagem é muito grande (máx ${MAX_SIZE_MB}MB).`);
                 return;
             }
             setSelectedFile(file);
