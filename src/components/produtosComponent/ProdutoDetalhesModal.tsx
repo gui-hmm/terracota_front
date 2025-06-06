@@ -21,7 +21,8 @@ import {
   BotaoFechar,
   BotaoAdicionar,
   ModalImage,
-  ModalNome
+  ModalNome,
+  CarrosselBotaoAdicionar
 } from "./produtoDetalhesModalStyle";
 import { recomendarProdutos } from "../../services/produtosService";
 
@@ -77,6 +78,11 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
     }
   };
 
+  const handleAdicionarRecomendado = (produtoRecomendado: Produto, event: React.MouseEvent) => {
+    event.stopPropagation(); // Evita que o clique no botão propague para o item
+    onAdicionarAoCarrinho(produtoRecomendado, 1); // Adiciona com quantidade 1
+  };
+
   const handleAdicionarAoCarrinho = () => {
     onAdicionarAoCarrinho(produto, quantidade);
     onFecharModal();
@@ -118,6 +124,13 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
                     <CarrosselNome>{produtoRec.nome}</CarrosselNome>
                     {/* ✅ CORREÇÃO 1: Preço dos recomendados */}
                     <CarrosselPreco>R$ {formatarPreco(produtoRec.preco)}</CarrosselPreco>
+                    {/* ✅ NOVO: Botão para adicionar ao carrinho */}
+                    <CarrosselBotaoAdicionar 
+                      onClick={(e) => handleAdicionarRecomendado(produtoRec, e)}
+                      title={`Adicionar ${produtoRec.nome} ao carrinho`}
+                    >
+                    +
+                    </CarrosselBotaoAdicionar>
                   </CarrosselItem>
                 ))}
               </CarrosselLista>
