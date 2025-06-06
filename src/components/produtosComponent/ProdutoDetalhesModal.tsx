@@ -88,7 +88,6 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
       return preco.toFixed(2);
     }
     return '0.00'; // Ou 'Indisponível'
-  };
 
   return (
     <Modal onClick={(e) => e.target === e.currentTarget && onFecharModal()}>

@@ -60,6 +60,21 @@ function Cadastro() {
     termsAccepted: "", 
   });
 
+  const formatCPF = (value: string) => {
+    const cpf = value.replace(/\D/g, "").slice(0, 11); 
+    return cpf
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  };
+
+  const formatPhone = (value: string) => {
+    const phone = value.replace(/\D/g, "").slice(0, 11); 
+    return phone
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ): void => {
@@ -69,12 +84,22 @@ function Cadastro() {
       const target = e.target as HTMLInputElement;
       setForm((prev) => ({
         ...prev,
-        [name]: target.checked,  
+        [name]: target.checked,
       }));
     } else {
+      let formattedValue = value;
+
+      if (name === "cpf") {
+        formattedValue = formatCPF(value);
+      }
+
+      if (name === "phone") {
+        formattedValue = formatPhone(value);
+      }
+
       setForm((prev) => ({
         ...prev,
-        [name]: value, 
+        [name]: formattedValue,
       }));
     }
   };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; // Adicionado useCallback
+import React, { useEffect, useState, useCallback } from "react";
 import {
     ButtonEditar,
     ButtonSalvar,
@@ -49,7 +49,6 @@ interface ProfileData {
     photo?: string;
 }
 
-// Campos que o usuário pode editar (exceto foto)
 type EditableProfileFields = Pick<ProfileData, 'nome' | 'contato'>;
 
 function Perfil() {
@@ -63,7 +62,6 @@ function Perfil() {
     const [perfil, setPerfil] = useState<ProfileData>({
         id: "", nome: "", email: "", cpf: "", contato: "", tipoUsuario: "", photo: "",
     });
-    // Estado para guardar os dados originais do perfil para comparação
     const [initialPerfilData, setInitialPerfilData] = useState<EditableProfileFields | null>(null);
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -96,7 +94,7 @@ function Perfil() {
             const roleToEndpointMap: Record<string, string> = {
                 CUSTOMER: "customers",
                 CRAFTSMAN: "craftsmen",
-                COMPANY: "companies", // Embora não haja PUT /companies/{id} no swagger fornecido
+                COMPANY: "companies",
             };
             const endpointRole = roleToEndpointMap[role] || "customers";
 
@@ -115,7 +113,7 @@ function Perfil() {
                 photo: data.photo || "",
             };
             setPerfil(fetchedProfile);
-            setInitialPerfilData({ nome: fetchedProfile.nome, contato: fetchedProfile.contato }); // Guarda os dados editáveis iniciais
+            setInitialPerfilData({ nome: fetchedProfile.nome, contato: fetchedProfile.contato });
             setUserPhotoPreview(data.photo || null);
         } catch (error) {
             console.error("Erro ao carregar perfil:", error);
@@ -123,7 +121,7 @@ function Perfil() {
         } finally {
             setLoading(false);
         }
-    }, [token]); // Adicionado token como dependência
+    }, [token]);
 
     useEffect(() => {
         if (userEmail && userRole) {
@@ -137,7 +135,6 @@ function Perfil() {
 
     const handleEditar = () => {
         setEditando(true);
-        // Guarda o estado atual dos campos editáveis para comparação ao salvar
         setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato });
         if (perfil.photo && !selectedFile) {
             setUserPhotoPreview(perfil.photo);
@@ -147,12 +144,14 @@ function Perfil() {
     const handleFileChangeForProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            const MAX_SIZE_MB = 15;
+
             if (!file.type.startsWith("image/")) {
                 toast.error("Por favor, selecione um arquivo de imagem.");
                 return;
             }
-            if (file.size > 5 * 1024 * 1024) { // 5MB Limite
-                toast.error("A imagem é muito grande (máx 5MB).");
+            if (file.size > MAX_SIZE_MB * 1024 * 1024) { 
+                toast.error(`A imagem é muito grande (máx ${MAX_SIZE_MB}MB).`);
                 return;
             }
             setSelectedFile(file);
@@ -186,14 +185,11 @@ function Perfil() {
         setIsSaving(true);
         let anyUpdateSucceeded = false;
 
-        // Passo 1: Salvar dados textuais do perfil (nome, contato), se alterados
         if (hasDataChanged) {
             try {
                 const profileUpdatePayload = {
                     name: perfil.nome,
                     phone: perfil.contato,
-                    // is_active: true, // O backend espera 'is_active', mas geralmente não é controlado pelo usuário aqui.
-                                      // Se for mandatório, precisa ser incluído. Assumindo que é opcional ou gerenciado de outra forma.
                 };
 
                 const roleToUpdateEndpoint: Record<string, string> = {
@@ -213,7 +209,7 @@ function Perfil() {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 toast.success("Dados do perfil atualizados!");
-                setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato }); // Atualiza os dados iniciais
+                setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato });
                 anyUpdateSucceeded = true;
             } catch (error: any) {
                 console.error("Erro ao atualizar dados do perfil:", error);
@@ -221,8 +217,7 @@ function Perfil() {
             }
         }
 
-        // Passo 2: Salvar a nova imagem de perfil, se selecionada
-        if (hasNewImage && selectedFile) { // selectedFile já foi verificado em hasNewImage, mas dupla checagem para TS
+        if (hasNewImage && selectedFile) { 
             try {
                 const imageFormData = new FormData();
                 imageFormData.append("file", selectedFile);
@@ -236,7 +231,6 @@ function Perfil() {
                 });
                 toast.success("Foto de perfil atualizada!");
                 anyUpdateSucceeded = true; 
-                // Re-fetch para obter a nova URL da foto e atualizar 'initialPerfilData' se os dados textuais também foram salvos antes
                 if(userEmail && userRole) await fetchUserProfile(userEmail, userRole);
             } catch (error: any) {
                 console.error("Erro ao enviar imagem de perfil:", error);
@@ -245,7 +239,7 @@ function Perfil() {
         }
         
         setIsSaving(false);
-        if(anyUpdateSucceeded || !hasDataChanged){ // Sai do modo edição se algo foi salvo ou se não havia nada para salvar (além da foto)
+        if(anyUpdateSucceeded || !hasDataChanged){ 
             setEditando(false);
         }
         setSelectedFile(null);

@@ -15,7 +15,6 @@ import { To, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 import { Produto } from "../../types/types";
 
-
 export interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
   quantidade: number;

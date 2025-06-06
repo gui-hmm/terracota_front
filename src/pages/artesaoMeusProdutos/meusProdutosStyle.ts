@@ -218,9 +218,9 @@ export const Form = styled.form`
 `;
 
 export const ProductImage = styled.img`
-  width: 100px; /* Ajuste conforme necessário */
-  height: 100px; /* Ajuste conforme necessário */
-  object-fit: cover; /* Para manter a proporção da imagem */
+  width: 100px; 
+  height: 100px; 
+  object-fit: cover;
   margin-bottom: 10px;
   border-radius: 4px;
   border: 1px solid #ddd;

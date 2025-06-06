@@ -14,7 +14,7 @@ export const apiRecomender = axios.create({
   },
 })
 
-// Add a request interceptor to include the token
+
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem('token');
@@ -29,12 +29,10 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
       sessionStorage.removeItem('token');
       window.location.href = '/login';
     }

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// Container de cada produto
 export const ContainerProduto = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,7 +16,6 @@ export const ContainerProduto = styled.div`
   }
 `;
 
-// Imagem do produto
 export const ImageProduto = styled.img`
   width: 100%;
   height: 250px;
@@ -26,7 +24,6 @@ export const ImageProduto = styled.img`
   margin-bottom: 12px;
 `;
 
-// Nome do produto
 export const NomeProduto = styled.h3`
   font-size: 16px;
   font-weight: bold;
@@ -34,7 +31,6 @@ export const NomeProduto = styled.h3`
   margin: 0 10px 10px;
 `;
 
-// Valor do produto
 export const ValorProduto = styled.p`
   font-size: 14px;
   color: #333;

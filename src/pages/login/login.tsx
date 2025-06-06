@@ -42,7 +42,6 @@ const Login: React.FC = () => {
   });
 
 
-  // Efeito para exibir toasts vindos de redirecionamentos
   useEffect(() => {
     if (location.state?.toastMessage) {
       const { toastMessage, type = 'info' } = location.state;
@@ -74,11 +73,9 @@ const Login: React.FC = () => {
     dispatch(login(form))
       .unwrap()
       .then(() => {
-        navigate("/"); // Navegue para a página principal após login bem-sucedido
+        navigate("/"); 
       })
-      .catch(() => {
-        // O erro será exibido automaticamente pelo estado `error`
-      });
+      .catch(() => { });
   };
 
   return (

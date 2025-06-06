@@ -13,7 +13,6 @@ import Chatbot from './pages/chatbot/chatbot';
 import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
 import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
-import MinhasVendas from './pages/artesaoMinhasVendas/minhasVendas';
 
 import RoleProtectedRoute from './RoleProtectedRoute';
 import { ToastContainer } from "react-toastify";
@@ -53,7 +52,6 @@ function App() {
           {/* Protegidas para CRAFTSMAN */}
           <Route element={<RoleProtectedRoute allowedRoles={["CRAFTSMAN"]} />}>
             <Route path="/meusprodutos" element={<MeusProdutos />} />
-            <Route path="/minhasvendas" element={<MinhasVendas />} />
           </Route>
 
           {/* Protegidas para COMPANY */}

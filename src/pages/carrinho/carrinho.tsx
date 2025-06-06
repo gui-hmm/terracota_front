@@ -10,7 +10,7 @@ import {
   ProdutoValor,
   QuantidadeControle,
   TotalValor,
-  BotaoFinalizar, // Certifique-se que este é o seu styled-component para o botão
+  BotaoFinalizar,
   BotaoEsvaziar,
   ConteinerCarrinhoText,
   IconVoltar,
@@ -24,12 +24,8 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import { api } from "../../api/api";
 
-// Importe o Spinner. Se você copiou para carrinhoStyle.ts, importe de lá.
-// Se for do loginStyle.ts, ajuste o caminho:
-// import { Spinner } from "../login/loginStyle"; // Exemplo de caminho
-import { Spinner } from "./carrinhoStyle"; // Assumindo que copiou para carrinhoStyle.ts ou já está lá
+import { Spinner } from "./carrinhoStyle"; 
 
-// ... (interfaces ProdutoCarrinhoLocalStorage, ProdutoCarrinhoInterno permanecem as mesmas) ...
 interface ProdutoCarrinhoLocalStorage {
   produto: {
     id: string;
@@ -129,7 +125,6 @@ const Carrinho: React.FC = () => {
   };
 
   const esvaziarCarrinho = () => {
-    // ... (lógica permanece a mesma)
     setProdutos([]);
     salvarCarrinhoNoLocalStorage([]); 
   };
@@ -148,7 +143,7 @@ const Carrinho: React.FC = () => {
         alert("Seu carrinho está vazio.");
         return;
     }
-    setIsLoadingFinalizar(true); // Ativa o loading
+    setIsLoadingFinalizar(true); 
     try {
       const response = await api.post("/sales/link", {
         items: produtos.map((produto) => ({
@@ -160,7 +155,6 @@ const Carrinho: React.FC = () => {
       const { paymentLink } = response.data;
 
       if (paymentLink) {
-        // esvaziarCarrinho(); // Opcional: limpar o carrinho
         window.location.href = paymentLink;
       } else {
         alert("Erro ao gerar link de pagamento. Resposta da API não continha o link.");

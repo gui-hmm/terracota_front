@@ -69,9 +69,9 @@ const MeusProdutos = () => {
     quantity: "",
     type: "",
   });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [editingFile, setEditingFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editingPreviewUrl, setEditingPreviewUrl] = useState<string | null>(null);
 
   const setLoadingFor = (id: string, isLoading: boolean) => {
@@ -127,12 +127,10 @@ const MeusProdutos = () => {
     }
   };
 
-  // Fetch products when craftsmanId is set
   useEffect(() => {
     if (craftsmanId) {
       fetchProducts();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [craftsmanId]);
 
 
@@ -142,16 +140,28 @@ const MeusProdutos = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    } else {
-      setSelectedFile(null);
-      setPreviewUrl(null);
-    }
+      if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const MAX_SIZE_MB = 15;
+          
+          if (!file.type.startsWith("image/")) {
+              toast.error("Por favor, selecione um arquivo de imagem.");
+              return;
+          }
+
+          if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+              toast.error(`A imagem é muito grande (máx ${MAX_SIZE_MB}MB).`);
+              return;
+          }
+
+          setSelectedFile(file);
+          setPreviewUrl(URL.createObjectURL(file));
+      } else {
+          setSelectedFile(null);
+          setPreviewUrl(null);
+      }
   };
-  
+    
   const handleEditingFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -181,7 +191,6 @@ const MeusProdutos = () => {
     let newProductId: string | null = null;
 
     try {
-      // Passo 1: Criar os dados do produto (sem a imagem)
       const productDataPayload = {
         name,
         description,
@@ -191,13 +200,11 @@ const MeusProdutos = () => {
         craftsman_id: craftsmanId,
       };
 
-      console.log("Enviando dados do produto:", productDataPayload);
       const productResponse = await api.post("/products", productDataPayload, {
          headers: { Authorization: `Bearer ${token}` },
       });
 
-      newProductId = productResponse.data.productId; // Supondo que o backend retorna o produto criado com seu ID
-      console.log("Produto criado com ID:", newProductId, productResponse.data);
+      newProductId = productResponse.data.productId;
 
       if (!newProductId) {
         toast.error("Produto criado, mas ID não retornado. Não é possível enviar a imagem.");
@@ -205,21 +212,14 @@ const MeusProdutos = () => {
       }
       toast.info("Dados do produto salvos. Enviando imagem, se selecionada...");
 
-      // Passo 2: Se uma imagem foi selecionada, enviá-la para o endpoint /images
       if (selectedFile) {
-        console.log(selectedFile.type)
         const imageFormData = new FormData();
         imageFormData.append("file", selectedFile);
-        imageFormData.append("id", newProductId); // ID do produto recém-criado
+        imageFormData.append("id", newProductId); 
 
-        console.log("Enviando imagem para o produto ID:", newProductId);
-        console.log("Dados carregados para enviar", imageFormData);
         await api.patch("/images", imageFormData, {
           headers: {
             Authorization: `Bearer ${token}`,
-            // Ao enviar FormData, o Axios deve definir o Content-Type automaticamente.
-            // Se um Content-Type global (ex: 'application/json') estiver interferindo,
-            // definir como 'undefined' pode forçar o Axios a usar o correto para FormData.
             'Content-Type': undefined, 
           },
         });
@@ -228,18 +228,13 @@ const MeusProdutos = () => {
         toast.info("Nenhuma imagem selecionada para este produto.");
       }
 
-      // Sucesso final
       toast.success("Produto configurado com sucesso!");
-      fetchProducts(); // Recarrega a lista de produtos (que agora deve incluir a imagem se enviada)
+      fetchProducts();
       setNewProduct({ name: "", description: "", price: "", quantity: "", type: "" });
       setSelectedFile(null);
       setPreviewUrl(null);
 
     } catch (error: any) {
-      console.error("Erro no processo de criação do produto:", error);
-      // Se a criação do produto falhou, newProductId será null.
-      // Se a criação do produto funcionou mas o upload da imagem falhou, newProductId terá um valor.
-      // Você pode querer uma lógica mais granular aqui (ex: permitir re-upload da imagem)
       const errorMsg = error.response?.data?.message || 
                        (newProductId ? "Erro ao enviar a imagem do produto." : "Erro ao criar os dados do produto.");
       toast.error(errorMsg);
@@ -268,13 +263,12 @@ const MeusProdutos = () => {
 
   const startEditing = (product: Product) => {
     setEditProductId(product.id);
-    // Certifique-se de que os campos numéricos são tratados como números para o estado
     setEditedProduct({ 
         ...product, 
         price: Number(product.price), 
         quantity: Number(product.quantity) 
     });
-    setEditingPreviewUrl(product.photo || null); // Mostra a foto atual ou nada
+    setEditingPreviewUrl(product.photo || null); 
     setEditingFile(null);
   };
 
@@ -304,7 +298,6 @@ const MeusProdutos = () => {
     let productUpdateError = false;
 
     try {
-      // Passo 1: Atualizar dados textuais do produto (se houver)
       const productDataToUpdate = {
         name: editedProduct.name,
         description: editedProduct.description,
@@ -312,20 +305,16 @@ const MeusProdutos = () => {
         quantity: Number(editedProduct.quantity), 
         type: editedProduct.type,            
       };
-      console.log("Atualizando dados do produto ID:", editProductId, productDataToUpdate);
-      // O endpoint atual é PUT /products/{id}/craftsmen/{craftsmanId} e espera JSON
       await api.put(`/products/${editProductId}/craftsmen/${craftsmanId}`, productDataToUpdate, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.info("Dados do produto atualizados.");
 
-      // Passo 2: Se uma nova imagem foi selecionada, enviá-la para /images
       if (editingFile) {
         const imageFormData = new FormData();
         imageFormData.append("file", editingFile);
         imageFormData.append("id", editProductId);
 
-        console.log("Enviando nova imagem para o produto ID:", editProductId);
         await api.patch("/images", imageFormData, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -346,8 +335,6 @@ const MeusProdutos = () => {
       setLoadingFor(editProductId, false);
       setButtonLoading(editProductId, null);
       if (!productUpdateError) {
-        // Só recarrega e cancela edição se tudo deu certo ou se apenas a imagem falhou após os dados serem salvos
-        // (o fetchProducts vai pegar a imagem antiga ou a nova se o PATCH /images funcionou)
         fetchProducts();
         cancelEditing();
       }
@@ -370,7 +357,7 @@ const MeusProdutos = () => {
       await api.patch(`/products/${id}/craftsmen/${craftsmanId}/${action}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      await fetchProducts(); // fetchProducts irá atualizar o estado 'products'
+      await fetchProducts();
       toast.success(`Quantidade atualizada: ${delta > 0 ? "+" : ""}${delta}`);
     } catch (error) {
       console.error("Erro ao atualizar quantidade:", error);
@@ -385,9 +372,8 @@ const MeusProdutos = () => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({
       ...prev,
-      // Trata campos numéricos, convertendo para número se não for string vazia
       [name]: (name === "price" || name === "quantity") 
-                ? (value === "" ? "" : parseFloat(value)) // Permite limpar o campo, mas converte para float se houver valor
+                ? (value === "" ? "" : parseFloat(value)) 
                 : value,
     }));
   };

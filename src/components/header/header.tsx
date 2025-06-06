@@ -15,7 +15,7 @@ import {
     ConfiguracaoButton,
     MenuButton,
     ContainerLogoMenu,
-    MenuContent // novo componente
+    MenuContent
 } from "./headerStyle";
 import { To, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
@@ -31,7 +31,7 @@ const Header = () => {
     const token = useAppSelector(state => state.auth.token);
     const isLoggedIn = !!token;
     const [userRole, setUserRole] = useState<string | null>(null);
-    const [menuOpen, setMenuOpen] = useState(false); // estado para controlar visibilidade do menu
+    const [menuOpen, setMenuOpen] = useState(false); 
 
     useEffect(() => {
         if (token) {
@@ -46,7 +46,7 @@ const Header = () => {
 
     const handleNavigate = (path: To) => {
         navigate(path);
-        setMenuOpen(false); // Fecha o menu ao navegar
+        setMenuOpen(false); 
     };
 
     return (
