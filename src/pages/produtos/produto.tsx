@@ -13,14 +13,7 @@ import {
 } from "./produtosStyle";
 import { To, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
-
-export interface Produto {
-  id: number;
-  nome: string;
-  valor: number;
-  imagem: string;
-  descricao?: string;
-}
+import { Produto } from "../../types/types";
 
 export interface ProdutoCarrinhoLocalStorage {
   produto: Produto;
@@ -38,18 +31,22 @@ const Produtos: React.FC = () => {
     navigate(path);
   };
 
+
   useEffect(() => {
     const buscarProdutosApi = async () => {
       setLoadingProdutosApi(true);
       try {
         const response = await api.get("/products?perPage=30");
+        
+        
         const produtosFormatados: Produto[] = response.data.items.map((item: any) => ({
           id: item.id,
           nome: item.name,
-          valor: item.price,
+          preco: item.price, 
           descricao: item.description,
-          imagem: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg", // imagem fallback
+          imagemUrl: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg",
         }));
+    
         setProdutosApi(produtosFormatados);
       } catch (error) {
         console.error("Erro ao buscar produtos da API:", error);
@@ -79,7 +76,7 @@ const Produtos: React.FC = () => {
         }
       } catch (error) {
         console.error("Erro ao parsear carrinho do localStorage:", error);
-        carrinhoAtual = []; 
+        carrinhoAtual = [];
       }
     }
 
@@ -125,7 +122,7 @@ const Produtos: React.FC = () => {
         {produtoSelecionado && (
           <ProdutoDetalhesModal
             produto={produtoSelecionado}
-            onAdicionarAoCarrinho={handleAdicionarAoCarrinho} 
+            onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
             onFecharModal={() => setProdutoSelecionado(null)}
           />
         )}

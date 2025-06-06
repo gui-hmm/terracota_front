@@ -56,19 +56,14 @@ import BarrosImage from '../../assets/explore_barros.png';
 import VoltarAsset from "../../assets/menorQue.png";
 import AvancarAsset from "../../assets/maior_que.png";
 
+import { Produto } from "../../types/types";
+
 import { api } from "../../api/api";
 
 
 interface JwtPayload {
   sub: string;
   role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
-}
-
-export interface Produto {
-  id: number;
-  nome: string;
-  valor: number;
-  imagem: string;
 }
 
 export interface ProdutoCarrinhoLocalStorage {
@@ -130,9 +125,10 @@ function Home() {
         const produtosFormatados: Produto[] = response.data.items.map((item: any) => ({
           id: item.id,
           nome: item.name,
-          valor: item.price,
-          imagem: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg",
+          preco: item.price,
+          imagemUrl: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg",
         }));
+        console.log(produtosFormatados);
         setProdutosApi(produtosFormatados);
       } catch (error) {
         console.error("Erro ao buscar produtos para a home:", error);
@@ -278,7 +274,7 @@ function Home() {
         }
 
         const products_ids = cartItems.map(item => item.produto.id.toString());
-        const total = cartItems.reduce((acc, item) => acc + (item.produto.valor * item.quantidade), 0);
+        const total = cartItems.reduce((acc, item) => acc + (item.produto.preco * item.quantidade), 0);
         const testCraftsmanId = "21338bba177949b4b52048158a533ec5"; // ID de teste
 
         const saleData = {

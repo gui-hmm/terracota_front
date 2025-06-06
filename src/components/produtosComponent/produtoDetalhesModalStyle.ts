@@ -135,3 +135,85 @@ export const ModalFooter = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+// Container do carrossel
+export const CarrosselContainer = styled.div`
+  width: 100%;
+  margin: 20px 0;
+`;
+
+// Título do carrossel
+export const CarrosselTitulo = styled.h4`
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.2rem;
+`;
+
+// Lista de itens do carrossel
+export const CarrosselLista = styled.div`
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`;
+
+// Item do carrossel
+export const CarrosselItem = styled.div`
+  scroll-snap-align: start;
+  min-width: 150px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+// Imagem do produto no carrossel
+export const CarrosselImagem = styled.img`
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+`;
+
+// Nome do produto no carrossel
+export const CarrosselNome = styled.p`
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #555;
+`;
+
+// Preço do produto no carrossel
+export const CarrosselPreco = styled.p`
+  font-weight: bold;
+  font-size: 1rem;
+  color: #2a2a2a;
+`;
+
+// Mensagem de carregamento/erro
+export const CarrosselMensagem = styled.p`
+  text-align: center;
+  color: #666;
+  padding: 20px 0;
+`;
