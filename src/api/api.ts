@@ -14,7 +14,6 @@ export const apiRecomender = axios.create({
   },
 })
 
-
 // Add a request interceptor to include the token
 api.interceptors.request.use(
   (config) => {
