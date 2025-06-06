@@ -7,6 +7,13 @@ export const api = axios.create({
   },
 });
 
+export const apiRecomender = axios.create({
+  baseURL: 'http://localhost:8000',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 // Add a request interceptor to include the token
 api.interceptors.request.use(
   (config) => {

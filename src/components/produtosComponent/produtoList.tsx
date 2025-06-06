@@ -1,6 +1,6 @@
 import React from "react";
 import { ContainerProduto, ImageProduto, NomeProduto, ValorProduto } from "./produtosListStyle";
-import { Produto } from "../../pages/produtos/produto";
+import { Produto } from "../../types/types";
 
 interface ProdutoListProps {
   produtos: Produto[];
@@ -10,11 +10,14 @@ interface ProdutoListProps {
 const ProdutoList: React.FC<ProdutoListProps> = ({ produtos, onSelectProduto }) => {
   return (
     <>
-      {produtos.map((produto) => (
+      {produtos.map((produto: Produto) => (
         <ContainerProduto key={produto.id} onClick={() => onSelectProduto(produto)}>
-          <ImageProduto src={produto.imagem} alt={produto.nome} />
+          <ImageProduto src={produto.imagemUrl} alt={produto.nome} />
           <NomeProduto>{produto.nome}</NomeProduto>
-          <ValorProduto>{`R$ ${produto.valor.toFixed(2)}`}</ValorProduto>
+          <ValorProduto>
+          {`R$ ${(produto.preco ?? 0).toFixed(2)}`}
+          </ValorProduto>
+
         </ContainerProduto>
       ))}
     </>

@@ -21,7 +21,6 @@ import {
   ContainerCards,
 } from "./carrinhoStyle";
 import Header from "../../components/header/header";
-import { Produto } from "../produtos/produto";
 import Footer from "../../components/footer/footer";
 import { api } from "../../api/api";
 
@@ -32,60 +31,72 @@ import { Spinner } from "./carrinhoStyle"; // Assumindo que copiou para carrinho
 
 // ... (interfaces ProdutoCarrinhoLocalStorage, ProdutoCarrinhoInterno permanecem as mesmas) ...
 interface ProdutoCarrinhoLocalStorage {
-  produto: Produto;
+  produto: {
+    id: string;
+    nome: string;
+    preco: number;
+    imagemUrl: string;
+  };
   quantidade: number;
 }
 
 interface ProdutoCarrinhoInterno {
-  id: number;
+  id: string;
   nome: string;
-  imagem: string;
-  valor: number;
+  preco: number;
+  imagemUrl: string;
   quantidade: number;
+  descricao?: string;
+  estoque?: number;
+  status?: "ativo" | "inativo";
+  categoria?: string;
+  totalVendas?: number;
+
 }
 
 
 const Carrinho: React.FC = () => {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState<ProdutoCarrinhoInterno[]>([]);
-  const [isLoadingFinalizar, setIsLoadingFinalizar] = useState(false); // Novo estado para o loading
+  const [isLoadingFinalizar, setIsLoadingFinalizar] = useState(false);
 
+  // Salva no localStorage apenas os campos necessários
   const salvarCarrinhoNoLocalStorage = (carrinhoParaSalvar: ProdutoCarrinhoInterno[]) => {
     const carrinhoFormatado: ProdutoCarrinhoLocalStorage[] = carrinhoParaSalvar.map(item => ({
       produto: {
         id: item.id,
         nome: item.nome,
-        valor: item.valor,
-        imagem: item.imagem
+        preco: item.preco,
+        imagemUrl: item.imagemUrl
       },
-      quantidade: item.quantidade,
+      quantidade: item.quantidade
     }));
     localStorage.setItem("carrinho", JSON.stringify(carrinhoFormatado));
   };
 
+  // Carrega do localStorage e mapeia para ProdutoCarrinhoInterno
   useEffect(() => {
-    // ... (lógica de carregamento do carrinho permanece a mesma)
     try {
       const produtosStorage = localStorage.getItem("carrinho");
       if (produtosStorage) {
         const parsedStorage: ProdutoCarrinhoLocalStorage[] = JSON.parse(produtosStorage);
-
+  
         if (Array.isArray(parsedStorage)) {
           const mappedParaInterno: ProdutoCarrinhoInterno[] = parsedStorage
             .map((item) => {
-              if (item.produto && typeof item.produto.id !== 'undefined' && typeof item.quantidade === 'number') {
+              if (item.produto && typeof item.quantidade === 'number') {
                 return {
                   id: item.produto.id,
                   nome: item.produto.nome,
-                  imagem: item.produto.imagem,
-                  valor: item.produto.valor,
-                  quantidade: item.quantidade,
+                  preco: item.produto.preco || 0, // Valor padrão
+                  imagemUrl: item.produto.imagemUrl || "",
+                  quantidade: item.quantidade || 0, // Valor padrão
                 };
               }
               return null;
             })
-            .filter((item): item is ProdutoCarrinhoInterno => item !== null); 
-
+            .filter((item): item is ProdutoCarrinhoInterno => item !== null);
+  
           setProdutos(mappedParaInterno);
         } else {
           setProdutos([]);
@@ -93,13 +104,12 @@ const Carrinho: React.FC = () => {
       }
     } catch (error) {
       console.error("Erro ao carregar carrinho:", error);
-      setProdutos([]); 
-      localStorage.setItem("carrinho", JSON.stringify([])); 
+      setProdutos([]);
+      localStorage.setItem("carrinho", JSON.stringify([]));
     }
   }, []);
 
-  const alterarQuantidade = (id: number, novaQuantidade: number) => {
-    // ... (lógica permanece a mesma)
+  const alterarQuantidade = (id: string, novaQuantidade: number) => {
     let produtosAtualizados: ProdutoCarrinhoInterno[];
     if (novaQuantidade <= 0) {
       produtosAtualizados = produtos.filter((produto) => produto.id !== id);
@@ -111,9 +121,8 @@ const Carrinho: React.FC = () => {
     setProdutos(produtosAtualizados);
     salvarCarrinhoNoLocalStorage(produtosAtualizados);
   };
-
-  const removerProduto = (id: number) => {
-    // ... (lógica permanece a mesma)
+  
+  const removerProduto = (id: string) => {
     const produtosAtualizados = produtos.filter((produto) => produto.id !== id);
     setProdutos(produtosAtualizados);
     salvarCarrinhoNoLocalStorage(produtosAtualizados);
@@ -126,14 +135,10 @@ const Carrinho: React.FC = () => {
   };
 
   const calcularTotal = () => {
-    // ... (lógica permanece a mesma)
     const total = produtos.reduce((acc, produto) => {
-      const valor = Number(produto.valor); 
-      const quantidade = Number(produto.quantidade); 
-      if (!isNaN(valor) && !isNaN(quantidade)) {
-        return acc + valor * quantidade;
-      }
-      return acc;
+      const valor = typeof produto.preco === "number" ? produto.preco : 0;
+      const quantidade = typeof produto.quantidade === "number" ? produto.quantidade : 0;
+      return acc + valor * quantidade;
     }, 0);
     return total.toFixed(2);
   };
@@ -165,7 +170,7 @@ const Carrinho: React.FC = () => {
       const errorMessage = error.response?.data?.message || "Erro ao finalizar compra. Tente novamente.";
       alert(errorMessage);
     } finally {
-      setIsLoadingFinalizar(false); // Desativa o loading em qualquer caso (sucesso ou erro)
+      setIsLoadingFinalizar(false);
     }
   };
 
@@ -177,10 +182,9 @@ const Carrinho: React.FC = () => {
           <IconVoltar src={Voltar} alt="Voltar" onClick={() => navigate(-1)} />
           <TextCarrinho>Carrinho</TextCarrinho>
         </ConteinerCarrinhoText>
-
+  
         <ContainerProdutos>
           <ContainerCards>
-            {/* ... (mapa de produtos permanece o mesmo) ... */}
             {produtos.length === 0 ? (
               <center style={{ height: "200px", width: "100%", paddingTop: "20px" }}>
                 <p>Seu carrinho está vazio.</p>
@@ -189,13 +193,15 @@ const Carrinho: React.FC = () => {
               produtos.map((produto) => (
                 <ProdutoItem key={produto.id}>
                   <ProdutoImagem
-                    src={produto.imagem || "https://via.placeholder.com/100x100?text=Sem+Imagem"}
+                    src={produto.imagemUrl || "https://via.placeholder.com/100x100?text=Sem+Imagem"}
                     alt={produto.nome || "Produto sem nome"}
                   />
                   <ProdutoInfo>
                     <ProdutoNome>{produto.nome}</ProdutoNome>
                     <ProdutoValor>
-                      R$ {typeof produto.valor === "number" ? produto.valor.toFixed(2) : "0.00"}
+                    R$ {typeof produto.preco === "number" && !isNaN(produto.preco) 
+                        ? produto.preco.toFixed(2) 
+                        : "0.00"}
                     </ProdutoValor>
                     <QuantidadeControle>
                       <button onClick={() => alterarQuantidade(produto.id, produto.quantidade - 1)}>
@@ -207,7 +213,10 @@ const Carrinho: React.FC = () => {
                       </button>
                     </QuantidadeControle>
                     <ProdutoValor>
-                      Total: R$ {(Number(produto.valor) * Number(produto.quantidade)).toFixed(2)}
+                    Total: R$ {(
+                                (typeof produto.preco === "number" ? produto.preco : 0) * 
+                                (typeof produto.quantidade === "number" ? produto.quantidade : 0)
+                              ).toFixed(2)}
                     </ProdutoValor>
                     <button onClick={() => removerProduto(produto.id)}>Remover</button>
                   </ProdutoInfo>
@@ -215,13 +224,12 @@ const Carrinho: React.FC = () => {
               ))
             )}
           </ContainerCards>
-
+  
           {produtos.length > 0 && (
             <ContainerTotal>
               <TotalValor>Total: R$ {calcularTotal()}</TotalValor>
               <ContainerButons>
-                <BotaoEsvaziar onClick={esvaziarCarrinho} disabled={isLoadingFinalizar}> 
-                  {/* Desabilita esvaziar enquanto finaliza */}
+                <BotaoEsvaziar onClick={esvaziarCarrinho} disabled={isLoadingFinalizar}>
                   Esvaziar Carrinho
                 </BotaoEsvaziar>
                 <BotaoFinalizar onClick={handleFinalizarCompra} disabled={isLoadingFinalizar}>
