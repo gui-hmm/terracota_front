@@ -25,7 +25,6 @@ export const ModalContent = styled.div`
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative; 
-  overflow-y: auto;
 `;
 
 export const ModalHeader = styled.div`
@@ -35,8 +34,7 @@ export const ModalHeader = styled.div`
   align-items: center;
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 15px;
-`;
+  `;
 
 export const BotaoFechar = styled.button`
   background: none;
@@ -45,6 +43,7 @@ export const BotaoFechar = styled.button`
   color: #333;
   cursor: pointer;
   transition: color 0.2s ease;
+  margin-bottom: 5px;
 
   &:hover {
     color: #f00; 
@@ -56,7 +55,9 @@ export const ModalBody = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  overflow-y: auto;
+
 `;
 
 export const ModalImage = styled.img`
@@ -116,6 +117,11 @@ export const ControlesQuantidade = styled.div`
   }
 `;
 
+export const ModalFooter = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
 export const BotaoAdicionar = styled.button`
   background-color: #802600;
   color: #fff;
@@ -130,12 +136,6 @@ export const BotaoAdicionar = styled.button`
   &:hover {
     background-color: #2ecc71;
   }
-`;
-
-export const ModalFooter = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
 `;
 
 // Container do carrossel
@@ -179,6 +179,7 @@ export const CarrosselLista = styled.div`
 
 // Item do carrossel
 export const CarrosselItem = styled.div`
+  position: relative;
   scroll-snap-align: start;
   min-width: 150px;
   cursor: pointer;

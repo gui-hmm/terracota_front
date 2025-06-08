@@ -109,9 +109,9 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
           <ModalDescricao>{`Descrição: ${produto.descricao || 'Não há descrição disponível.'}`}</ModalDescricao>
           
           <CarrosselContainer>
-          <CarrosselTitulo>
-            Você também pode gostar ✨
-          </CarrosselTitulo>
+            <CarrosselTitulo>
+              Você também pode gostar ✨
+            </CarrosselTitulo>
             {carregando ? (
               <CarrosselMensagem>Carregando recomendações...</CarrosselMensagem>
             ) : erro ? (
@@ -120,7 +120,7 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
               <CarrosselLista>
                 {recomendados.map((produtoRec) => (
                   <CarrosselItem key={produtoRec.id}>
-                    <CarrosselImagem src={produtoRec.imagemUrl} alt={produtoRec.nome} />
+                    <CarrosselImagem src={produtoRec.imagemUrl || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg"} alt={produtoRec.nome} />
                     <CarrosselNome>{produtoRec.nome}</CarrosselNome>
                     <CarrosselPreco>R$ {formatarPreco(produtoRec.preco)}</CarrosselPreco>
                     <CarrosselBotaoAdicionar 
