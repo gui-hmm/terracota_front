@@ -69,8 +69,12 @@ export const MenuContent = styled.div<MenuContentProps>`
 
     @media (max-width: 768px) {
         flex-direction: column;
-        display: ${({ $menuOpen }) => ($menuOpen ? 'flex' : 'none')};
-        width: 100%;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+        max-height: ${({ $menuOpen }) => ($menuOpen ? '500px' : '0')};
+        opacity: ${({ $menuOpen }) => ($menuOpen ? 1 : 0)};
     }
 `;
 
