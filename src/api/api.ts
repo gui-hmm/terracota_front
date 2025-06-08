@@ -8,13 +8,13 @@ export const api = axios.create({
 });
 
 export const apiRecomender = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: process.env.REACT_APP_API_RECOMENDER_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-
+// Add a request interceptor to include the token
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem('token');

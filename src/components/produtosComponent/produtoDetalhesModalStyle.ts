@@ -217,3 +217,35 @@ export const CarrosselMensagem = styled.p`
   color: #666;
   padding: 20px 0;
 `;
+
+export const CarrosselBotaoAdicionar = styled.button`
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background-color: #802600;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: #2ecc71;
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+`;

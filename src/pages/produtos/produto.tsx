@@ -98,6 +98,7 @@ const Produtos: React.FC = () => {
 
     localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
     setProdutoSelecionado(null);
+    setProdutoSelecionado(null);
   };
 
   return (
