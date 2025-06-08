@@ -17,6 +17,7 @@ export const ModalContent = styled.div`
   background-color: #fff;
   width: 90%;
   max-width: 500px;
+  max-height: 92%;
   padding: 20px;
   border-radius: 10px;
   display: flex;
@@ -24,6 +25,7 @@ export const ModalContent = styled.div`
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative; 
+  overflow-y: auto;
 `;
 
 export const ModalHeader = styled.div`
@@ -184,7 +186,7 @@ export const CarrosselItem = styled.div`
   transition: transform 0.2s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.01);
   }
 `;
 
@@ -240,7 +242,7 @@ export const CarrosselBotaoAdicionar = styled.button`
 
   &:hover {
     background-color: #2ecc71;
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
   }
 

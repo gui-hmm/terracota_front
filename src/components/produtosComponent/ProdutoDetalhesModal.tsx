@@ -122,9 +122,7 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
                   <CarrosselItem key={produtoRec.id}>
                     <CarrosselImagem src={produtoRec.imagemUrl} alt={produtoRec.nome} />
                     <CarrosselNome>{produtoRec.nome}</CarrosselNome>
-                    {/* ✅ CORREÇÃO 1: Preço dos recomendados */}
                     <CarrosselPreco>R$ {formatarPreco(produtoRec.preco)}</CarrosselPreco>
-                    {/* ✅ NOVO: Botão para adicionar ao carrinho */}
                     <CarrosselBotaoAdicionar 
                       onClick={(e) => handleAdicionarRecomendado(produtoRec, e)}
                       title={`Adicionar ${produtoRec.nome} ao carrinho`}
