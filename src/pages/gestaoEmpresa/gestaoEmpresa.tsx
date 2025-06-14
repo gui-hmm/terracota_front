@@ -296,7 +296,8 @@ const GestaoEmpresa = () => {
             </ContainerSelecionarArtesao>
 
             <Titles>Artesãos Associados</Titles>
-            {managedCraftsmen.length === 0 ? (
+            {isFetchingData ? (<Spinner><div className="loader" /></Spinner>) : 
+            managedCraftsmen.length === 0 ? (
             <p style={{ textAlign: "center", width: "100%" }}>Nenhum artesão associado ainda.</p>
             ) : (
             <ArtesaoList>
