@@ -9,20 +9,15 @@ import "react-toastify/dist/ReactToastify.css";
 import Voltar from "../../assets/menorQue.png";
 import DefaultProductImage from "../../assets/p1.png";
 import DefaultUserProfileImage from "../../assets/user.jpg";
-
-// Seus styled-components (sem alterações)
 import {
   Container,
   ProductList,
   ProductItem,
   ProductImage,
-  //Input,
   Button,
   Select,
   Spinner,
   IconVoltar,
-  TextMeusProdutos,
-  ConteinerMeusProdutosText,
   Titles,
   ContainerInputs,
   TextInput,
@@ -32,10 +27,15 @@ import {
   StyledFileInput,
   PreviewImage,
   Actions,
-  ArtesaoList
+  ArtesaoList,
+  ConteinerGestaoEmpresasText,
+  TextGestaoEmpresas,
+  ContainerArtesao,
+  ContainerSelecionarArtesao,
+  CardArtesaoSelecionado,
+  ContainerProdutos
 } from "./gestaoEmpresaStyle";
 
-// --- Interfaces ---
 interface Craftsman {
   id: string;
   name: string;
@@ -61,12 +61,10 @@ interface JwtPayload {
   companyId: string;
 }
 
-// --- Componente para a Empresa ---
 const GestaoEmpresa = () => {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
 
-  // --- Estados ---
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [produtosGerenciados, setProdutosGerenciados] = useState<Product[]>([]);
   const [artesaosDisponiveis, setArtesaosDisponiveis] = useState<Craftsman[]>([]);
@@ -84,7 +82,6 @@ const GestaoEmpresa = () => {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [buttonLoadingMap, setButtonLoadingMap] = useState<Record<string, string | null>>({});
 
-  // Funções de loading
   const setLoadingFor = (id: string, isLoading: boolean) => {
     setLoadingIds((prev) =>
       isLoading ? [...prev, id] : prev.filter((item) => item !== id)
@@ -96,7 +93,6 @@ const GestaoEmpresa = () => {
   const isButtonLoading = (productId: string, buttonType: string) =>
     buttonLoadingMap[productId] === buttonType;
 
-  // --- Identificação da Empresa ---
     useEffect(() => {
         if (token) {
             const decoded = jwtDecode<JwtPayload>(token);
@@ -121,7 +117,6 @@ const GestaoEmpresa = () => {
         }
     }, [token, navigate]);
   
-  // Busca de dados principal
   useEffect(() => {
     if (!companyId) return;
 
@@ -133,7 +128,6 @@ const GestaoEmpresa = () => {
         });
         const summaries: { id: string }[] = managedCraftsmenSummary.data.items || [];
 
-        // Busca detalhada de cada artesão associado
         const detailPromises = summaries.map(summary =>
             api.get(`/craftsmen/${summary.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -191,7 +185,6 @@ const GestaoEmpresa = () => {
     fetchData();
   }, [companyId, token]);
 
-  // Função para associar artesão
   const handleAssociateArtisan = async () => {
     if (!artesaoSelecionadoParaAssociar || !companyId) return;
     setIsAssociating(true);
@@ -200,7 +193,6 @@ const GestaoEmpresa = () => {
             headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Artesão associado com sucesso! Atualizando dados...");
-        // Força a recarga total dos dados para refletir todas as mudanças
         const event = new Event('forceReload');
         window.dispatchEvent(event);
     } catch (error: any) {
@@ -224,7 +216,6 @@ const GestaoEmpresa = () => {
     }
     };
 
-  // Funções de edição
   const startEditing = (product: Product) => {
     setEditProductId(product.id);
     setEditedProduct({ ...product });
@@ -255,11 +246,9 @@ const GestaoEmpresa = () => {
             headers: { Authorization: `Bearer ${token}` },
         });
         toast.info("Dados do produto atualizados.");
-        // Lógica de imagem, se houver
-        if (editingFile) { /* ... */ }
+        if (editingFile)
         toast.success("Produto atualizado completamente!");
         cancelEditing();
-        // Recarregar dados para consistência
         const event = new Event('forceReload');
         window.dispatchEvent(event);
     } catch (error: any) {
@@ -270,7 +259,6 @@ const GestaoEmpresa = () => {
     }
   };
 
-  // Filtro de produtos
   const produtosFiltrados = useMemo(() => {
     if (filtroArtesao === 'todos') return produtosGerenciados;
     return produtosGerenciados.filter(p => p.craftsman?.id === filtroArtesao);
@@ -278,35 +266,34 @@ const GestaoEmpresa = () => {
 
   const artesaoSelecionadoInfo = artesaosDisponiveis.find(a => a.id === artesaoSelecionadoParaAssociar);
 
-  // --- Renderização do Componente (JSX) ---
   return (
     <>
       <Header />
       <Container>
-        <ConteinerMeusProdutosText onClick={() => navigate("/")}>
+        <ConteinerGestaoEmpresasText onClick={() => navigate("/")}>
             <IconVoltar alt="Voltar" src={Voltar} />
-            <TextMeusProdutos>Painel da Empresa</TextMeusProdutos>
-        </ConteinerMeusProdutosText>
+            <TextGestaoEmpresas>Painel da Empresa</TextGestaoEmpresas>
+        </ConteinerGestaoEmpresasText>
 
         <Titles>Associar Novo Artesão</Titles>
-        <div style={{ width: '100%', marginBottom: '40px' }}>
-            <div style={{ width: '100%', maxWidth: '500px' }}>
+        <ContainerArtesao>
+            <ContainerSelecionarArtesao>
                 <TextInput>Selecione um artesão disponível para gerenciar</TextInput>
-                <Select value={artesaoSelecionadoParaAssociar} onChange={(e) => setArtesaoSelecionadoParaAssociar(e.target.value)} disabled={isAssociating} style={{ width: '100%'}}>
+                <Select value={artesaoSelecionadoParaAssociar} onChange={(e) => setArtesaoSelecionadoParaAssociar(e.target.value)} disabled={isAssociating}>
                     <option value="">Selecione...</option>
-                    {artesaosDisponiveis.map(artesao => (<option style={{color: "#000"}} key={artesao.id} value={artesao.id}>{artesao.name}</option>))}
+                    {artesaosDisponiveis.map(artesao => (<option key={artesao.id} value={artesao.id}>{artesao.name}</option>))}
                 </Select>
                 {artesaoSelecionadoInfo && (
-                    <div style={{ border: '1px solid #ddd', padding: '10px', marginTop: '10px', borderRadius: '4px' }}>
+                    <CardArtesaoSelecionado>
                         <p><strong>Nome:</strong> {artesaoSelecionadoInfo.name}</p>
                         <p><strong>Email:</strong> {artesaoSelecionadoInfo.email}</p>
                         <p><strong>Telefone:</strong> {artesaoSelecionadoInfo.phone}</p>
-                    </div>
+                    </CardArtesaoSelecionado>
                 )}
-                <Button onClick={handleAssociateArtisan} disabled={isAssociating || !artesaoSelecionadoParaAssociar} style={{ marginTop: '10px' }}>
+                <Button onClick={handleAssociateArtisan} disabled={isAssociating || !artesaoSelecionadoParaAssociar}>
                     {isAssociating ? <SpinnerButton /> : 'Associar Artesão à Empresa'}
                 </Button>
-            </div>
+            </ContainerSelecionarArtesao>
 
             <Titles>Artesãos Associados</Titles>
             {managedCraftsmen.length === 0 ? (
@@ -326,10 +313,7 @@ const GestaoEmpresa = () => {
                     <p>Email: {artesao.email}</p>
                     <p>Telefone: {artesao.phone}</p>
                     <Actions>
-                    <Button
-                        onClick={() => handleRemoveCraftsman(artesao.id)}
-                        style={{ backgroundColor: "#dc3545" }}
-                    >
+                    <Button onClick={() => handleRemoveCraftsman(artesao.id)}>
                         Remover
                     </Button>
                     </Actions>
@@ -337,22 +321,21 @@ const GestaoEmpresa = () => {
                 ))}
             </ArtesaoList>
             )}
-        </div>
+        </ContainerArtesao>
 
         <Titles>Curadoria de Produtos</Titles>
-        <div style={{ marginBottom: '20px', width: '100%', maxWidth: '300px' }}>
+        <ContainerProdutos>
             <TextInput>Filtrar produtos por artesão</TextInput>
-            <Select value={filtroArtesao} onChange={(e) => setFiltroArtesao(e.target.value)} style={{ width: '100%'}}>
+            <Select value={filtroArtesao} onChange={(e) => setFiltroArtesao(e.target.value)}>
                 <option value="todos">Todos os Artesãos</option>
                 {managedCraftsmen.map(artesao => (<option key={artesao.id} value={artesao.id}>{artesao.name}</option>))}
             </Select>
-        </div>
+        </ContainerProdutos>
 
         {isFetchingData ? (<Spinner><div className="loader" /></Spinner>) : 
         produtosFiltrados.length === 0 ? (<p style={{textAlign: "center", width: '100%'}}>Nenhum produto encontrado.</p>) : 
         (
             <ProductList>
-                {/* CORREÇÃO PRINCIPAL: Loop único sobre a lista de produtos filtrados */}
                 {produtosFiltrados.map((product) => {
                     const isItemLoading = loadingIds.includes(product.id);
                     return (
@@ -379,9 +362,20 @@ const GestaoEmpresa = () => {
                                         <option value="">Selecione o tipo</option>
                                         <option value="joias_artesanais">Joias artesanais</option>
                                         <option value="cerâmica">Cerâmica</option>
-                                        {/* ... outras opções ... */}
+                                        <option value="arte_têxtil">Arte têxtil</option>
+                                        <option value="trabalhos_em_madeira">Trabalhos em madeira</option>
+                                        <option value="artesanato_em_couro">Artesanato em couro</option>
+                                        <option value="arte_em_vidro">Arte em vidro</option>
+                                        <option value="esculturas">Esculturas</option>
+                                        <option value="pintura">Pintura</option>
+                                        <option value="artesanato_em_papel">Artesanato em papel</option>
+                                        <option value="crocê_e_tricô">Crochê e tricô</option>
+                                        <option value="arte_em_metal">Arte em metal</option>
+                                        <option value="arte_em_resina">Arte em resina</option>
+                                        <option value="produtos_sustentáveis">Produtos sustentáveis</option>
+                                        <option value="brinquedos_artesanais">Brinquedos artesanais</option>
                                     </Select>
-                                    <ContainerInputs style={{marginTop: '10px'}}>
+                                    <ContainerInputs>
                                         <TextInput>Nova Foto (opcional)</TextInput>
                                         <StyledFileInput type="file" id={`editFileInput-${product.id}`} onChange={handleEditingFileChange} accept="image/*" />
                                         <FileInputLabel htmlFor={`editFileInput-${product.id}`}>
@@ -398,7 +392,6 @@ const GestaoEmpresa = () => {
                                 </>
                             ) : (
                                 <>
-                                    {/* Modo de Visualização */}
                                     <p><strong>{product.name}</strong></p>
                                     <p style={{fontStyle: 'italic', color: '#555', fontSize: '0.9em', marginBottom: '10px'}}>
                                         Artesão: {product.craftsman?.name || 'Não identificado'}
@@ -408,7 +401,6 @@ const GestaoEmpresa = () => {
                                     <p>Tipo: {product.type}</p>
                                     <Actions>
                                         <Button onClick={() => startEditing(product)} disabled={isItemLoading}>Editar</Button>
-                                        {/* Adicionar outras ações como excluir se necessário */}
                                     </Actions>
                                 </>
                             )}

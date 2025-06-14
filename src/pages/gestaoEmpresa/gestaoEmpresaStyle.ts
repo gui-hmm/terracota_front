@@ -43,7 +43,7 @@ export const Container = styled.div`
   justify-content: start;
 `;
 
-export const ConteinerMeusProdutosText = styled.div`
+export const ConteinerGestaoEmpresasText = styled.div`
   margin-left: 2%;
   display: flex;
   flex-direction: row;
@@ -57,9 +57,19 @@ export const IconVoltar = styled.img`
   cursor: pointer;
 `;
 
-export const TextMeusProdutos = styled.div`
+export const TextGestaoEmpresas = styled.div`
   font-size: 26px;
   font-weight: 200;
+`;
+
+export const ContainerArtesao = styled.div`
+  width: 100%;
+  margin-bottom: 40px;
+`;
+
+export const ContainerSelecionarArtesao = styled.div`
+  width: 100%;
+  max-width: 350px;
 `;
 
 export const Titles = styled.div`
@@ -77,30 +87,8 @@ export const Titles = styled.div`
   }
 `;
 
-export const ContainerCriarProdutos = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 5px 30px;
-  width: 90%;
-  height: auto;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
-    width: 80%;
-  }
-
-  @media (max-width: 320px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
-  }
-`;
-
 export const ContainerInputs = styled.div`
-
+  margin-top: 10px;
 `;
 
 export const TextInput = styled.div`
@@ -109,29 +97,11 @@ export const TextInput = styled.div`
   color: rgba(128, 38, 0, 1);
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: solid 1px #802600;
-`;
-
-export const ButtonCriarProduto = styled.button`
-  width: 110px;
-  height: 50px;
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.4rem 0.6rem;
-  background-color: #802600;
-  color: white;
-  border: none;
+export const CardArtesaoSelecionado = styled.div`
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-top: 10px; 
   border-radius: 4px;
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
 `;
 
 export const ArtesaoList = styled.div`
@@ -147,6 +117,12 @@ export const ProductList = styled.div`
   gap: 1.5rem;
 `;
 
+export const ContainerProdutos = styled.div`
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+`;
+
 export const InputProdutos = styled.input`
   width: 93%;
   margin-bottom: 0.5rem;
@@ -157,6 +133,7 @@ export const InputProdutos = styled.input`
 export const Select = styled.select`
   width: 99%;
   margin-bottom: 0.5rem;
+  margin-top: 5px;
   padding: 0.5rem;
   border: solid 1px #802600;
 `;
@@ -214,16 +191,6 @@ export const Actions = styled.div`
   justify-content: center;
 `;
 
-export const Quantity = styled.p`
-  font-weight: bold;
-  color: #444;
-`;
-
-export const Form = styled.form`
-  width: 100%;
-  margin-bottom: 2rem;
-`;
-
 export const ProductImage = styled.img`
   width: 100px; 
   height: 100px; 
@@ -235,12 +202,6 @@ export const ProductImage = styled.img`
 
 export const StyledFileInput = styled.input`
   display: none; 
-`;
-
-export const ContainerImageContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 `;
 
 export const FileInputLabel = styled.label`
