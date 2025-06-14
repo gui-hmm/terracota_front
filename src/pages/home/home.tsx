@@ -273,12 +273,10 @@ function Home() {
 
         const products_ids = cartItems.map(item => item.produto.id.toString());
         const total = cartItems.reduce((acc, item) => acc + (item.produto.preco * item.quantidade), 0);
-        const testCraftsmanId = "21338bba177949b4b52048158a533ec5"; // ID de teste
 
         const saleData = {
           preference_id: preferenceIdParam,
           payment_id: parseInt(paymentIdParam, 10),
-          craftsman_id: testCraftsmanId,
           customer_id: customerId,
           products_ids: products_ids,
           total: parseFloat(total.toFixed(2)),
