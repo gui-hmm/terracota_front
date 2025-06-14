@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
 
-// ... (interface User e AuthState sem alterações) ...
 interface User {
   id: string;
   email: string;
-  name: string; // Pode ser trade_name para empresas
+  name: string; 
   cpf?: string;
   cnpj?: string;
   contact: string;
@@ -31,7 +30,6 @@ interface LoginCredentials {
   password: string;
 }
 
-// AJUSTE: Tornando a interface de credenciais mais flexível
 interface RegisterCredentials {
   email: string;
   password: string;
@@ -70,10 +68,6 @@ export const login = createAsyncThunk<
   }
 });
 
-
-
-
-
 export const register = createAsyncThunk<
   { message: string },
   RegisterCredentials,
@@ -95,7 +89,6 @@ export const register = createAsyncThunk<
   }
 
   try {
-    // AJUSTE: Monta o payload dinamicamente baseado no 'role'
     let payload: any;
 
     if (roleUpper === 'COMPANY') {
@@ -109,7 +102,7 @@ export const register = createAsyncThunk<
         user_role: roleUpper,
         is_active: true,
       };
-    } else { // Para CUSTOMER e CRAFTSMAN
+    } else { 
       payload = {
         email: rest.email,
         password: rest.password,

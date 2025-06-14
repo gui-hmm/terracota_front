@@ -81,8 +81,8 @@ const Login: React.FC = () => {
   return (
     <div>
       <ToastContainer
-        position="top-right" // Posição preferida na tela
-        autoClose={4000}     // Fecha automaticamente após 4 segundos
+        position="top-right" 
+        autoClose={4000}    
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -90,7 +90,7 @@ const Login: React.FC = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"        // Pode ser 'light', 'dark', ou 'colored'
+        theme="light"       
         style={{ zIndex: 1000 }}
       />
       <Header />

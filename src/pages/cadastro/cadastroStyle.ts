@@ -141,7 +141,6 @@ export const ContainerButton = styled.div`
     margin-top: 60px;
 `;
 
-// cadastroStyle.ts
 export const ButtonEntrar = styled.button`
   width: 110px;
   height: 50px;

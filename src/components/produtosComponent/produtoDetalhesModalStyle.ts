@@ -138,20 +138,17 @@ export const BotaoAdicionar = styled.button`
   }
 `;
 
-// Container do carrossel
 export const CarrosselContainer = styled.div`
   width: 100%;
   margin: 20px 0;
 `;
 
-// Título do carrossel
 export const CarrosselTitulo = styled.h4`
   margin-bottom: 15px;
   color: #333;
   font-size: 1.2rem;
 `;
 
-// Lista de itens do carrossel
 export const CarrosselLista = styled.div`
   display: flex;
   gap: 15px;
@@ -177,7 +174,6 @@ export const CarrosselLista = styled.div`
   }
 `;
 
-// Item do carrossel
 export const CarrosselItem = styled.div`
   position: relative;
   scroll-snap-align: start;
@@ -191,7 +187,6 @@ export const CarrosselItem = styled.div`
   }
 `;
 
-// Imagem do produto no carrossel
 export const CarrosselImagem = styled.img`
   width: 120px;
   height: 120px;
@@ -200,21 +195,18 @@ export const CarrosselImagem = styled.img`
   border: 1px solid #eee;
 `;
 
-// Nome do produto no carrossel
 export const CarrosselNome = styled.p`
   margin: 8px 0;
   font-size: 0.9rem;
   color: #555;
 `;
 
-// Preço do produto no carrossel
 export const CarrosselPreco = styled.p`
   font-weight: bold;
   font-size: 1rem;
   color: #2a2a2a;
 `;
 
-// Mensagem de carregamento/erro
 export const CarrosselMensagem = styled.p`
   text-align: center;
   color: #666;

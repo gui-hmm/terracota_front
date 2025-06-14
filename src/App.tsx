@@ -1,22 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
 
-// Páginas públicas
 import Home from './pages/home/home';
 import QuemSomos from './pages/quemSomos/quemSomos';
 import Produtos from './pages/produtos/produto';
 import Login from './pages/login/login';
 import Cadastro from './pages/cadastro/cadastro';
 import Chatbot from './pages/chatbot/chatbot';
-
-// Páginas protegidas
 import Perfil from './pages/perfil/perfil';
 import Carrinho from './pages/carrinho/carrinho';
 import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
+import GestaoEmpresa from "./pages/gestaoEmpresa/gestaoEmpresa";
 
 import RoleProtectedRoute from './RoleProtectedRoute';
 import { ToastContainer } from "react-toastify";
-import GestaoEmpresa from "./pages/gestaoEmpresa/gestaoEmpresa";
 
 
 function App() {
@@ -24,8 +21,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ToastContainer
-          position="top-right" // Posição preferida na tela
-          autoClose={4000}     // Fecha automaticamente após 4 segundos
+          position="top-right" 
+          autoClose={4000}    
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

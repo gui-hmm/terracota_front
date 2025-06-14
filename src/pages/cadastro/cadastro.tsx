@@ -46,11 +46,9 @@ function Cadastro() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error: authError } = useSelector((state: RootState) => state.auth);
 
-  // NOVO: O 'role' agora controla qual formulário é exibido
   const [role, setRole] = useState<string>("CUSTOMER");
   const navigate = useNavigate();
 
-  // AJUSTE: Unificando o estado do formulário para todos os tipos
   const [form, setForm] = useState({
     // Campos comuns
     email: "",
@@ -67,7 +65,6 @@ function Cadastro() {
     cnpj: "",
   });
 
-  // AJUSTE: Unificando os erros
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -81,7 +78,6 @@ function Cadastro() {
     cnpj: "",
   });
   
-  // ... (handleNavigate e formatPhone sem alterações) ...
   const handleNavigate = (path: To) => {
     navigate(path);
   };
@@ -92,7 +88,6 @@ function Cadastro() {
       .replace(/(\d{5})(\d)/, "$1-$2");
   };
 
-  // Funções de formatação de documento
   const formatCPF = (value: string) => {
     const cpf = value.replace(/\D/g, "").slice(0, 11);
     return cpf.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
@@ -122,7 +117,6 @@ function Cadastro() {
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setRole(event.target.value);
-    // Limpa os erros e os campos do formulário antigo ao trocar de tipo
     setErrors({} as any);
     setForm(prev => ({
         ...prev,
@@ -130,7 +124,6 @@ function Cadastro() {
     }));
   };
   
-  // Funções de validação
   const validateEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePhone = (phone: string): boolean => /^\(\d{2}\) \d{5}-\d{4}$/.test(phone);
   const validateCPF = (cpf: string): boolean => /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
@@ -140,19 +133,17 @@ function Cadastro() {
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {} as any;
 
-    // Validações comuns
     if (!validateEmail(form.email)) newErrors.email = "Email inválido";
     if (!validatePhone(form.phone)) newErrors.phone = "Contato inválido: (XX) XXXXX-XXXX";
     if (!validatePassword(form.password)) newErrors.password = "A senha deve ter no mínimo 8 caracteres";
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = "As senhas não coincidem";
     if (!form.termsAccepted) newErrors.termsAccepted = "Você precisa aceitar os termos e condições.";
 
-    // AJUSTE: Validações específicas por tipo de usuário
     if (role === 'COMPANY') {
       if (!form.legal_name.trim()) newErrors.legal_name = "O campo 'Razão Social' é obrigatório.";
       if (!form.trade_name.trim()) newErrors.trade_name = "O campo 'Nome Fantasia' é obrigatório.";
       if (!validateCNPJ(form.cnpj)) newErrors.cnpj = "CNPJ inválido: XX.XXX.XXX/XXXX-XX";
-    } else { // CUSTOMER e CRAFTSMAN
+    } else { 
       if (!form.name.trim()) newErrors.name = "O campo 'Nome' é obrigatório.";
       if (!validateCPF(form.cpf)) newErrors.cpf = "CPF inválido: XXX.XXX.XXX-XX";
     }
@@ -164,7 +155,6 @@ function Cadastro() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-        // AJUSTE: Monta as credenciais dinamicamente para o dispatch
         let credentials: RegisterCredentials;
         if (role === 'COMPANY') {
             credentials = {
@@ -211,7 +201,6 @@ function Cadastro() {
           <ContainerCadastro>
             <Text1>Crie sua conta</Text1>
 
-            {/* AJUSTE: Seletor de tipo de usuário no início */}
             <TextInput>Eu sou</TextInput>
             <SelectInput value={role} onChange={handleRoleChange}>
               <option value="CUSTOMER">Cliente</option>
@@ -219,10 +208,8 @@ function Cadastro() {
               <option value="COMPANY">Empresa</option>
             </SelectInput>
 
-            {/* AJUSTE: Renderização condicional dos campos */}
             {role === 'COMPANY' ? (
               <>
-                {/* CAMPOS DE EMPRESA */}
                 <TextInput>Razão Social</TextInput>
                 {errors.legal_name && <ErrorMessage>{errors.legal_name}</ErrorMessage>}
                 <InputCadastro name="legal_name" value={form.legal_name} onChange={handleInputChange} required />
@@ -237,7 +224,6 @@ function Cadastro() {
               </>
             ) : (
               <>
-                {/* CAMPOS DE PESSOA FÍSICA */}
                 <TextInput>Nome Completo</TextInput>
                 {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
                 <InputCadastro name="name" value={form.name} onChange={handleInputChange} required />
@@ -248,7 +234,6 @@ function Cadastro() {
               </>
             )}
 
-            {/* CAMPOS COMUNS */}
             <TextInput>Email</TextInput>
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
             <InputCadastro name="email" value={form.email} onChange={handleInputChange} required />

@@ -50,13 +50,11 @@ interface ProdutoCarrinhoInterno {
 
 }
 
-
 const Carrinho: React.FC = () => {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState<ProdutoCarrinhoInterno[]>([]);
   const [isLoadingFinalizar, setIsLoadingFinalizar] = useState(false);
 
-  // Salva no localStorage apenas os campos necessários
   const salvarCarrinhoNoLocalStorage = (carrinhoParaSalvar: ProdutoCarrinhoInterno[]) => {
     const carrinhoFormatado: ProdutoCarrinhoLocalStorage[] = carrinhoParaSalvar.map(item => ({
       produto: {
@@ -70,7 +68,6 @@ const Carrinho: React.FC = () => {
     localStorage.setItem("carrinho", JSON.stringify(carrinhoFormatado));
   };
 
-  // Carrega do localStorage e mapeia para ProdutoCarrinhoInterno
   useEffect(() => {
     try {
       const produtosStorage = localStorage.getItem("carrinho");
@@ -84,9 +81,9 @@ const Carrinho: React.FC = () => {
                 return {
                   id: item.produto.id,
                   nome: item.produto.nome,
-                  preco: item.produto.preco || 0, // Valor padrão
+                  preco: item.produto.preco || 0,
                   imagemUrl: item.produto.imagemUrl || "",
-                  quantidade: item.quantidade || 0, // Valor padrão
+                  quantidade: item.quantidade || 0,
                 };
               }
               return null;

@@ -18,7 +18,7 @@ export interface Venda {
     imagemUrl: string;
     quantidade: number;
     precoUnitario: number;
-    data: string; // formato ISO
+    data: string; 
 }
  
 export interface Artesao {

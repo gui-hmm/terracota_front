@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { jwtDecode } from "jwt-decode";
 import Header from "../../components/header/header";
@@ -112,7 +112,7 @@ const MeusProdutos = () => {
     }
   }, [token, navigate]);
  
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     if (!craftsmanId) return;
     setIsFetchingProducts(true);
     try {
@@ -126,13 +126,13 @@ const MeusProdutos = () => {
     } finally {
       setIsFetchingProducts(false);
     }
-  };
+  }, [craftsmanId, token]);
 
   useEffect(() => {
     if (craftsmanId) {
       fetchProducts();
     }
-  }, [craftsmanId]);
+  }, [craftsmanId, fetchProducts]);
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

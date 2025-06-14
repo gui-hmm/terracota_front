@@ -1,4 +1,3 @@
-// Em carrinhoStyle.ts (se for copiar)
 import styled, { keyframes } from "styled-components";
 
 export const spin = keyframes`

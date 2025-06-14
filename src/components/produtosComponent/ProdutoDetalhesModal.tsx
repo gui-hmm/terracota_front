@@ -26,7 +26,7 @@ import {
 import { recomendarProdutos } from "../../services/produtosService";
 
 interface ProdutoDetalhesModalProps {
-  produto: Produto | null; // Alterado para aceitar null
+  produto: Produto | null;
   onAdicionarAoCarrinho: (produto: Produto, novaQuantidade: number) => void;
   onFecharModal: () => void;
 }
@@ -41,14 +41,12 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState('');
 
-  // ✅ GUARDA DE PROTEÇÃO: Se não houver produto, não renderiza nada.
   if (!produto) {
     return null; 
   }
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    // Reseta a quantidade para 1 sempre que o produto do modal mudar
     setQuantidade(1);
 
     const carregarRecomendados = async () => {
@@ -78,8 +76,8 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
   };
 
   const handleAdicionarRecomendado = (produtoRecomendado: Produto, event: React.MouseEvent) => {
-    event.stopPropagation(); // Evita que o clique no botão propague para o item
-    onAdicionarAoCarrinho(produtoRecomendado, 1); // Adiciona com quantidade 1
+    event.stopPropagation();
+    onAdicionarAoCarrinho(produtoRecomendado, 1); 
   };
 
   const handleAdicionarAoCarrinho = () => {
@@ -87,12 +85,11 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
     onFecharModal();
   };
   
-  // Função para formatar o preço com segurança
   const formatarPreco = (preco: number | undefined) => {
     if (typeof preco === 'number') {
       return preco.toFixed(2);
     }
-    return '0.00'; // Ou 'Indisponível'
+    return '0.00';
   }
 
   return (
@@ -134,7 +131,6 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
             )}
           </CarrosselContainer>
 
-          {/* ✅ CORREÇÃO 2: Preço do produto principal */}
           <ModalPreco>{`Valor do produto: R$ ${formatarPreco(produto.preco)}`}</ModalPreco>
           
           <ControlesQuantidade>
@@ -143,7 +139,6 @@ const ProdutoDetalhesModal: React.FC<ProdutoDetalhesModalProps> = ({
             <button onClick={() => handleQuantidadeAlterada(quantidade + 1)}>+</button>
           </ControlesQuantidade>
 
-          {/* ✅ CORREÇÃO 3: Preço total */}
           <ModalPreco>{`Valor total: R$ ${formatarPreco((produto.preco || 0) * quantidade)}`}</ModalPreco>
 
         </ModalBody>

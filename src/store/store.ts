@@ -1,7 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authSlice from './reducers/auth';
 
-// Imports necessários do redux-persist
 import {
   persistStore,
   persistReducer,
