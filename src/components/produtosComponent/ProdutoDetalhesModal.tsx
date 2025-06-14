@@ -3,7 +3,6 @@ import { Produto } from "../../types/types";
 import { 
   Modal, 
   ModalContent, 
-  // ... (e todos os outros imports de style)
   ModalPreco,
   ControlesQuantidade,
   ModalDescricao,

@@ -47,7 +47,7 @@ export const ConteinerMeusProdutosText = styled.div`
   margin-left: 2%;
   display: flex;
   flex-direction: row;
-`;
+  `;
 
 export const IconVoltar = styled.img`
   width: auto;
@@ -86,20 +86,22 @@ export const ContainerCriarProdutos = styled.div`
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
     width: 80%;
   }
 
   @media (max-width: 320px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
   }
 `;
 
-export const ContainerInputs = styled.div``;
+export const ContainerInputs = styled.div`
+
+`;
 
 export const TextInput = styled.div`
   font-size: 16px;
@@ -130,6 +132,13 @@ export const ButtonCriarProduto = styled.button`
     opacity: 0.6;
     cursor: not-allowed;
   }
+`;
+
+export const ArtesaoList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 `;
 
 export const ProductList = styled.div`
@@ -182,9 +191,11 @@ export const ProductItem = styled.div`
   width: 100%;
   max-width: 300px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
 
   @media (max-width: 380px) {
     width: 80%;
@@ -214,8 +225,8 @@ export const Form = styled.form`
 `;
 
 export const ProductImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 100px; 
+  height: 100px; 
   object-fit: cover;
   margin-bottom: 10px;
   border-radius: 4px;
@@ -223,7 +234,7 @@ export const ProductImage = styled.img`
 `;
 
 export const StyledFileInput = styled.input`
-  display: none;
+  display: none; 
 `;
 
 export const ContainerImageContent = styled.div`

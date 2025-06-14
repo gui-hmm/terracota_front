@@ -73,14 +73,19 @@ const Header = () => {
                 </IconsContainer>
 
                 <IconsRightContainer>
-                    {userRole !== "CRAFTSMAN" && (
+                    {userRole !== "COMPANY" && (
                         <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
                     )}
 
                     {userRole === "CRAFTSMAN" && (
                         <>
-                            <CarrinhoButton title="Carrinho" src={Carrinho} alt="Carrinho" onClick={() => handleNavigate('/carrinho')} />
                             <ConfiguracaoButton title="Painel do artesão" src={Painel} alt="Painel" onClick={() => handleNavigate('/meusprodutos')} />
+                        </>
+                    )}
+
+                    {userRole === "COMPANY" && (
+                        <>
+                            <ConfiguracaoButton title="Painel da empresa" src={Painel} alt="Painel" onClick={() => handleNavigate('/gestaoempresa')} />
                         </>
                     )}
 

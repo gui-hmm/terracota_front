@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import { useNavigate } from "react-router-dom";
+import Voltar from "../../assets/menorQue.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -32,7 +33,7 @@ import {
   PreviewImage,
   ContainerImageContent,
 } from "./meusProdutosStyle";
-import Voltar from "../../assets/menorQue.png";
+
 
 interface Product {
   id: string;

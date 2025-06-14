@@ -88,6 +88,7 @@ export const TextExploreContainer = styled.div`
 
 export const BarrosExplore = styled.img`
     width: 70%;
+    max-height: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -136,6 +137,10 @@ export const ButtonExplore = styled.button`
     font-size: 20px;
     width: 25vh;
     height: 6.5vh;
+
+    @media (max-width: 380px) {
+        font-size: 15px;
+    } 
 `;
 
 export const ContainerMaisVendido = styled.div`

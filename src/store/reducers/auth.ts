@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
 
+// ... (interface User e AuthState sem alterações) ...
 interface User {
   id: string;
   email: string;
-  name: string;
-  cpf: string;
+  name: string; // Pode ser trade_name para empresas
+  cpf?: string;
+  cnpj?: string;
   contact: string;
   role: 'CUSTOMER' | 'CRAFTSMAN' | 'COMPANY';
 }
@@ -18,6 +20,7 @@ interface AuthState {
   registrationSuccess: boolean;
 }
 
+
 interface LoginResponse {
   user: User;
   token: string;
@@ -28,13 +31,19 @@ interface LoginCredentials {
   password: string;
 }
 
+// AJUSTE: Tornando a interface de credenciais mais flexível
 interface RegisterCredentials {
   email: string;
-  name: string;
-  cpf: string;
+  password: string;
   phone: string;
   role: string;
-  password: string;
+  // Campos para Pessoa Física
+  name?: string;
+  cpf?: string;
+  // Campos para Empresa
+  legal_name?: string;
+  trade_name?: string;
+  cnpj?: string;
 }
 
 const initialState: AuthState = {
@@ -61,6 +70,10 @@ export const login = createAsyncThunk<
   }
 });
 
+
+
+
+
 export const register = createAsyncThunk<
   { message: string },
   RegisterCredentials,
@@ -82,11 +95,32 @@ export const register = createAsyncThunk<
   }
 
   try {
-    const payload = {
-      ...rest,
-      user_role: roleUpper,
-      is_active: true,
-    };
+    // AJUSTE: Monta o payload dinamicamente baseado no 'role'
+    let payload: any;
+
+    if (roleUpper === 'COMPANY') {
+      payload = {
+        email: rest.email,
+        password: rest.password,
+        phone: rest.phone,
+        legal_name: rest.legal_name,
+        trade_name: rest.trade_name,
+        cnpj: rest.cnpj,
+        user_role: roleUpper,
+        is_active: true,
+      };
+    } else { // Para CUSTOMER e CRAFTSMAN
+      payload = {
+        email: rest.email,
+        password: rest.password,
+        phone: rest.phone,
+        name: rest.name,
+        cpf: rest.cpf,
+        user_role: roleUpper,
+        is_active: true,
+      };
+    }
+
     await api.post(endpoint, payload);
     return { message: "Cadastro realizado com sucesso!" };
   } catch (error: any) {

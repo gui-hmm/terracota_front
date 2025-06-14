@@ -1,3 +1,56 @@
+// import React, { useEffect, useState, useCallback } from "react";
+// import {
+//     ButtonEditar,
+//     ButtonSalvar,
+//     Container,
+//     ContainerButton,
+//     ContainerPerfil,
+//     ContainerPerfilGeral,
+//     ConteinerPerfilText,
+//     IconVoltar,
+//     ImagePerfil,
+//     InputPerfil,
+//     Text1,
+//     TextPerfil,
+//     TextInput,
+//     SelectInput,
+//     Spinner,
+//     SpinnerWrapper,
+//     ContainerImageContent,
+//     UserProfilePhoto,
+//     StyledFileInput,
+//     FileInputLabel,
+// } from "./perfilStyle";
+// import Voltar from "../../assets/menorQue.png";
+// import Header from "../../components/header/header";
+// import Footer from "../../components/footer/footer";
+// import Jarros from "../../assets/cadastro_barros.png";
+// import DefaultUserProfileImage from "../../assets/user.jpg";
+// import { To, useNavigate } from "react-router-dom";
+// import { useAppDispatch } from "../../store/hooks";
+// import { logout } from "../../store/reducers/auth";
+// import { api } from "../../api/api";
+// import { jwtDecode } from "jwt-decode";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+
+// interface JwtPayload {
+//     sub: string;
+//     role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
+// }
+
+// interface ProfileData {
+//     id: string;
+//     nome: string;
+//     email: string;
+//     cpf: string;
+//     contato: string;
+//     tipoUsuario: string;
+//     photo?: string;
+// }
+
+// type EditableProfileFields = Pick<ProfileData, 'nome' | 'contato'>;
+
 import React, { useEffect, useState, useCallback } from "react";
 import {
     ButtonEditar,
@@ -34,22 +87,32 @@ import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// --- Interfaces ---
+
 interface JwtPayload {
     sub: string;
     role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
 }
 
+// AJUSTE: Interface de perfil unificada para todos os tipos de usuário
 interface ProfileData {
     id: string;
-    nome: string;
     email: string;
-    cpf: string;
     contato: string;
-    tipoUsuario: string;
+    tipoUsuario: "CUSTOMER" | "CRAFTSMAN" | "COMPANY" | "";
     photo?: string;
+    // Campos de Pessoa Física
+    nome?: string;
+    cpf?: string;
+    // Campos de Empresa
+    legal_name?: string;
+    trade_name?: string;
+    owner_email?: string;
+    cnpj?: string;
 }
 
-type EditableProfileFields = Pick<ProfileData, 'nome' | 'contato'>;
+// AJUSTE: Campos editáveis agora incluem os da empresa
+type EditableProfileFields = Pick<ProfileData, 'nome' | 'contato' | 'legal_name' | 'trade_name'>;
 
 function Perfil() {
     const navigate = useNavigate();
@@ -59,10 +122,12 @@ function Perfil() {
     const [userRole, setUserRole] = useState<JwtPayload['role'] | null>(null);
     const [userEmail, setUserEmail] = useState<string | null>(null);
     
+    // AJUSTE: Estado inicial do perfil agora inclui todos os campos possíveis
     const [perfil, setPerfil] = useState<ProfileData>({
-        id: "", nome: "", email: "", cpf: "", contato: "", tipoUsuario: "", photo: "",
+        id: "", email: "", contato: "", tipoUsuario: "", photo: "",
+        nome: "", cpf: "", legal_name: "", trade_name: "", cnpj: ""
     });
-    const [initialPerfilData, setInitialPerfilData] = useState<EditableProfileFields | null>(null);
+    const [initialPerfilData, setInitialPerfilData] = useState<Partial<EditableProfileFields> | null>(null);
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [userPhotoPreview, setUserPhotoPreview] = useState<string | null>(null);
@@ -70,6 +135,7 @@ function Perfil() {
 
     const token = sessionStorage.getItem("token");
 
+    // Decodificação do token (lógica sem alterações)
     useEffect(() => {
         if (token) {
             try {
@@ -87,6 +153,7 @@ function Perfil() {
         }
     }, [token, navigate]);
 
+    // AJUSTE: A busca de dados agora mapeia a resposta da API dinamicamente
     const fetchUserProfile = useCallback(async (email: string, role: JwtPayload['role']) => {
         if (!token) return;
         setLoading(true);
@@ -96,24 +163,50 @@ function Perfil() {
                 CRAFTSMAN: "craftsmen",
                 COMPANY: "companies",
             };
-            const endpointRole = roleToEndpointMap[role] || "customers";
+            const endpointRole = roleToEndpointMap[role];
+            if (!endpointRole) throw new Error("Tipo de usuário inválido");
 
             const response = await api.get(`/${endpointRole}/email/${email}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = response.data;
+            console.log(data);
 
-            const fetchedProfile: ProfileData = {
-                id: data.id || "",
-                nome: data.name || "",
-                email: data.email || "",
-                cpf: data.cpf || "",
-                contato: data.phone || "",
-                tipoUsuario: data.role || "",
-                photo: data.photo || "",
-            };
+            // AJUSTE: Mapeamento condicional dos dados recebidos
+            let fetchedProfile: ProfileData;
+
+            if (role === 'COMPANY') {
+                fetchedProfile = {
+                    id: data.id || "",
+                    email: data.owner_email || "",
+                    contato: data.phone || "",
+                    tipoUsuario: data.role || "COMPANY",
+                    photo: data.photo || "",
+                    // Campos específicos de empresa
+                    trade_name: data.trade_name || "", 
+                    legal_name: data.legal_name || "",
+                    cnpj: data.cnpj || "",
+                };
+            } else { // Para CUSTOMER e CRAFTSMAN
+                fetchedProfile = {
+                    id: data.id || "",
+                    nome: data.name || "",
+                    email: data.email || "",
+                    cpf: data.cpf || "",
+                    contato: data.phone || "",
+                    tipoUsuario: data.role || "",
+                    photo: data.photo || "",
+                };
+            }
+
             setPerfil(fetchedProfile);
-            setInitialPerfilData({ nome: fetchedProfile.nome, contato: fetchedProfile.contato });
+            // Salva o estado inicial para comparar depois
+            setInitialPerfilData({ 
+                nome: fetchedProfile.nome, 
+                contato: fetchedProfile.contato,
+                legal_name: fetchedProfile.legal_name,
+                trade_name: fetchedProfile.trade_name
+            });
             setUserPhotoPreview(data.photo || null);
         } catch (error) {
             console.error("Erro ao carregar perfil:", error);
@@ -129,9 +222,8 @@ function Perfil() {
         }
     }, [userEmail, userRole, fetchUserProfile]);
 
-    const handleNavigate = (path: To) => {
-        navigate(path);
-    };
+    // ... (handleNavigate sem alterações) ...
+    const handleNavigate = (path: To) => navigate(path);
 
     const handleEditar = () => {
         setEditando(true);
@@ -162,12 +254,21 @@ function Perfil() {
         }
     };
     
+    // AJUSTE: Comparação de dados alterados agora inclui campos da empresa
     const profileDataChanged = (): boolean => {
         if (!initialPerfilData) return false;
-        return perfil.nome !== initialPerfilData.nome || perfil.contato !== initialPerfilData.contato;
+        if (userRole === 'COMPANY') {
+            return perfil.trade_name !== initialPerfilData.trade_name ||
+                   perfil.legal_name !== initialPerfilData.legal_name ||
+                   perfil.contato !== initialPerfilData.contato;
+        } else {
+            return perfil.nome !== initialPerfilData.nome || 
+                   perfil.contato !== initialPerfilData.contato;
+        }
     };
 
     const handleSalvar = async () => {
+        // ... (verificações iniciais sem alterações) ...
         if (!perfil.id || !userRole) {
             toast.error("ID do usuário ou tipo de usuário não encontrado.");
             return;
@@ -184,36 +285,40 @@ function Perfil() {
 
         setIsSaving(true);
         let anyUpdateSucceeded = false;
-
-        if (hasDataChanged) {
+        
+        if (profileDataChanged()) {
             try {
-                const profileUpdatePayload = {
-                    name: perfil.nome,
-                    phone: perfil.contato,
-                };
-
+                // AJUSTE: Payload de atualização e endpoint dinâmicos
+                let profileUpdatePayload: any;
                 const roleToUpdateEndpoint: Record<string, string> = {
                     CUSTOMER: "customers",
                     CRAFTSMAN: "craftsmen",
-                    // COMPANY: "companies", // Adicionar se houver endpoint de PUT para company
+                    COMPANY: "companies", // NOVO: Endpoint de atualização para empresa
                 };
-                const updateEndpointRole = roleToUpdateEndpoint[userRole];
+                const updateEndpointRole = roleToUpdateEndpoint[userRole!];
 
-                if (!updateEndpointRole) {
-                    toast.error(`Tipo de usuário '${userRole}' não suporta atualização de dados.`);
-                    throw new Error("Endpoint de atualização não encontrado para o role.");
+                if (userRole === 'COMPANY') {
+                    profileUpdatePayload = {
+                        trade_name: perfil.trade_name,
+                        legal_name: perfil.legal_name,
+                        phone: perfil.contato,
+                    };
+                } else {
+                    profileUpdatePayload = {
+                        name: perfil.nome,
+                        phone: perfil.contato,
+                    };
                 }
                 
-                console.log("Atualizando dados do perfil:", profileUpdatePayload);
                 await api.put(`/${updateEndpointRole}/${perfil.id}`, profileUpdatePayload, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 toast.success("Dados do perfil atualizados!");
-                setInitialPerfilData({ nome: perfil.nome, contato: perfil.contato });
-                anyUpdateSucceeded = true;
+                // Recarregar os dados após o sucesso
+                if(userEmail && userRole) await fetchUserProfile(userEmail, userRole);
+
             } catch (error: any) {
-                console.error("Erro ao atualizar dados do perfil:", error);
-                toast.error(error.response?.data?.message || "Erro ao atualizar os dados do perfil.");
+                 toast.error(error.response?.data?.message || "Erro ao atualizar os dados.");
             }
         }
 
@@ -243,6 +348,10 @@ function Perfil() {
             setEditando(false);
         }
         setSelectedFile(null);
+        
+        setIsSaving(false);
+        setEditando(false);
+        setSelectedFile(null);
     };
 
     const handleSair = () => {
@@ -263,9 +372,7 @@ function Perfil() {
         <div>
             <Header />
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-            {loading ? (
-                <SpinnerWrapper><Spinner /></SpinnerWrapper>
-            ) : (
+            {loading ? ( <SpinnerWrapper><Spinner /></SpinnerWrapper> ) : (
                 <>
                     <Container>
                         <ConteinerPerfilText>
@@ -297,20 +404,44 @@ function Perfil() {
                                     )}
                                 </ContainerImageContent>
 
-                                <TextInput>Nome</TextInput>
-                                <InputPerfil name="nome" disabled={!editando} value={perfil.nome} onChange={handleChange} />
+                                {/* AJUSTE: Renderização condicional dos campos do perfil */}
+                                {userRole === 'COMPANY' ? (
+                                    <>
+                                        {/* CAMPOS PARA EMPRESA */}
+                                        <TextInput>Nome Fantasia</TextInput>
+                                        <InputPerfil name="trade_name" disabled={!editando} value={perfil.trade_name} onChange={handleChange} />
+                                        
+                                        <TextInput>Razão Social</TextInput>
+                                        <InputPerfil name="legal_name" disabled={!editando} value={perfil.legal_name} onChange={handleChange} />
+
+                                        <TextInput>CNPJ</TextInput>
+                                        <InputPerfil name="cnpj" disabled value={perfil.cnpj} readOnly title="O CNPJ não pode ser alterado." />
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* CAMPOS PARA PESSOA FÍSICA */}
+                                        <TextInput>Nome</TextInput>
+                                        <InputPerfil name="nome" disabled={!editando} value={perfil.nome} onChange={handleChange} />
+
+                                        <TextInput>CPF</TextInput>
+                                        <InputPerfil name="cpf" disabled value={perfil.cpf} readOnly title="O CPF não pode ser alterado." />
+                                    </>
+                                )}
+
+                                {/* CAMPOS COMUNS A TODOS */}
                                 <TextInput>Email</TextInput>
                                 <InputPerfil name="email" disabled value={perfil.email} readOnly title="O e-mail não pode ser alterado." />
-                                <TextInput>CPF</TextInput>
-                                <InputPerfil name="cpf" disabled value={perfil.cpf} readOnly title="O CPF não pode ser alterado." />
+                                
                                 <TextInput>Contato</TextInput>
                                 <InputPerfil name="contato" disabled={!editando} value={perfil.contato} onChange={handleChange} />
+                                
                                 <TextInput>Tipo de Usuário</TextInput>
                                 <SelectInput name="tipoUsuario" disabled value={perfil.tipoUsuario} title="Este campo não pode ser editado">
                                     <option value="CUSTOMER">Cliente</option>
                                     <option value="CRAFTSMAN">Artesão</option>
                                     <option value="COMPANY">Empresa</option>
                                 </SelectInput>
+                                
                                 <ContainerButton>
                                     {editando ? (
                                         <ButtonSalvar onClick={handleSalvar} disabled={isSaving}>

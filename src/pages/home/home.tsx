@@ -60,7 +60,6 @@ import { Produto } from "../../types/types";
 
 import { api } from "../../api/api";
 
-
 interface JwtPayload {
   sub: string;
   role: "CUSTOMER" | "CRAFTSMAN" | "COMPANY";
@@ -128,7 +127,6 @@ function Home() {
           preco: item.price,
           imagemUrl: item.photo || "https://img.freepik.com/vetores-premium/jarro-de-ceramica-marrom-vaso-de-barro-vaso-de-artesanato_81894-7502.jpg",
         }));
-        console.log(produtosFormatados);
         setProdutosApi(produtosFormatados);
       } catch (error) {
         console.error("Erro ao buscar produtos para a home:", error);

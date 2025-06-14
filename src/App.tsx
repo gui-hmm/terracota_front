@@ -16,6 +16,7 @@ import MeusProdutos from './pages/artesaoMeusProdutos/meusProdutos';
 
 import RoleProtectedRoute from './RoleProtectedRoute';
 import { ToastContainer } from "react-toastify";
+import GestaoEmpresa from "./pages/gestaoEmpresa/gestaoEmpresa";
 
 
 function App() {
@@ -32,17 +33,18 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"        // Pode ser 'light', 'dark', ou 'colored'
+          theme="light"       
           style={{ zIndex: 1000 }}
         />
         <Routes>
           {/* Rotas públicas */}
           <Route path="/" element={<Home />} />
-          <Route path="/quemsomos" element={<QuemSomos />} />
-          <Route path="/produtos" element={<Produtos />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/quemsomos" element={<QuemSomos />} />
+          <Route path="/produtos" element={<Produtos />} />
           <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/perfil" element={<Perfil />} />
 
           {/* Protegidas para CUSTOMER */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER"]} />}>
@@ -56,13 +58,12 @@ function App() {
 
           {/* Protegidas para COMPANY */}
           <Route element={<RoleProtectedRoute allowedRoles={["COMPANY"]} />}>
-
+            <Route path="/gestaoempresa" element={<GestaoEmpresa />} />
           </Route>
 
           {/* Protegidas para CUSTOMER e CRAFTSMAN */}
           <Route element={<RoleProtectedRoute allowedRoles={["CUSTOMER", "CRAFTSMAN"]} />}>
             <Route path="/carrinho" element={<Carrinho />} />
-            <Route path="/perfil" element={<Perfil />} />
           </Route>
 
           {/* Protegidas para CRAFTSMAN e COMPANY */}

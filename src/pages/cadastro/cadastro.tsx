@@ -26,190 +26,174 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Jarros from "../../assets/cadastro_barros.png";
 import { To, useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+
+interface RegisterCredentials {
+  email: string;
+  password: string;
+  phone: string;
+  role: string;
+  // Campos para Pessoa Física
+  name?: string;
+  cpf?: string;
+  // Campos para Empresa
+  legal_name?: string;
+  trade_name?: string;
+  cnpj?: string;
+}
 
 function Cadastro() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error: authError } = useSelector((state: RootState) => state.auth);
 
+  // NOVO: O 'role' agora controla qual formulário é exibido
   const [role, setRole] = useState<string>("CUSTOMER");
-
   const navigate = useNavigate();
 
+  // AJUSTE: Unificando o estado do formulário para todos os tipos
+  const [form, setForm] = useState({
+    // Campos comuns
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    termsAccepted: false,
+    // Campos de Pessoa Física
+    name: "",
+    cpf: "",
+    // Campos de Empresa
+    legal_name: "",
+    trade_name: "",
+    cnpj: "",
+  });
+
+  // AJUSTE: Unificando os erros
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    termsAccepted: "",
+    name: "",
+    cpf: "",
+    legal_name: "",
+    trade_name: "",
+    cnpj: "",
+  });
+  
+  // ... (handleNavigate e formatPhone sem alterações) ...
   const handleNavigate = (path: To) => {
     navigate(path);
   };
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    cpf: "",
-    phone: "",
-    termsAccepted: false, 
-  });
-
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    cpf: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    termsAccepted: "", 
-  });
-
-  const formatCPF = (value: string) => {
-    const cpf = value.replace(/\D/g, "").slice(0, 11); 
-    return cpf
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  };
-
-  const formatPhone = (value: string) => {
+   const formatPhone = (value: string) => {
     const phone = value.replace(/\D/g, "").slice(0, 11); 
     return phone
       .replace(/^(\d{2})(\d)/, "($1) $2")
       .replace(/(\d{5})(\d)/, "$1-$2");
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ): void => {
-    const { name, value, type } = e.target;
+  // Funções de formatação de documento
+  const formatCPF = (value: string) => {
+    const cpf = value.replace(/\D/g, "").slice(0, 11);
+    return cpf.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  };
 
-    if (type === "checkbox") {
-      const target = e.target as HTMLInputElement;
-      setForm((prev) => ({
-        ...prev,
-        [name]: target.checked,
-      }));
-    } else {
-      let formattedValue = value;
-
-      if (name === "cpf") {
-        formattedValue = formatCPF(value);
-      }
-
-      if (name === "phone") {
-        formattedValue = formatPhone(value);
-      }
-
-      setForm((prev) => ({
-        ...prev,
-        [name]: formattedValue,
-      }));
-    }
+  const formatCNPJ = (value: string) => {
+    const cnpj = value.replace(/\D/g, "").slice(0, 14);
+    if (cnpj.length <= 2) return cnpj;
+    if (cnpj.length <= 5) return cnpj.replace(/(\d{2})(\d)/, '$1.$2');
+    if (cnpj.length <= 8) return cnpj.replace(/(\d{2})(\d{3})(\d)/, '$1.$2.$3');
+    if (cnpj.length <= 12) return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d)/, '$1.$2.$3/$4');
+    return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d)/, '$1.$2.$3/$4-$5');
   };
   
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      let formattedValue = value;
+      if (name === "cpf") formattedValue = formatCPF(value);
+      if (name === "cnpj") formattedValue = formatCNPJ(value);
+      if (name === "phone") formattedValue = formatPhone(value);
+      setForm((prev) => ({ ...prev, [name]: formattedValue }));
+    }
+  };
+
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     setRole(event.target.value);
+    // Limpa os erros e os campos do formulário antigo ao trocar de tipo
+    setErrors({} as any);
+    setForm(prev => ({
+        ...prev,
+        name: "", cpf: "", legal_name: "", trade_name: "", cnpj: ""
+    }));
   };
-
-  const validateEmail = (email: string): boolean => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
-
-  const validateCPF = (cpf: string): boolean => {
-    const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-    return regex.test(cpf);
-  };
-
-  const validatePhone = (phone: string): boolean => {
-    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
-    return regex.test(phone);
-  };
-
-  const validatePassword = (password: string): boolean => {
-    return password.length >= 8;
-  };
-
-  const validateConfirmPassword = (
-    password: string,
-    confirmPassword: string
-  ): boolean => {
-    return password === confirmPassword;
-  };
+  
+  // Funções de validação
+  const validateEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePhone = (phone: string): boolean => /^\(\d{2}\) \d{5}-\d{4}$/.test(phone);
+  const validateCPF = (cpf: string): boolean => /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
+  const validateCNPJ = (cnpj: string): boolean => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
+  const validatePassword = (password: string): boolean => password.length >= 8;
 
   const validateForm = (): boolean => {
-    let newErrors: any = { ...errors };
+    const newErrors: typeof errors = {} as any;
 
-    if (!form.name.trim()) {
-      newErrors.name = "O campo 'Nome' é obrigatório.";
-    } else {
-      newErrors.name = "";
-    }
+    // Validações comuns
+    if (!validateEmail(form.email)) newErrors.email = "Email inválido";
+    if (!validatePhone(form.phone)) newErrors.phone = "Contato inválido: (XX) XXXXX-XXXX";
+    if (!validatePassword(form.password)) newErrors.password = "A senha deve ter no mínimo 8 caracteres";
+    if (form.password !== form.confirmPassword) newErrors.confirmPassword = "As senhas não coincidem";
+    if (!form.termsAccepted) newErrors.termsAccepted = "Você precisa aceitar os termos e condições.";
 
-    if (!validateEmail(form.email)) {
-      newErrors.email = "Email inválido";
-    } else {
-      newErrors.email = "";
-    }
-
-    if (!validateCPF(form.cpf)) {
-      newErrors.cpf = "CPF inválido. Formato esperado: XXX.XXX.XXX-XX";
-    } else {
-      newErrors.cpf = "";
-    }
-
-    if (!validatePhone(form.phone)) {
-      newErrors.phone = "Contato inválido. Formato esperado: (XX) XXXXX-XXXX";
-    } else {
-      newErrors.phone = "";
-    }
-
-    if (!validatePassword(form.password)) {
-      newErrors.password = "A senha deve ter pelo menos 8 caracteres";
-    } else {
-      newErrors.password = "";
-    }
-
-    if (!validateConfirmPassword(form.password, form.confirmPassword)) {
-      newErrors.confirmPassword = "As senhas não coincidem";
-    } else {
-      newErrors.confirmPassword = "";
-    }
-
-    if (!form.termsAccepted) {
-      newErrors.termsAccepted = "Você precisa aceitar os termos e condições.";
-    } else {
-      newErrors.termsAccepted = "";
+    // AJUSTE: Validações específicas por tipo de usuário
+    if (role === 'COMPANY') {
+      if (!form.legal_name.trim()) newErrors.legal_name = "O campo 'Razão Social' é obrigatório.";
+      if (!form.trade_name.trim()) newErrors.trade_name = "O campo 'Nome Fantasia' é obrigatório.";
+      if (!validateCNPJ(form.cnpj)) newErrors.cnpj = "CNPJ inválido: XX.XXX.XXX/XXXX-XX";
+    } else { // CUSTOMER e CRAFTSMAN
+      if (!form.name.trim()) newErrors.name = "O campo 'Nome' é obrigatório.";
+      if (!validateCPF(form.cpf)) newErrors.cpf = "CPF inválido: XXX.XXX.XXX-XX";
     }
 
     setErrors(newErrors);
-
-    return !Object.values(newErrors).some((error) => error !== "");
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (validateForm()) {
-      try {
-        const result = await dispatch(register({
-          email: form.email,
-          password: form.password,
-          name: form.name,
-          cpf: form.cpf.replace(/[.-]/g, ''), 
-          phone: form.phone.replace(/[()-\s]/g, ''),
-          role: role.toUpperCase(),
-        })).unwrap();
-
-        if (result) {
-          handleNavigate('/login'); 
+        // AJUSTE: Monta as credenciais dinamicamente para o dispatch
+        let credentials: RegisterCredentials;
+        if (role === 'COMPANY') {
+            credentials = {
+                role: role,
+                email: form.email,
+                password: form.password,
+                phone: form.phone.replace(/[()-\s]/g, ''),
+                legal_name: form.legal_name,
+                trade_name: form.trade_name,
+                cnpj: form.cnpj.replace(/[./-]/g, ''),
+            };
+        } else {
+            credentials = {
+                role: role,
+                email: form.email,
+                password: form.password,
+                phone: form.phone.replace(/[()-\s]/g, ''),
+                name: form.name,
+                cpf: form.cpf.replace(/[.-]/g, ''),
+            };
         }
-      } catch (error) {
-        const err = error as AxiosError;
-      
-        console.error('Registration failed:', {
-          message: err.response?.data,
-          status: err.response?.status,
-          fullError: err,
-        });
-      }
+        
+        try {
+            await dispatch(register(credentials)).unwrap();
+            toast.success("Cadastro realizado com sucesso! Faça o login.");
+            handleNavigate('/login');
+        } catch (error) {
+            toast.error(error as string || "Ocorreu um erro no cadastro.");
+        }
     }
   };
 
@@ -217,7 +201,7 @@ function Cadastro() {
     <div>
       <Header />
       <Container>
-      {authError && <ErrorMessage>{authError}</ErrorMessage>}
+        {authError && <ErrorMessage>{authError}</ErrorMessage>}
         <ConteinerCadastroText>
           <IconVoltar alt="" src={Voltar} onClick={() => handleNavigate('/')} />
           <TextCadastro>Cadastro</TextCadastro>
@@ -225,76 +209,62 @@ function Cadastro() {
         <ContainerCadastroGeral>
           <ImageCadastro alt="" src={Jarros} />
           <ContainerCadastro>
-            <Text1>Cadastro</Text1>
+            <Text1>Crie sua conta</Text1>
 
-            <TextInput>Nome</TextInput>
-            {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
-            <InputCadastro
-              name="name"
-              value={form.name}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>Email</TextInput>
-            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
-            <InputCadastro
-              name="email"
-              value={form.email}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>Senha</TextInput>
-            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
-            <InputCadastro
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>Confirmar Senha</TextInput>
-            {errors.confirmPassword && (
-              <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
-            )}
-            <InputCadastro
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>CPF</TextInput>
-            {errors.cpf && <ErrorMessage>{errors.cpf}</ErrorMessage>}
-            <InputCadastro
-              name="cpf"
-              value={form.cpf}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>Contato</TextInput>
-            {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
-            <InputCadastro
-              name="phone"
-              value={form.phone}
-              onChange={handleInputChange}
-              required
-            />
-
-            <TextInput>Tipo de Usuário</TextInput>
+            {/* AJUSTE: Seletor de tipo de usuário no início */}
+            <TextInput>Eu sou</TextInput>
             <SelectInput value={role} onChange={handleRoleChange}>
               <option value="CUSTOMER">Cliente</option>
               <option value="CRAFTSMAN">Artesão</option>
               <option value="COMPANY">Empresa</option>
             </SelectInput>
 
-                {errors.termsAccepted && (
-                    <ErrorMessage>{errors.termsAccepted}</ErrorMessage>
-                )}
+            {/* AJUSTE: Renderização condicional dos campos */}
+            {role === 'COMPANY' ? (
+              <>
+                {/* CAMPOS DE EMPRESA */}
+                <TextInput>Razão Social</TextInput>
+                {errors.legal_name && <ErrorMessage>{errors.legal_name}</ErrorMessage>}
+                <InputCadastro name="legal_name" value={form.legal_name} onChange={handleInputChange} required />
+
+                <TextInput>Nome Fantasia</TextInput>
+                {errors.trade_name && <ErrorMessage>{errors.trade_name}</ErrorMessage>}
+                <InputCadastro name="trade_name" value={form.trade_name} onChange={handleInputChange} required />
+
+                <TextInput>CNPJ</TextInput>
+                {errors.cnpj && <ErrorMessage>{errors.cnpj}</ErrorMessage>}
+                <InputCadastro name="cnpj" value={form.cnpj} onChange={handleInputChange} required />
+              </>
+            ) : (
+              <>
+                {/* CAMPOS DE PESSOA FÍSICA */}
+                <TextInput>Nome Completo</TextInput>
+                {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+                <InputCadastro name="name" value={form.name} onChange={handleInputChange} required />
+
+                <TextInput>CPF</TextInput>
+                {errors.cpf && <ErrorMessage>{errors.cpf}</ErrorMessage>}
+                <InputCadastro name="cpf" value={form.cpf} onChange={handleInputChange} required />
+              </>
+            )}
+
+            {/* CAMPOS COMUNS */}
+            <TextInput>Email</TextInput>
+            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+            <InputCadastro name="email" value={form.email} onChange={handleInputChange} required />
+            
+            <TextInput>Senha</TextInput>
+            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
+            <InputCadastro type="password" name="password" value={form.password} onChange={handleInputChange} required />
+
+            <TextInput>Confirmar Senha</TextInput>
+            {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
+            <InputCadastro type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleInputChange} required />
+
+            <TextInput>Contato (Celular)</TextInput>
+            {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
+            <InputCadastro name="phone" value={form.phone} onChange={handleInputChange} required />
+            
             <ContainerText2>
                 <input
                     type="checkbox"
@@ -316,6 +286,7 @@ function Cadastro() {
                 {loading ? <Spinner /> : "Entrar"}
               </ButtonEntrar>
             </ContainerButton>
+
           </ContainerCadastro>
         </ContainerCadastroGeral>
       </Container>
@@ -325,3 +296,4 @@ function Cadastro() {
 }
 
 export default Cadastro;
+
