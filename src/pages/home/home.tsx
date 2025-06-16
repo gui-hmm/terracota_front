@@ -285,6 +285,7 @@ function Home() {
         };
 
         try {
+          console.log(saleData)
           const saleResponse = await api.post('/sales', saleData);
           const successMsg = `Compra ${saleResponse.data.orderId || paymentIdParam} registrada com sucesso! Obrigado!`;
           setNotification(successMsg, 'success');
@@ -295,6 +296,8 @@ function Home() {
         } catch (error: any) {
           const errorMessage = error.response?.data?.message || error.message;
           setNotification(`Erro ao registrar sua compra: ${errorMessage}.`, 'error');
+          localStorage.removeItem('carrinho');
+          setTimeout(() => { if (location.search.includes(paymentIdParam)) navigate('/', { replace: true }); }, 5000);
         } finally {
           setIsProcessingSale(false);
         }
