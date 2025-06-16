@@ -285,7 +285,6 @@ function Home() {
         };
 
         try {
-          console.log(saleData)
           const saleResponse = await api.post('/sales', saleData);
           const successMsg = `Compra ${saleResponse.data.orderId || paymentIdParam} registrada com sucesso! Obrigado!`;
           setNotification(successMsg, 'success');
